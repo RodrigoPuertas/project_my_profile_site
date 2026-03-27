@@ -163,6 +163,19 @@
             from { transform: rotate(0deg); }
             to   { transform: rotate(360deg); }
         }
+        .marquee-track {
+            display: flex;
+            gap: 3rem;
+            width: max-content;
+            animation: marquee 25s linear infinite;
+        }
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
         h1, h2, h3 {
             font-family: 'Space Grotesk', sans-serif;
         }
@@ -173,15 +186,16 @@
 <header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
 <div class="text-xl font-bold tracking-tighter text-[#ecedf6] dark:text-[#ecedf6]">KINETIC ARCHITECT</div>
 <nav class="hidden md:flex items-center gap-8">
-<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="#">Overview</a>
-<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="#">Architecture</a>
-<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="#">Projects</a>
-<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="#">Contact</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="index.html">Overview</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="#sobre">Sobre</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="projects.html">Projetos</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="artigos.html">Artigos</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="#cta">Contato</a>
 </nav>
 <div class="flex items-center gap-4">
-  <button class="hidden md:block bg-gradient-to-br from-primary to-secondary-dim px-6 py-2 rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity">
-      Consult for Project
-  </button>
+  <a href="consult.html" class="hidden md:block bg-gradient-to-br from-primary to-secondary-dim px-6 py-2 rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity">
+      Consultoria
+  </a>
   <button class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 z-50" id="nav-toggle" aria-label="Abrir menu">
       <span class="block h-0.5 bg-white rounded transition-all"></span>
       <span class="block h-0.5 bg-white rounded transition-all"></span>
@@ -190,11 +204,13 @@
 </div>
 
 <!-- Mobile Menu -->
-<div id="mobile-menu" class="hidden fixed inset-0 bg-[#0b0e14]/95 backdrop-blur-md z-40 flex-col justify-center items-center gap-8 font-['Space_Grotesk'] text-xl uppercase tracking-widest hidden">
-    <a href="#" class="text-primary hover:text-white">Overview</a>
-    <a href="#" class="text-primary hover:text-white">Architecture</a>
-    <a href="#" class="text-primary hover:text-white">Projects</a>
-    <a href="#" class="text-primary hover:text-white">Contact</a>
+<div id="mobile-menu" class="hidden fixed inset-0 bg-[#0b0e14]/95 backdrop-blur-md z-40 flex-col justify-center items-center gap-8 font-['Space_Grotesk'] text-xl uppercase tracking-widest">
+    <a href="index.html" class="text-primary hover:text-white">Overview</a>
+    <a href="#sobre" class="text-primary hover:text-white">Sobre</a>
+    <a href="projects.html" class="text-primary hover:text-white">Projetos</a>
+    <a href="artigos.html" class="text-primary hover:text-white">Artigos</a>
+    <a href="consult.html" class="text-primary hover:text-white">Consultoria</a>
+    <a href="#cta" class="text-primary hover:text-white">Contato</a>
 </div>
 <div class="bg-gradient-to-r from-transparent via-[#22262f] to-transparent h-[1px] w-full absolute bottom-0 left-0"></div>
 </header>
@@ -235,7 +251,8 @@
 <div class="px-8 md:px-20 mb-12">
 <span class="text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-outline">Core Infrastructure Stack</span>
 </div>
-<div class="flex gap-12 whitespace-nowrap px-8 md:px-20 overflow-x-auto pb-4 no-scrollbar">
+<div class="marquee-track">
+<!-- Set 1 -->
 <div class="flex flex-col min-w-[200px] group">
 <span class="text-3xl font-headline font-bold text-on-surface/40 group-hover:text-primary transition-colors">Python</span>
 <span class="text-[0.625rem] uppercase tracking-widest text-outline-variant">Data Science & ML</span>
@@ -256,10 +273,47 @@
 <span class="text-3xl font-headline font-bold text-on-surface/40 group-hover:text-primary transition-colors">Power BI</span>
 <span class="text-[0.625rem] uppercase tracking-widest text-outline-variant">Data Visualization</span>
 </div>
+<div class="flex flex-col min-w-[200px] group">
+<span class="text-3xl font-headline font-bold text-on-surface/40 group-hover:text-tertiary transition-colors">Machine Learning</span>
+<span class="text-[0.625rem] uppercase tracking-widest text-outline-variant">Predictive Models</span>
+</div>
+<div class="flex flex-col min-w-[200px] group">
+<span class="text-3xl font-headline font-bold text-on-surface/40 group-hover:text-secondary transition-colors">Airflow</span>
+<span class="text-[0.625rem] uppercase tracking-widest text-outline-variant">Pipeline Orchestration</span>
+</div>
+<!-- Set 2 (duplicate para loop contínuo) -->
+<div class="flex flex-col min-w-[200px] group" aria-hidden="true">
+<span class="text-3xl font-headline font-bold text-on-surface/40 group-hover:text-primary transition-colors">Python</span>
+<span class="text-[0.625rem] uppercase tracking-widest text-outline-variant">Data Science & ML</span>
+</div>
+<div class="flex flex-col min-w-[200px] group" aria-hidden="true">
+<span class="text-3xl font-headline font-bold text-on-surface/40 group-hover:text-tertiary transition-colors">PySpark</span>
+<span class="text-[0.625rem] uppercase tracking-widest text-outline-variant">Big Data Analytics</span>
+</div>
+<div class="flex flex-col min-w-[200px] group" aria-hidden="true">
+<span class="text-3xl font-headline font-bold text-on-surface/40 group-hover:text-primary transition-colors">SQL</span>
+<span class="text-[0.625rem] uppercase tracking-widest text-outline-variant">Data Engineering</span>
+</div>
+<div class="flex flex-col min-w-[200px] group" aria-hidden="true">
+<span class="text-3xl font-headline font-bold text-on-surface/40 group-hover:text-secondary transition-colors">MLOps</span>
+<span class="text-[0.625rem] uppercase tracking-widest text-outline-variant">Model Lifecycle</span>
+</div>
+<div class="flex flex-col min-w-[200px] group" aria-hidden="true">
+<span class="text-3xl font-headline font-bold text-on-surface/40 group-hover:text-primary transition-colors">Power BI</span>
+<span class="text-[0.625rem] uppercase tracking-widest text-outline-variant">Data Visualization</span>
+</div>
+<div class="flex flex-col min-w-[200px] group" aria-hidden="true">
+<span class="text-3xl font-headline font-bold text-on-surface/40 group-hover:text-tertiary transition-colors">Machine Learning</span>
+<span class="text-[0.625rem] uppercase tracking-widest text-outline-variant">Predictive Models</span>
+</div>
+<div class="flex flex-col min-w-[200px] group" aria-hidden="true">
+<span class="text-3xl font-headline font-bold text-on-surface/40 group-hover:text-secondary transition-colors">Airflow</span>
+<span class="text-[0.625rem] uppercase tracking-widest text-outline-variant">Pipeline Orchestration</span>
+</div>
 </div>
 </section>
 <!-- About Me Section - Asymmetric Editorial -->
-<section class="py-32 px-8 md:px-20 grid grid-cols-1 md:grid-cols-12 gap-16">
+<section class="py-32 px-8 md:px-20 grid grid-cols-1 md:grid-cols-12 gap-16" id="sobre">
 <div class="md:col-span-5">
 <h2 class="text-4xl font-bold tracking-tight mb-8">DADOS ESTRATÉGICOS, <span class="text-outline">MUITO ALÉM DE NÚMEROS.</span></h2>
 </div>
@@ -374,10 +428,10 @@
 <h2 class="text-5xl md:text-6xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-tertiary">
             Experiência &amp; Educação
         </h2>
-<button class="flex items-center gap-2 px-6 py-3 bg-surface-container-high border border-outline-variant/30 rounded text-sm font-bold uppercase tracking-widest hover:border-primary transition-all group">
+<a href="assets/curriculo.pdf" download class="flex items-center gap-2 px-6 py-3 bg-surface-container-high border border-outline-variant/30 rounded text-sm font-bold uppercase tracking-widest hover:border-primary transition-all group">
 <span class="material-symbols-outlined text-primary group-hover:animate-bounce" data-icon="download">download</span>
             Baixar CV
-        </button>
+        </a>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
 <!-- Column 1: Carreira -->
@@ -440,7 +494,7 @@
 </div>
 </section>
 <!-- CTA Section -->
-<section class="py-40 px-8 md:px-20 text-center relative overflow-hidden">
+<section class="py-40 px-8 md:px-20 text-center relative overflow-hidden" id="cta">
 <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none"></div>
 <div class="relative z-10 max-w-3xl mx-auto">
 <h2 class="text-4xl md:text-7xl font-bold tracking-tighter mb-10">VAMOS TRABALHAR <span class="italic text-outline-variant">JUNTOS?</span></h2>
@@ -461,9 +515,8 @@
 <div class="text-sm font-black text-[#ecedf6]">KINETIC ARCHITECT</div>
 <div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">© 2024 KINETIC ARCHITECT // ENGINEERED PRECISION</div>
 <div class="flex gap-8">
-<a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="#">LinkedIn</a>
-<a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="#">GitHub</a>
-<a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="#">Technical Blog</a>
+<a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
+<a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>
 </div>
 </div>
 </footer>
@@ -473,62 +526,4 @@
 <div id="cursor-glow"></div>
 
 <script src="js/main.js"></script>
-<script>
-  const dot  = document.getElementById('cursor-dot');
-  const ring = document.getElementById('cursor-ring');
-  const glow = document.getElementById('cursor-glow');
-
-  let mouseX = 0, mouseY = 0;
-  let ringX  = 0, ringY  = 0;
-  let glowX  = 0, glowY  = 0;
-  let idleTimer = null;
-
-  function showCursor() {
-    document.body.classList.add('cursor-active');
-  }
-
-  function hideCursor() {
-    document.body.classList.remove('cursor-active');
-  }
-
-  document.addEventListener('mousemove', e => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-
-    // Dot segue instantaneamente
-    dot.style.left = mouseX + 'px';
-    dot.style.top  = mouseY + 'px';
-
-    // Aparece ao mover
-    showCursor();
-
-    // Desaparece após 1.2s parado
-    clearTimeout(idleTimer);
-    idleTimer = setTimeout(hideCursor, 1200);
-  });
-
-  // Ring e glow com lag suave
-  (function animateCursor() {
-    ringX += (mouseX - ringX) * 0.1;
-    ringY += (mouseY - ringY) * 0.1;
-    ring.style.left = ringX + 'px';
-    ring.style.top  = ringY + 'px';
-
-    glowX += (mouseX - glowX) * 0.05;
-    glowY += (mouseY - glowY) * 0.05;
-    glow.style.left = glowX + 'px';
-    glow.style.top  = glowY + 'px';
-
-    requestAnimationFrame(animateCursor);
-  })();
-
-  // Hover em links/botões
-  document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-  });
-
-  // Sai da janela
-  document.addEventListener('mouseleave', hideCursor);
-</script>
 </body></html>

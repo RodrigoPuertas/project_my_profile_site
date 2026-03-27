@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RODRIGO PUERTAS | ARQUIVO DE PROJETOS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-fixed-dim": "#8885ff",
+              "surface": "#0b0e14",
+              "on-surface-variant": "#a9abb3",
+              "on-error": "#490013",
+              "primary-dim": "#645efb",
+              "on-tertiary-fixed-variant": "#005564",
+              "on-primary-fixed-variant": "#1a0099",
+              "tertiary": "#8ce7ff",
+              "outline-variant": "#45484f",
+              "surface-tint": "#a7a5ff",
+              "on-secondary": "#2b0065",
+              "error": "#ff6e84",
+              "on-primary": "#1c00a0",
+              "outline": "#73757d",
+              "primary-container": "#9795ff",
+              "on-secondary-container": "#e1d0ff",
+              "on-tertiary": "#005464",
+              "background": "#0b0e14",
+              "secondary-dim": "#8a4cfc",
+              "surface-container-high": "#1c2028",
+              "surface-variant": "#22262f",
+              "error-dim": "#d73357",
+              "secondary-fixed": "#dcc9ff",
+              "surface-container-lowest": "#000000",
+              "surface-dim": "#0b0e14",
+              "surface-container-low": "#10131a",
+              "on-secondary-fixed-variant": "#6514d6",
+              "tertiary-fixed-dim": "#40ceed",
+              "on-background": "#ecedf6",
+              "error-container": "#a70138",
+              "on-secondary-fixed": "#430097",
+              "on-primary-container": "#14007e",
+              "on-primary-fixed": "#000000",
+              "on-error-container": "#ffb2b9",
+              "inverse-primary": "#4e45e4",
+              "inverse-surface": "#f9f9ff",
+              "surface-container-highest": "#22262f",
+              "secondary-fixed-dim": "#d0b8ff",
+              "secondary-container": "#6001d1",
+              "on-surface": "#ecedf6",
+              "secondary": "#af88ff",
+              "primary": "#a7a5ff",
+              "surface-container": "#161a21",
+              "tertiary-container": "#53ddfc",
+              "on-tertiary-container": "#004b58",
+              "tertiary-fixed": "#53ddfc",
+              "primary-fixed": "#9795ff",
+              "inverse-on-surface": "#52555c",
+              "tertiary-dim": "#40ceed",
+              "surface-bright": "#282c36",
+              "on-tertiary-fixed": "#003640"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .editorial-shadow {
+            box-shadow: 0 40px 80px -20px rgba(167, 165, 255, 0.08);
+        }
+        body {
+            background-color: #0b0e14;
+            color: #ecedf6;
+            font-family: 'Inter', sans-serif;
+        }
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        /* 
+           CUSTOM CURSOR IMPLEMENTATION COMMENT:
+           Future integration should include a dot/ring cursor that follows mouse position.
+           Example:
+           <div id="cursor-ring" class="fixed w-8 h-8 border border-primary/30 rounded-full pointer-events-none z-[9999] transition-transform duration-150"></div>
+           <div id="cursor-dot" class="fixed w-1.5 h-1.5 bg-primary rounded-full pointer-events-none z-[9999]"></div>
+        */
+    
+        body { cursor: none; }
+        a, button { cursor: none; }
+        #cursor-dot { position: fixed; top: 0; left: 0; width: 6px; height: 6px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.2s, height 0.2s; mix-blend-mode: difference; }
+        #cursor-ring { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px solid rgba(167, 165, 255, 0.7); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.35s cubic-bezier(.23,1,.32,1), height 0.35s cubic-bezier(.23,1,.32,1), border-color 0.3s; }
+        #cursor-ring::before { content: ''; position: absolute; inset: -1px; border-radius: 50%; background: conic-gradient(from 0deg, #a7a5ff, transparent 60%, #8ce7ff, transparent); opacity: 0.4; animation: spinRing 3s linear infinite; -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); }
+        #cursor-glow { position: fixed; top: 0; left: 0; width: 350px; height: 350px; background: radial-gradient(circle, rgba(167, 165, 255, 0.06) 0%, transparent 65%); border-radius: 50%; pointer-events: none; z-index: 9997; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease; }
+        body.cursor-active #cursor-dot, body.cursor-active #cursor-ring, body.cursor-active #cursor-glow { opacity: 1; }
+        body.cursor-hover #cursor-dot { width: 10px; height: 10px; }
+        body.cursor-hover #cursor-ring { width: 64px; height: 64px; border-color: rgba(140, 231, 255, 0.5); }
+        @keyframes spinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body class="selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar matching SCREEN_21 style -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
+<div class="text-xl font-bold tracking-tighter text-[#ecedf6]">KINETIC ARCHITECT</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="index.html">Overview</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#8ce7ff] font-bold border-b border-[#8ce7ff] pb-1" href="projects.html">Projetos</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="artigos.html">Artigos</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="index.html#cta">Contato</a>
+</nav>
+<div class="flex items-center gap-4">
+  <a href="consult.html" class="hidden md:block bg-gradient-to-br from-primary to-secondary-dim px-6 py-2 rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity">Consultoria</a>
+  <button class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 z-50" id="nav-toggle" aria-label="Abrir menu">
+    <span class="block h-0.5 bg-white rounded transition-all"></span>
+    <span class="block h-0.5 bg-white rounded transition-all"></span>
+    <span class="block h-0.5 bg-white rounded transition-all"></span>
+  </button>
+</div>
+<div class="bg-gradient-to-r from-transparent via-[#22262f] to-transparent h-[1px] w-full absolute bottom-0 left-0"></div>
+</header>
+<main class="pt-20 min-h-screen">
+<!-- Hero Section: Grid Texture Removed, Style matched to Screen 21 -->
+<section class="relative px-8 py-24 md:py-40 overflow-hidden flex items-center">
+<div class="max-w-[1440px] mx-auto relative z-10 w-full">
+<div class="flex flex-col space-y-4 mb-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-surface-container-highest border-l-2 border-secondary self-start">
+<span class="text-[0.625rem] font-black uppercase tracking-[0.2em] text-tertiary">ARQUIVO_DE_PROJETOS | STATUS: ONLINE</span>
+</div>
+<h1 class="text-5xl md:text-8xl font-bold leading-[0.9] tracking-tighter uppercase">
+                    ENGENHARIA <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-tertiary">DE DADOS</span>
+</h1>
+</div>
+<div class="max-w-2xl mt-12">
+<p class="text-lg md:text-xl text-on-surface-variant font-light leading-relaxed">
+                    Uma curadoria técnica de infraestruturas de alto rendimento, pipelines de dados escaláveis e modelos de machine learning para aplicações críticas.
+                </p>
+</div>
+<!-- Technical Meta Data -->
+<div class="absolute bottom-0 right-0 hidden lg:block opacity-40">
+<div class="font-label text-[10px] text-primary space-y-1 text-right tabular-nums tracking-widest uppercase">
+<p>LATENCY_CHECK: 14MS</p>
+<p>SYSTEM_STATUS: NOMINAL</p>
+<p>ARCHIVE_VERSION: 2.0.4</p>
+<p>GEO_LOC: -23.5505, -46.6333</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Project Grid: Refined Technical Style -->
+<section class="px-8 pb-32">
+<div class="max-w-[1440px] mx-auto">
+<!-- Filter bar -->
+<div class="flex flex-wrap gap-8 mb-16 border-b border-outline-variant/20 pb-8">
+<button data-filter="todos" class="text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-primary">TODOS</button>
+<button data-filter="ml" class="text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-on-surface/40 hover:text-primary transition-colors">MACHINE LEARNING</button>
+<button data-filter="de" class="text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-on-surface/40 hover:text-primary transition-colors">DATA ENGINEERING</button>
+<button data-filter="analytics" class="text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-on-surface/40 hover:text-primary transition-colors">ANALYTICS</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Project 1 -->
+<div data-category="de" class="group relative overflow-hidden rounded-xl bg-surface-container-high border border-outline-variant/10 hover:border-primary/40 transition-all duration-500 p-8 md:p-12 flex flex-col justify-between min-h-[360px]">
+<div>
+<div class="flex justify-between items-start mb-12">
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-tertiary border border-tertiary/20 uppercase tracking-widest">PySpark</span>
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-tertiary border border-tertiary/20 uppercase tracking-widest">SQL</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors duration-300">north_east</span>
+</div>
+<h3 class="text-3xl font-bold mb-4 font-headline uppercase">Otimização de Logística S&amp;OP</h3>
+<p class="text-on-surface-variant font-light max-w-sm leading-relaxed">Arquitetura de dados em larga escala para otimização de rotas e custos operacionais em tempo real.</p>
+</div>
+<div class="pt-8 flex items-center justify-between border-t border-outline-variant/10">
+<span class="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-outline">DEPLOY_ID: OP-992</span>
+<div class="h-0.5 w-12 bg-primary transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+</div>
+</div>
+<!-- Project 2 -->
+<div data-category="ml" class="group relative overflow-hidden rounded-xl bg-surface-container-high border border-outline-variant/10 hover:border-primary/40 transition-all duration-500 p-8 md:p-12 flex flex-col justify-between min-h-[360px]">
+<div>
+<div class="flex justify-between items-start mb-12">
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-primary border border-primary/20 uppercase tracking-widest">Python</span>
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-primary border border-primary/20 uppercase tracking-widest">LightGBM</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors duration-300">north_east</span>
+</div>
+<h3 class="text-3xl font-bold mb-4 font-headline uppercase">Forecast de Demanda E-commerce</h3>
+<p class="text-on-surface-variant font-light max-w-sm leading-relaxed">Modelo preditivo de séries temporais com foco em estoque dinâmico e redução drástica de churn.</p>
+</div>
+<div class="pt-8 flex items-center justify-between border-t border-outline-variant/10">
+<span class="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-outline">DEPLOY_ID: TS-401</span>
+<div class="h-0.5 w-12 bg-primary transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+</div>
+</div>
+<!-- Project 3 -->
+<div data-category="de" class="group relative overflow-hidden rounded-xl bg-surface-container-high border border-outline-variant/10 hover:border-primary/40 transition-all duration-500 p-8 md:p-12 flex flex-col justify-between min-h-[360px]">
+<div>
+<div class="flex justify-between items-start mb-12">
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-secondary border border-secondary/20 uppercase tracking-widest">Spark Streaming</span>
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-secondary border border-secondary/20 uppercase tracking-widest">Kafka</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors duration-300">north_east</span>
+</div>
+<h3 class="text-3xl font-bold mb-4 font-headline uppercase">Pipeline ML Real-time</h3>
+<p class="text-on-surface-variant font-light max-w-sm leading-relaxed">Ingestão e processamento massivo de dados em tempo real para detecção de anomalias financeiras.</p>
+</div>
+<div class="pt-8 flex items-center justify-between border-t border-outline-variant/10">
+<span class="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-outline">DEPLOY_ID: RT-220</span>
+<div class="h-0.5 w-12 bg-primary transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+</div>
+</div>
+<!-- Project 4 -->
+<div data-category="analytics" class="group relative overflow-hidden rounded-xl bg-surface-container-high border border-outline-variant/10 hover:border-primary/40 transition-all duration-500 p-8 md:p-12 flex flex-col justify-between min-h-[360px]">
+<div>
+<div class="flex justify-between items-start mb-12">
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-tertiary border border-tertiary/20 uppercase tracking-widest">Power BI</span>
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-tertiary border border-tertiary/20 uppercase tracking-widest">SQL</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors duration-300">north_east</span>
+</div>
+<h3 class="text-3xl font-bold mb-4 font-headline uppercase">Dashboard de Analytics Vivo</h3>
+<p class="text-on-surface-variant font-light max-w-sm leading-relaxed">Visualização estratégica de KPIs de negócio com atualização em tempo real para tomada de decisão.</p>
+</div>
+<div class="pt-8 flex items-center justify-between border-t border-outline-variant/10">
+<span class="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-outline">DEPLOY_ID: BI-108</span>
+<div class="h-0.5 w-12 bg-primary transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+</div>
+</div>
+</div>
+<!-- CTA Section -->
+<section class="py-40 text-center relative overflow-hidden mt-20">
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none"></div>
+<div class="relative z-10 max-w-3xl mx-auto">
+<h2 class="text-4xl md:text-7xl font-bold tracking-tighter mb-10">PRONTO PARA <span class="italic text-outline-variant">ESCALAR?</span></h2>
+<p class="text-on-surface-variant text-lg mb-12">Estou aceitando projetos de consultoria focados em infraestrutura de alta carga e estratégia de dados.</p>
+<div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+<a class="w-full md:w-auto px-12 py-4 bg-on-background text-surface font-bold uppercase tracking-widest text-sm hover:bg-primary transition-colors" href="consult.html">Iniciar auditoria técnica</a>
+<a class="group flex items-center gap-3 text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-on-surface" href="index.html">DOCUMENTAÇÃO TÉCNICA <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">north_east</span></a>
+</div>
+</div>
+</section>
+</div>
+</section>
+</main>
+<!-- Footer matching SCREEN_21 exactly -->
+<footer class="bg-[#0b0e14] border-t border-[#22262f] py-12">
+<div class="w-full flex flex-col md:flex-row justify-between items-center px-12 gap-6">
+<div class="text-sm font-black text-[#ecedf6]">RODRIGO PUERTAS</div>
+<div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">© 2024 RODRIGO PUERTAS // ENGINEERED PRECISION</div>
+<div class="flex gap-8">
+<a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
+<a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>
+</div>
+</div>
+</footer>
+
+    <div id='cursor-dot'></div>
+    <div id='cursor-ring'></div>
+    <div id='cursor-glow'></div>
+
+    <div id='mobile-menu' class='hidden fixed inset-0 bg-[#0b0e14]/95 backdrop-blur-md z-40 flex-col justify-center items-center gap-8 font-[Space_Grotesk] text-xl uppercase tracking-widest'>
+        <a href='index.html' class='text-primary hover:text-white'>Overview</a>
+        <a href='projects.html' class='text-white'>Projetos</a>
+        <a href='artigos.html' class='text-primary hover:text-white'>Artigos</a>
+        <a href='consult.html' class='text-primary hover:text-white'>Consultoria</a>
+        <a href='index.html#cta' class='text-primary hover:text-white'>Contato</a>
+    </div>
+
+    <script src="js/main.js"></script>
+</body></html>

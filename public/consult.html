@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Consultoria de Projetos | RP_ENGINEERING</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-surface": "#ecedf6",
+                        "primary-fixed-dim": "#8885ff",
+                        "secondary-dim": "#8a4cfc",
+                        "secondary-fixed": "#dcc9ff",
+                        "surface-container-highest": "#22262f",
+                        "inverse-on-surface": "#52555c",
+                        "tertiary-fixed": "#53ddfc",
+                        "secondary-fixed-dim": "#d0b8ff",
+                        "secondary": "#af88ff",
+                        "tertiary-fixed-dim": "#40ceed",
+                        "on-secondary-fixed-variant": "#6514d6",
+                        "primary-container": "#9795ff",
+                        "tertiary-dim": "#40ceed",
+                        "surface-container-low": "#10131a",
+                        "tertiary-container": "#53ddfc",
+                        "on-primary-fixed-variant": "#1a0099",
+                        "error": "#ff6e84",
+                        "surface": "#0b0e14",
+                        "outline-variant": "#45484f",
+                        "on-tertiary-container": "#004b58",
+                        "inverse-primary": "#4e45e4",
+                        "on-primary-fixed": "#000000",
+                        "on-primary": "#1c00a0",
+                        "on-error": "#490013",
+                        "error-dim": "#d73357",
+                        "surface-container-high": "#1c2028",
+                        "outline": "#73757d",
+                        "on-primary-container": "#14007e",
+                        "primary-dim": "#645efb",
+                        "on-secondary": "#2b0065",
+                        "secondary-container": "#6001d1",
+                        "on-surface-variant": "#a9abb3",
+                        "on-error-container": "#ffb2b9",
+                        "on-secondary-fixed": "#430097",
+                        "on-tertiary-fixed-variant": "#005564",
+                        "on-secondary-container": "#e1d0ff",
+                        "surface-variant": "#22262f",
+                        "surface-tint": "#a7a5ff",
+                        "inverse-surface": "#f9f9ff",
+                        "on-tertiary": "#005464",
+                        "background": "#0b0e14",
+                        "surface-container": "#161a21",
+                        "primary": "#a7a5ff",
+                        "surface-container-lowest": "#000000",
+                        "on-tertiary-fixed": "#003640",
+                        "primary-fixed": "#9795ff",
+                        "surface-bright": "#282c36",
+                        "surface-dim": "#0b0e14",
+                        "error-container": "#a70138",
+                        "tertiary": "#8ce7ff",
+                        "on-background": "#ecedf6"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0b0e14;
+            color: #ecedf6;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        /* Custom cursor placeholder notes:
+           - Implementation requires a fixed div with a dot/ring.
+           - JS listener for mousemove to update translate properties.
+           - Pointer-events: none to avoid interfering with interactions.
+        */
+    
+        body { cursor: none; }
+        a, button { cursor: none; }
+        #cursor-dot { position: fixed; top: 0; left: 0; width: 6px; height: 6px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.2s, height 0.2s; mix-blend-mode: difference; }
+        #cursor-ring { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px solid rgba(167, 165, 255, 0.7); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.35s cubic-bezier(.23,1,.32,1), height 0.35s cubic-bezier(.23,1,.32,1), border-color 0.3s; }
+        #cursor-ring::before { content: ''; position: absolute; inset: -1px; border-radius: 50%; background: conic-gradient(from 0deg, #a7a5ff, transparent 60%, #8ce7ff, transparent); opacity: 0.4; animation: spinRing 3s linear infinite; -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); }
+        #cursor-glow { position: fixed; top: 0; left: 0; width: 350px; height: 350px; background: radial-gradient(circle, rgba(167, 165, 255, 0.06) 0%, transparent 65%); border-radius: 50%; pointer-events: none; z-index: 9997; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease; }
+        body.cursor-active #cursor-dot, body.cursor-active #cursor-ring, body.cursor-active #cursor-glow { opacity: 1; }
+        body.cursor-hover #cursor-dot { width: 10px; height: 10px; }
+        body.cursor-hover #cursor-ring { width: 64px; height: 64px; border-color: rgba(140, 231, 255, 0.5); }
+        @keyframes spinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body class="dark bg-surface selection:bg-primary/30">
+<!-- TopAppBar Updated to match SCREEN_21 -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
+<div class="text-xl font-bold tracking-tighter text-[#ecedf6]">KINETIC ARCHITECT</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="index.html">Overview</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="projects.html">Projetos</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="artigos.html">Artigos</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="index.html#cta">Contato</a>
+</nav>
+<div class="flex items-center gap-4">
+  <a href="consult.html" class="hidden md:block bg-gradient-to-br from-primary to-secondary-dim px-6 py-2 rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity">Consultoria</a>
+  <button class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 z-50" id="nav-toggle" aria-label="Abrir menu">
+    <span class="block h-0.5 bg-white rounded transition-all"></span>
+    <span class="block h-0.5 bg-white rounded transition-all"></span>
+    <span class="block h-0.5 bg-white rounded transition-all"></span>
+  </button>
+</div>
+<div class="bg-gradient-to-r from-transparent via-[#22262f] to-transparent h-[1px] w-full absolute bottom-0 left-0"></div>
+</header>
+<!-- Main Section (grid-texture removed) -->
+<main class="relative pt-32 pb-24 px-8 min-h-screen overflow-hidden">
+<!-- Abstract Decoration -->
+<div class="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-500/5 blur-[120px] rounded-full -mr-96 -mt-96 pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-tertiary/5 blur-[100px] rounded-full -ml-72 -mb-72 pointer-events-none"></div>
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-start relative z-10">
+<!-- Left Column: Content -->
+<section class="flex flex-col gap-12 pt-12">
+<div class="space-y-6">
+<div class="inline-flex items-center gap-3 bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/10">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="text-[0.625rem] font-black uppercase tracking-[0.2em] text-tertiary">STATUS DO SISTEMA: ATIVO</span>
+</div>
+<h1 class="font-headline text-5xl md:text-8xl font-bold leading-[0.9] tracking-tighter text-on-surface">
+                        VAMOS ESCALAR O <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-tertiary">SEU IMPACTO.</span>
+</h1>
+<p class="max-w-lg text-lg text-on-surface-variant font-body leading-relaxed font-light">
+                        Consultoria estratégica focada em precisão arquitetônica e soberania de dados. Transformamos ecossistemas complexos em motores de crescimento através de engenharia de alta performance.
+                    </p>
+</div>
+<div class="grid grid-cols-2 gap-8 py-8 border-y border-outline-variant/10">
+<div>
+<div class="text-[0.625rem] font-label uppercase tracking-widest text-primary mb-2">Engenharia</div>
+<div class="font-headline text-xl font-medium">Kinetic Architect V1.0</div>
+</div>
+<div>
+<div class="text-[0.625rem] font-label uppercase tracking-widest text-tertiary mb-2">Protocolo</div>
+<div class="font-headline text-xl font-medium">LTM_STRATEGY_CORE</div>
+</div>
+</div>
+<div class="relative w-full aspect-video rounded-xl overflow-hidden shadow-2xl group border border-outline-variant/10">
+<img alt="Visualização de precisão arquitetônica" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-3B12QW_2YuLdOVCkrIwtC3USzChAVpHBDXnb91zcQe8FFtqc6lCjvGJ7GMa1s-xBjOx6slj4Q0eA1__y79EMeaqn5w-I-MYQMhDjEkyklK5QH88RuIr0LsZY2o1rkPfrcvQefoe__iG-3VJv5qDWwyXYORfD_Yyd0WckZ8XtsK04qKa9BJz3z2123pvEB6HgmBlblRkbJLv4f6rDUAwRqMxeHlZ4XInNA2MVxWmfwE5uhOdbwAC41CTZP3qz8JGBCxoDZwTpqJg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-60"></div>
+<div class="absolute bottom-6 left-6 flex items-center gap-4">
+<div class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface/80 backdrop-blur-md border border-outline-variant/10">
+<span class="material-symbols-outlined text-primary">terminal</span>
+</div>
+<div>
+<div class="text-[0.6rem] font-label uppercase text-on-surface-variant tracking-tighter">Módulo Atual</div>
+<div class="text-sm font-headline font-bold">ARCH_OPTIMIZER_X</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Contact Form (Updated style for cleaner look) -->
+<section class="bg-surface-container-low p-1 rounded-xl shadow-[0_0_80px_rgba(0,0,0,0.4)]">
+<div class="bg-surface p-8 md:p-12 rounded-lg border border-outline-variant/10">
+<div class="mb-10">
+<h2 class="font-headline text-2xl font-bold mb-2">Consultoria de Projetos</h2>
+<p class="text-on-surface-variant text-sm font-body font-light">Inicie sua jornada técnica preenchendo os requisitos abaixo.</p>
+</div>
+<form class="space-y-8" id="contato-form" novalidate>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-[0.6875rem] font-label uppercase tracking-[0.05em] text-on-surface/60 ml-1" for="nome">Nome</label>
+<input id="nome" name="nome" class="w-full bg-surface-container-highest border-none ring-1 ring-white/10 focus:ring-primary/50 focus:shadow-[0_0_15px_rgba(167,165,255,0.1)] transition-all duration-300 rounded-lg p-4 text-sm font-body text-on-surface outline-none placeholder:text-outline/40" placeholder="Seu nome completo" type="text" required/>
+</div>
+<div class="space-y-2">
+<label class="text-[0.6875rem] font-label uppercase tracking-[0.05em] text-on-surface/60 ml-1" for="email">E-mail</label>
+<input id="email" name="email" class="w-full bg-surface-container-highest border-none ring-1 ring-white/10 focus:ring-primary/50 focus:shadow-[0_0_15px_rgba(167,165,255,0.1)] transition-all duration-300 rounded-lg p-4 text-sm font-body text-on-surface outline-none placeholder:text-outline/40" placeholder="nome@empresa.com" type="email" required/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-[0.6875rem] font-label uppercase tracking-[0.05em] text-on-surface/60 ml-1" for="assunto">Assunto</label>
+<div class="relative">
+<select id="assunto" name="assunto" class="w-full appearance-none bg-surface-container-highest border-none ring-1 ring-white/10 focus:ring-primary/50 focus:shadow-[0_0_15px_rgba(167,165,255,0.1)] transition-all duration-300 rounded-lg p-4 text-sm font-body text-on-surface outline-none cursor-pointer">
+<option value="" disabled selected>Selecione a especialidade</option>
+<option value="Machine Learning">Machine Learning</option>
+<option value="Data Engineering">Data Engineering</option>
+<option value="S&amp;OP Analytics">S&amp;OP Analytics</option>
+<option value="Outros">Outros</option>
+</select>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-[0.6875rem] font-label uppercase tracking-[0.05em] text-on-surface/60 ml-1" for="mensagem">Descrição do Projeto</label>
+<textarea id="mensagem" name="mensagem" class="w-full bg-surface-container-highest border-none ring-1 ring-white/10 focus:ring-primary/50 focus:shadow-[0_0_15px_rgba(167,165,255,0.1)] transition-all duration-300 rounded-lg p-4 text-sm font-body text-on-surface outline-none placeholder:text-outline/40 resize-none" placeholder="Descreva brevemente seus objetivos e desafios técnicos..." rows="5" required></textarea>
+</div>
+<div class="pt-4">
+<button id="form-btn" class="w-full py-5 bg-gradient-to-r from-indigo-600 to-violet-700 text-on-surface font-headline font-extrabold uppercase tracking-[0.2em] rounded-lg shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50" type="submit">
+  INICIAR AUDITORIA TÉCNICA
+  <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</button>
+<p id="form-status" class="text-center mt-4 text-[0.75rem] min-h-[1.25rem]" aria-live="polite"></p>
+<p class="text-center mt-2 text-[0.6rem] font-label uppercase text-on-surface-variant tracking-widest flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[10px]">lock</span>
+  Seus dados estão protegidos
+</p>
+</div>
+</form>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer Updated to match SCREEN_21 -->
+<footer class="bg-[#0b0e14] border-t border-[#22262f] py-12">
+<div class="w-full flex flex-col md:flex-row justify-between items-center px-12 gap-6">
+<div class="text-sm font-black text-[#ecedf6]">KINETIC ARCHITECT</div>
+<div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">© 2024 KINETIC ARCHITECT // ENGINEERED PRECISION</div>
+<div class="flex gap-8">
+<a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
+<a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>
+<a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="index.html">Blog Técnico</a>
+</div>
+</div>
+</footer>
+
+    <div id='cursor-dot'></div>
+    <div id='cursor-ring'></div>
+    <div id='cursor-glow'></div>
+
+    <div id='mobile-menu' class='hidden fixed inset-0 bg-[#0b0e14]/95 backdrop-blur-md z-40 flex-col justify-center items-center gap-8 font-[Space_Grotesk] text-xl uppercase tracking-widest'>
+        <a href='index.html' class='text-primary hover:text-white'>Overview</a>
+        <a href='projects.html' class='text-primary hover:text-white'>Projetos</a>
+        <a href='artigos.html' class='text-primary hover:text-white'>Artigos</a>
+        <a href='consult.html' class='text-white'>Consultoria</a>
+        <a href='index.html#cta' class='text-primary hover:text-white'>Contato</a>
+    </div>
+
+    <script src="js/main.js"></script>
+</body></html>

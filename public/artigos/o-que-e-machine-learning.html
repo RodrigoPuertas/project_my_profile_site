@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>O que é Machine Learning? | Rodrigo Puertas</title>
+<meta name="description" content="Do conceito ao treinamento: como máquinas aprendem a partir de dados e por que isso importa."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary-fixed-dim": "#8885ff", "surface": "#0b0e14", "on-surface-variant": "#a9abb3",
+          "on-error": "#490013", "primary-dim": "#645efb", "tertiary": "#8ce7ff",
+          "outline-variant": "#45484f", "surface-tint": "#a7a5ff", "on-secondary": "#2b0065",
+          "error": "#ff6e84", "on-primary": "#1c00a0", "outline": "#73757d",
+          "primary-container": "#9795ff", "on-secondary-container": "#e1d0ff",
+          "background": "#0b0e14", "secondary-dim": "#8a4cfc",
+          "surface-container-high": "#1c2028", "surface-variant": "#22262f",
+          "secondary-fixed": "#dcc9ff", "surface-container-lowest": "#000000",
+          "surface-container-low": "#10131a", "on-background": "#ecedf6",
+          "on-surface": "#ecedf6", "secondary": "#af88ff", "primary": "#a7a5ff",
+          "surface-container": "#161a21", "tertiary-container": "#53ddfc",
+          "primary-fixed": "#9795ff", "surface-container-highest": "#22262f",
+          "surface-bright": "#282c36",
+        },
+        fontFamily: { "headline": ["Space Grotesk"], "body": ["Inter"], "label": ["Inter"] },
+        borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+  body { background-color: #0b0e14; color: #ecedf6; font-family: 'Inter', sans-serif; cursor: none; }
+  a, button { cursor: none; }
+  h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
+
+  /* Cursor */
+  #cursor-dot { position: fixed; top: 0; left: 0; width: 6px; height: 6px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.2s, height 0.2s; mix-blend-mode: difference; }
+  #cursor-ring { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px solid rgba(167, 165, 255, 0.7); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.35s cubic-bezier(.23,1,.32,1), height 0.35s cubic-bezier(.23,1,.32,1); }
+  #cursor-ring::before { content: ''; position: absolute; inset: -1px; border-radius: 50%; background: conic-gradient(from 0deg, #a7a5ff, transparent 60%, #8ce7ff, transparent); opacity: 0.4; animation: spinRing 3s linear infinite; -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); }
+  #cursor-glow { position: fixed; top: 0; left: 0; width: 350px; height: 350px; background: radial-gradient(circle, rgba(167, 165, 255, 0.06) 0%, transparent 65%); border-radius: 50%; pointer-events: none; z-index: 9997; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease; }
+  body.cursor-active #cursor-dot, body.cursor-active #cursor-ring, body.cursor-active #cursor-glow { opacity: 1; }
+  body.cursor-hover #cursor-dot { width: 10px; height: 10px; }
+  body.cursor-hover #cursor-ring { width: 64px; height: 64px; border-color: rgba(140, 231, 255, 0.5); }
+  @keyframes spinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* Article Typography */
+  .article-body p { margin-bottom: 1.5rem; line-height: 1.9; color: #a9abb3; font-size: 1.0625rem; }
+  .article-body h2 { font-size: 1.75rem; font-weight: 700; margin-top: 3rem; margin-bottom: 1rem; color: #ecedf6; letter-spacing: -0.02em; }
+  .article-body h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem; color: #ecedf6; }
+  .article-body strong { color: #ecedf6; font-weight: 600; }
+  .article-body ul { margin-bottom: 1.5rem; padding-left: 1.5rem; list-style: none; }
+  .article-body ul li { position: relative; padding-left: 1.25rem; margin-bottom: 0.5rem; color: #a9abb3; font-size: 1.0625rem; line-height: 1.8; }
+  .article-body ul li::before { content: '—'; position: absolute; left: 0; color: #a7a5ff; font-weight: 600; }
+  .callout { background: #161a21; border-left: 3px solid #a7a5ff; padding: 1.25rem 1.5rem; border-radius: 0 0.25rem 0.25rem 0; margin-bottom: 1.5rem; }
+  .callout p { margin: 0; color: #ecedf6; font-size: 0.9375rem; }
+  .code-block { background: #000; border: 1px solid #22262f; border-radius: 0.25rem; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.875rem; color: #8ce7ff; overflow-x: auto; }
+  .code-block .comment { color: #45484f; }
+  .code-block .keyword { color: #a7a5ff; }
+  .code-block .string { color: #af88ff; }
+</style>
+</head>
+<body class="selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
+  <div class="text-xl font-bold tracking-tighter text-[#ecedf6]">KINETIC ARCHITECT</div>
+  <nav class="hidden md:flex items-center gap-8">
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../index.html">Overview</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../projects.html">Projetos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#8ce7ff] font-bold border-b border-[#8ce7ff] pb-1" href="../artigos.html">Artigos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../index.html#cta">Contato</a>
+  </nav>
+  <div class="flex items-center gap-4">
+    <a href="../consult.html" class="hidden md:block bg-gradient-to-br from-primary to-secondary-dim px-6 py-2 rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity">Consultoria</a>
+    <button class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 z-50" id="nav-toggle" aria-label="Abrir menu">
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+    </button>
+  </div>
+  <div class="bg-gradient-to-r from-transparent via-[#22262f] to-transparent h-[1px] w-full absolute bottom-0 left-0"></div>
+</header>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="hidden fixed inset-0 bg-[#0b0e14]/95 backdrop-blur-md z-40 flex-col justify-center items-center gap-8 font-['Space_Grotesk'] text-xl uppercase tracking-widest">
+  <a href="../index.html" class="text-primary hover:text-white">Overview</a>
+  <a href="../projects.html" class="text-primary hover:text-white">Projetos</a>
+  <a href="../artigos.html" class="text-white">Artigos</a>
+  <a href="../consult.html" class="text-primary hover:text-white">Consultoria</a>
+  <a href="../index.html#cta" class="text-primary hover:text-white">Contato</a>
+</div>
+
+<main class="pt-20">
+
+  <!-- Article Hero -->
+  <section class="px-8 pt-20 pb-16 md:pt-32 md:pb-20 max-w-[800px] mx-auto">
+    <!-- Breadcrumb -->
+    <a href="../artigos.html" class="inline-flex items-center gap-2 text-[0.6875rem] uppercase tracking-widest text-outline hover:text-primary transition-colors mb-12">
+      <span class="material-symbols-outlined text-sm">arrow_back</span>
+      Knowledge Base
+    </a>
+
+    <!-- Meta -->
+    <div class="flex flex-wrap items-center gap-4 mb-8">
+      <span class="px-3 py-1 rounded-sm bg-surface-container-high text-[0.6rem] font-bold text-primary border border-primary/20 uppercase tracking-widest">Machine Learning</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">8 min leitura</span>
+      <span class="text-outline-variant">•</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">Março 2026</span>
+      <span class="text-outline-variant">•</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">Rodrigo Puertas</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
+      O que é <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-tertiary">Machine Learning?</span>
+    </h1>
+    <p class="text-xl text-on-surface-variant font-light leading-relaxed">
+      Do conceito ao treinamento: como máquinas aprendem a partir de dados e por que isso importa para negócios reais.
+    </p>
+  </section>
+
+  <!-- Divider -->
+  <div class="bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent h-[1px] w-full max-w-[800px] mx-auto"></div>
+
+  <!-- Article Content -->
+  <article class="article-body px-8 py-16 max-w-[800px] mx-auto">
+
+    <h2>A definição que ninguém te conta</h2>
+    <p>
+      Machine Learning (ML) é um subcampo da Inteligência Artificial no qual sistemas computacionais aprendem padrões a partir de dados — sem serem explicitamente programados para cada regra.
+    </p>
+    <p>
+      Em vez de você escrever <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">if preco > 100 then desconto = True</code>, você fornece exemplos de situações em que o desconto foi dado, e o modelo aprende a regra sozinho. Isso muda fundamentalmente como você resolve problemas.
+    </p>
+
+    <div class="callout">
+      <p><strong>Definição técnica:</strong> ML é a área que estuda algoritmos que melhoram automaticamente sua performance com a experiência (dados), sem serem reprogramados para cada situação.</p>
+    </div>
+
+    <h2>Os três tipos que você precisa conhecer</h2>
+
+    <h3>1. Aprendizado Supervisionado</h3>
+    <p>
+      O modelo aprende com dados rotulados — você fornece os exemplos e as respostas corretas. É o tipo mais comum e o mais utilizado em produção.
+    </p>
+    <ul>
+      <li><strong>Classificação</strong> — "Esse email é spam ou não spam?"</li>
+      <li><strong>Regressão</strong> — "Quanto vale esse imóvel?"</li>
+      <li><strong>Forecasting</strong> — "Qual será a demanda do produto na próxima semana?"</li>
+    </ul>
+
+    <h3>2. Aprendizado Não Supervisionado</h3>
+    <p>
+      Sem rótulos. O modelo encontra padrões e estrutura nos dados por conta própria. Útil quando você não sabe exatamente o que procura.
+    </p>
+    <ul>
+      <li><strong>Clustering (K-Means, DBSCAN)</strong> — segmentação de clientes</li>
+      <li><strong>Redução de dimensionalidade (PCA)</strong> — visualizar dados de alta dimensão</li>
+      <li><strong>Detecção de anomalias</strong> — identificar transações suspeitas</li>
+    </ul>
+
+    <h3>3. Aprendizado por Reforço</h3>
+    <p>
+      O modelo aprende por tentativa e erro, recebendo recompensas por ações corretas. É a base do AlphaGo, carros autônomos e sistemas de recomendação avançados.
+    </p>
+
+    <h2>Como um modelo realmente aprende</h2>
+    <p>
+      O processo de treinamento pode ser resumido em quatro etapas:
+    </p>
+    <ul>
+      <li><strong>Dados</strong> — você alimenta o modelo com exemplos históricos</li>
+      <li><strong>Predição</strong> — o modelo faz uma previsão inicial (geralmente ruim)</li>
+      <li><strong>Erro</strong> — comparamos a previsão com o valor real (função de perda/loss)</li>
+      <li><strong>Ajuste</strong> — os pesos internos do modelo são atualizados para reduzir o erro (gradiente descendente)</li>
+    </ul>
+    <p>
+      Esse ciclo se repete milhares ou milhões de vezes até o modelo convergir — ou seja, atingir uma performance aceitável nos dados de validação.
+    </p>
+
+    <div class="code-block">
+<span class="comment"># Exemplo mínimo com Scikit-learn</span>
+<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score
+
+<span class="comment"># 1. Separar dados em treino e teste</span>
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="string">0.2</span>)
+
+<span class="comment"># 2. Instanciar e treinar o modelo</span>
+model = RandomForestClassifier(n_estimators=<span class="string">100</span>)
+model.fit(X_train, y_train)
+
+<span class="comment"># 3. Avaliar performance</span>
+y_pred = model.predict(X_test)
+<span class="keyword">print</span>(accuracy_score(y_test, y_pred))
+    </div>
+
+    <h2>O que não é Machine Learning</h2>
+    <p>
+      É importante não confundir ML com:
+    </p>
+    <ul>
+      <li><strong>Regras if/else complexas</strong> — isso é programação tradicional, não ML</li>
+      <li><strong>Estatística descritiva</strong> — médias e desvios padrão descrevem dados, mas não aprendem</li>
+      <li><strong>Business Intelligence (BI)</strong> — dashboards explicam o passado; ML projeta o futuro</li>
+      <li><strong>Inteligência Artificial geral</strong> — ML é uma das abordagens de IA, não a única</li>
+    </ul>
+
+    <h2>Quando usar (e quando não usar)</h2>
+
+    <div class="callout">
+      <p>Use ML quando: o problema tem dados históricos suficientes, a relação entre variáveis é complexa demais para regras manuais, e você precisa de escala.</p>
+    </div>
+
+    <p>
+      <strong>Use ML quando:</strong> existe um padrão nos dados que você quer capturar, você tem volume suficiente de exemplos, e uma previsão errada tem custo gerenciável.
+    </p>
+    <p>
+      <strong>Não use ML quando:</strong> o problema pode ser resolvido com uma fórmula simples, você tem poucos dados (&lt;1000 exemplos na maioria dos casos), ou a interpretabilidade total é um requisito legal (crédito, saúde).
+    </p>
+
+    <h2>O que vem a seguir</h2>
+    <p>
+      Machine Learning é o ponto de partida. Mas para colocar modelos em produção de forma confiável, rastreável e escalável, você precisa entender <strong>MLOps</strong> — o próximo artigo desta série.
+    </p>
+    <p>
+      E para alimentar seus modelos com dados de qualidade, entra a <strong>Engenharia de Dados</strong>: pipelines, ETL, Data Lakes e Warehouses.
+    </p>
+
+  </article>
+
+  <!-- Divider -->
+  <div class="bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent h-[1px] w-full max-w-[800px] mx-auto"></div>
+
+  <!-- Author + Next -->
+  <section class="px-8 py-16 max-w-[800px] mx-auto flex flex-col md:flex-row gap-12 justify-between items-start">
+    <!-- Author -->
+    <div class="flex items-center gap-4">
+      <img src="https://github.com/RodrigoPuertas.png" alt="Rodrigo Puertas" class="w-12 h-12 rounded-full border border-outline-variant/30"/>
+      <div>
+        <div class="text-sm font-bold text-on-surface">Rodrigo Puertas</div>
+        <div class="text-[0.6875rem] text-outline uppercase tracking-widest">Cientista de Dados · Shopee</div>
+      </div>
+    </div>
+    <!-- Back to list -->
+    <a href="../artigos.html" class="inline-flex items-center gap-2 px-6 py-3 border border-outline-variant/30 rounded text-[0.6875rem] font-bold uppercase tracking-widest hover:border-primary transition-all group">
+      <span class="material-symbols-outlined text-sm group-hover:text-primary transition-colors">arrow_back</span>
+      Ver todos os artigos
+    </a>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#0b0e14] border-t border-[#22262f] py-12">
+  <div class="w-full flex flex-col md:flex-row justify-between items-center px-12 gap-6">
+    <div class="text-sm font-black text-[#ecedf6]">KINETIC ARCHITECT</div>
+    <div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">© 2026 RODRIGO PUERTAS // KNOWLEDGE BASE</div>
+    <div class="flex gap-8">
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="cursor-glow"></div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
