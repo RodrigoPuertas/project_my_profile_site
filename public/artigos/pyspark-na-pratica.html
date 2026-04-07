@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PySpark na Pr&aacute;tica | Rodrigo Puertas</title>
+<meta name="description" content="Processamento distribu&iacute;do de dados em larga escala: quando e por que usar Spark ao inv&eacute;s de Pandas."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="../js/tailwind-config.js"></script>
+<link href="../css/shared.css" rel="stylesheet"/>
+<link href="../css/article.css" rel="stylesheet"/>
+</head>
+<body class="selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
+  <div class="text-xl font-bold tracking-tighter text-[#ecedf6]">PUERTAS.DEV</div>
+  <nav class="hidden md:flex items-center gap-8">
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../index.html">Overview</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../projects.html">Projetos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#8ce7ff] font-bold border-b border-[#8ce7ff] pb-1" href="../artigos.html">Artigos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../index.html#cta">Contato</a>
+  </nav>
+  <div class="flex items-center gap-4">
+    <a href="../consult.html" class="hidden md:block bg-gradient-to-br from-primary to-secondary-dim px-6 py-2 rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity">Consultoria</a>
+    <button class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 z-50" id="nav-toggle" aria-label="Abrir menu">
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+    </button>
+  </div>
+  <div class="bg-gradient-to-r from-transparent via-[#22262f] to-transparent h-[1px] w-full absolute bottom-0 left-0"></div>
+</header>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="hidden fixed inset-0 bg-[#0b0e14]/95 backdrop-blur-md z-40 flex-col justify-center items-center gap-8 font-['Space_Grotesk'] text-xl uppercase tracking-widest">
+  <a href="../index.html" class="text-primary hover:text-white">Overview</a>
+  <a href="../projects.html" class="text-primary hover:text-white">Projetos</a>
+  <a href="../artigos.html" class="text-white">Artigos</a>
+  <a href="../consult.html" class="text-primary hover:text-white">Consultoria</a>
+  <a href="../index.html#cta" class="text-primary hover:text-white">Contato</a>
+</div>
+
+<main class="pt-20">
+
+  <!-- Article Hero -->
+  <section class="px-8 pt-20 pb-16 md:pt-32 md:pb-20 max-w-[800px] mx-auto">
+    <a href="../artigos.html" class="inline-flex items-center gap-2 text-[0.6875rem] uppercase tracking-widest text-outline hover:text-primary transition-colors mb-12">
+      <span class="material-symbols-outlined text-sm">arrow_back</span>
+      Knowledge Base
+    </a>
+
+    <div class="flex flex-wrap items-center gap-4 mb-8">
+      <span class="px-3 py-1 rounded-sm bg-surface-container-high text-[0.6rem] font-bold text-tertiary border border-tertiary/20 uppercase tracking-widest">Data Engineering</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">11 min leitura</span>
+      <span class="text-outline-variant">&bull;</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">Abril 2026</span>
+      <span class="text-outline-variant">&bull;</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">Rodrigo Puertas</span>
+    </div>
+
+    <h1 class="text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
+      PySpark <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-tertiary">na Pr&aacute;tica</span>
+    </h1>
+    <p class="text-xl text-on-surface-variant font-light leading-relaxed">
+      Processamento distribu&iacute;do de dados em larga escala: quando e por que usar Spark ao inv&eacute;s de Pandas.
+    </p>
+  </section>
+
+  <div class="bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent h-[1px] w-full max-w-[800px] mx-auto"></div>
+
+  <!-- Article Content -->
+  <article class="article-body px-8 py-16 max-w-[800px] mx-auto">
+
+    <h2>O que &eacute; Apache Spark</h2>
+    <p>
+      Apache Spark &eacute; um motor de processamento de dados distribu&iacute;do, open-source, projetado para lidar com volumes massivos de dados com velocidade e toler&acirc;ncia a falhas. Criado na UC Berkeley em 2009, rapidamente se tornou o padr&atilde;o da ind&uacute;stria para Big Data.
+    </p>
+    <p>
+      O diferencial do Spark em rela&ccedil;&atilde;o ao Hadoop MapReduce &eacute; o processamento <strong>in-memory</strong>: em vez de escrever resultados intermedi&aacute;rios em disco a cada etapa, o Spark mant&eacute;m os dados na mem&oacute;ria RAM dos workers, sendo at&eacute; <strong>100x mais r&aacute;pido</strong> para determinadas opera&ccedil;&otilde;es.
+    </p>
+
+    <div class="callout">
+      <p><strong>Defini&ccedil;&atilde;o:</strong> PySpark &eacute; a API Python para o Apache Spark. Permite que cientistas e engenheiros de dados usem a sintaxe familiar do Python para processar dados distribu&iacute;dos em clusters com centenas de m&aacute;quinas.</p>
+    </div>
+
+    <h2>Spark vs Pandas: quando usar cada um</h2>
+    <p>
+      A pergunta fundamental: quando o Pandas n&atilde;o &eacute; suficiente? A resposta est&aacute; no volume de dados e na arquitetura de processamento.
+    </p>
+
+    <!-- SVG: Spark vs Pandas comparison -->
+    <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" width="100%" style="max-width:700px;margin:2rem auto;display:block;">
+      <defs>
+        <linearGradient id="gradPandas" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#a7a5ff;stop-opacity:0.2"/>
+          <stop offset="100%" style="stop-color:#a7a5ff;stop-opacity:0.05"/>
+        </linearGradient>
+        <linearGradient id="gradSpark" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#8ce7ff;stop-opacity:0.2"/>
+          <stop offset="100%" style="stop-color:#8ce7ff;stop-opacity:0.05"/>
+        </linearGradient>
+      </defs>
+      <!-- Pandas box -->
+      <rect x="20" y="20" width="310" height="240" rx="8" fill="url(#gradPandas)" stroke="#a7a5ff" stroke-opacity="0.3"/>
+      <text x="175" y="55" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk" font-size="18" font-weight="700">PANDAS</text>
+      <line x1="60" y1="70" x2="290" y2="70" stroke="#45484f" stroke-width="1"/>
+      <text x="175" y="100" text-anchor="middle" fill="#ecedf6" font-family="Inter" font-size="13">Single Machine</text>
+      <text x="175" y="125" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="12">Processamento em 1 n&oacute;</text>
+      <text x="175" y="155" text-anchor="middle" fill="#ecedf6" font-family="Inter" font-size="13">In-Memory (RAM local)</text>
+      <text x="175" y="180" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="12">Limitado pela RAM da m&aacute;quina</text>
+      <rect x="100" y="200" width="150" height="36" rx="4" fill="#a7a5ff" fill-opacity="0.15" stroke="#a7a5ff" stroke-opacity="0.3"/>
+      <text x="175" y="223" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk" font-size="14" font-weight="600">&lt; 10 GB</text>
+      <!-- Spark box -->
+      <rect x="370" y="20" width="310" height="240" rx="8" fill="url(#gradSpark)" stroke="#8ce7ff" stroke-opacity="0.3"/>
+      <text x="525" y="55" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk" font-size="18" font-weight="700">PYSPARK</text>
+      <line x1="410" y1="70" x2="640" y2="70" stroke="#45484f" stroke-width="1"/>
+      <text x="525" y="100" text-anchor="middle" fill="#ecedf6" font-family="Inter" font-size="13">Cluster Distribu&iacute;do</text>
+      <text x="525" y="125" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="12">Processamento em N n&oacute;s</text>
+      <text x="525" y="155" text-anchor="middle" fill="#ecedf6" font-family="Inter" font-size="13">In-Memory Distribu&iacute;do</text>
+      <text x="525" y="180" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="12">Escala horizontal ilimitada</text>
+      <rect x="450" y="200" width="150" height="36" rx="4" fill="#8ce7ff" fill-opacity="0.15" stroke="#8ce7ff" stroke-opacity="0.3"/>
+      <text x="525" y="223" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk" font-size="14" font-weight="600">TB+ de dados</text>
+      <!-- VS -->
+      <text x="350" y="148" text-anchor="middle" fill="#45484f" font-family="Space Grotesk" font-size="16" font-weight="700">VS</text>
+    </svg>
+
+    <h2>Arquitetura do Spark</h2>
+    <p>
+      Entender a arquitetura &eacute; fundamental para otimizar seus jobs. O Spark segue um modelo <strong>master-worker</strong> com tr&ecirc;s componentes principais.
+    </p>
+
+    <!-- SVG: Architecture diagram -->
+    <svg viewBox="0 0 700 340" xmlns="http://www.w3.org/2000/svg" width="100%" style="max-width:700px;margin:2rem auto;display:block;">
+      <!-- Driver -->
+      <rect x="250" y="10" width="200" height="60" rx="6" fill="#a7a5ff" fill-opacity="0.15" stroke="#a7a5ff" stroke-opacity="0.5"/>
+      <text x="350" y="35" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk" font-size="14" font-weight="700">DRIVER PROGRAM</text>
+      <text x="350" y="55" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="10">SparkContext / SparkSession</text>
+      <!-- Arrow down -->
+      <line x1="350" y1="70" x2="350" y2="100" stroke="#a7a5ff" stroke-opacity="0.5" stroke-width="2" marker-end="url(#arrowPurple)"/>
+      <!-- Cluster Manager -->
+      <rect x="250" y="100" width="200" height="50" rx="6" fill="#af88ff" fill-opacity="0.15" stroke="#af88ff" stroke-opacity="0.5"/>
+      <text x="350" y="130" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk" font-size="13" font-weight="600">CLUSTER MANAGER</text>
+      <text x="350" y="143" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="9">YARN / Mesos / K8s / Standalone</text>
+      <!-- Arrows to workers -->
+      <line x1="250" y1="150" x2="120" y2="190" stroke="#af88ff" stroke-opacity="0.4" stroke-width="1.5"/>
+      <line x1="350" y1="150" x2="350" y2="190" stroke="#af88ff" stroke-opacity="0.4" stroke-width="1.5"/>
+      <line x1="450" y1="150" x2="580" y2="190" stroke="#af88ff" stroke-opacity="0.4" stroke-width="1.5"/>
+      <!-- Worker 1 -->
+      <rect x="30" y="190" width="180" height="130" rx="6" fill="#22262f" stroke="#45484f"/>
+      <text x="120" y="215" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk" font-size="12" font-weight="600">WORKER NODE 1</text>
+      <rect x="50" y="230" width="140" height="30" rx="4" fill="#8ce7ff" fill-opacity="0.1" stroke="#8ce7ff" stroke-opacity="0.2"/>
+      <text x="120" y="250" text-anchor="middle" fill="#8ce7ff" font-family="Inter" font-size="10">Executor</text>
+      <rect x="60" y="270" width="50" height="22" rx="3" fill="#a7a5ff" fill-opacity="0.1" stroke="#a7a5ff" stroke-opacity="0.2"/>
+      <text x="85" y="285" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="9">Task</text>
+      <rect x="120" y="270" width="50" height="22" rx="3" fill="#a7a5ff" fill-opacity="0.1" stroke="#a7a5ff" stroke-opacity="0.2"/>
+      <text x="145" y="285" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="9">Task</text>
+      <!-- Worker 2 -->
+      <rect x="260" y="190" width="180" height="130" rx="6" fill="#22262f" stroke="#45484f"/>
+      <text x="350" y="215" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk" font-size="12" font-weight="600">WORKER NODE 2</text>
+      <rect x="280" y="230" width="140" height="30" rx="4" fill="#8ce7ff" fill-opacity="0.1" stroke="#8ce7ff" stroke-opacity="0.2"/>
+      <text x="350" y="250" text-anchor="middle" fill="#8ce7ff" font-family="Inter" font-size="10">Executor</text>
+      <rect x="290" y="270" width="50" height="22" rx="3" fill="#a7a5ff" fill-opacity="0.1" stroke="#a7a5ff" stroke-opacity="0.2"/>
+      <text x="315" y="285" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="9">Task</text>
+      <rect x="350" y="270" width="50" height="22" rx="3" fill="#a7a5ff" fill-opacity="0.1" stroke="#a7a5ff" stroke-opacity="0.2"/>
+      <text x="375" y="285" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="9">Task</text>
+      <!-- Worker 3 -->
+      <rect x="490" y="190" width="180" height="130" rx="6" fill="#22262f" stroke="#45484f"/>
+      <text x="580" y="215" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk" font-size="12" font-weight="600">WORKER NODE N</text>
+      <rect x="510" y="230" width="140" height="30" rx="4" fill="#8ce7ff" fill-opacity="0.1" stroke="#8ce7ff" stroke-opacity="0.2"/>
+      <text x="580" y="250" text-anchor="middle" fill="#8ce7ff" font-family="Inter" font-size="10">Executor</text>
+      <rect x="520" y="270" width="50" height="22" rx="3" fill="#a7a5ff" fill-opacity="0.1" stroke="#a7a5ff" stroke-opacity="0.2"/>
+      <text x="545" y="285" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="9">Task</text>
+      <rect x="580" y="270" width="50" height="22" rx="3" fill="#a7a5ff" fill-opacity="0.1" stroke="#a7a5ff" stroke-opacity="0.2"/>
+      <text x="605" y="285" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="9">Task</text>
+    </svg>
+
+    <ul>
+      <li><strong>Driver Program</strong> &mdash; coordena o job, mant&eacute;m o SparkContext e distribui o trabalho</li>
+      <li><strong>Cluster Manager</strong> &mdash; gerencia recursos (YARN, Kubernetes ou Standalone)</li>
+      <li><strong>Workers/Executors</strong> &mdash; executam as tasks em paralelo, cada um com sua fatia de mem&oacute;ria e CPU</li>
+    </ul>
+
+    <h2>PySpark: primeiros passos</h2>
+    <p>
+      A porta de entrada &eacute; o <strong>SparkSession</strong> &mdash; o ponto central para toda intera&ccedil;&atilde;o com o Spark.
+    </p>
+
+    <div class="code-block">
+<span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> SparkSession
+
+<span class="comment"># Criar a sess&atilde;o</span>
+spark = SparkSession.builder \
+    .appName(<span class="string">"MeuJob"</span>) \
+    .config(<span class="string">"spark.sql.shuffle.partitions"</span>, <span class="string">200</span>) \
+    .getOrCreate()
+
+<span class="comment"># Ler dados</span>
+df = spark.read.parquet(<span class="string">"s3://bucket/dados/"</span>)
+
+<span class="comment"># Verificar schema e contagem</span>
+df.printSchema()
+<span class="keyword">print</span>(f<span class="string">"Total de linhas: {df.count()}"</span>)
+    </div>
+
+    <p>
+      Diferente do Pandas, o Spark usa <strong>lazy evaluation</strong>: opera&ccedil;&otilde;es como <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">filter()</code>, <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">select()</code> e <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">groupBy()</code> n&atilde;o executam imediatamente. O Spark constr&oacute;i um <strong>plano de execu&ccedil;&atilde;o otimizado</strong> e s&oacute; processa quando voc&ecirc; chama uma <strong>action</strong> como <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">count()</code>, <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">show()</code> ou <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">write()</code>.
+    </p>
+
+    <h2>Opera&ccedil;&otilde;es essenciais</h2>
+
+    <h3>Select, Filter e GroupBy</h3>
+    <div class="code-block">
+<span class="comment"># Select e rename</span>
+df.select(<span class="string">"order_id"</span>, <span class="string">"value"</span>, <span class="string">"region"</span>)
+
+<span class="comment"># Filter</span>
+df.filter(df.value > <span class="string">100</span>)
+df.filter((df.region == <span class="string">"SP"</span>) &amp; (df.value > <span class="string">50</span>))
+
+<span class="comment"># GroupBy + agrega&ccedil;&otilde;es</span>
+<span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> functions <span class="keyword">as</span> F
+
+df.groupBy(<span class="string">"region"</span>).agg(
+    F.count(<span class="string">"order_id"</span>).alias(<span class="string">"total_pedidos"</span>),
+    F.sum(<span class="string">"value"</span>).alias(<span class="string">"receita_total"</span>),
+    F.avg(<span class="string">"value"</span>).alias(<span class="string">"ticket_medio"</span>)
+).orderBy(F.desc(<span class="string">"receita_total"</span>))
+    </div>
+
+    <h3>Joins</h3>
+    <div class="code-block">
+<span class="comment"># Inner join</span>
+pedidos.join(clientes, pedidos.cliente_id == clientes.id, <span class="string">"inner"</span>)
+
+<span class="comment"># Left join com broadcast (tabela pequena)</span>
+<span class="keyword">from</span> pyspark.sql.functions <span class="keyword">import</span> broadcast
+
+pedidos.join(broadcast(regioes), <span class="string">"region_id"</span>, <span class="string">"left"</span>)
+    </div>
+
+    <h3>Window Functions</h3>
+    <div class="code-block">
+<span class="keyword">from</span> pyspark.sql.window <span class="keyword">import</span> Window
+
+<span class="comment"># Ranking por regi&atilde;o</span>
+w = Window.partitionBy(<span class="string">"region"</span>).orderBy(F.desc(<span class="string">"value"</span>))
+
+df.withColumn(<span class="string">"rank"</span>, F.row_number().over(w)) \
+  .filter(F.col(<span class="string">"rank"</span>) &lt;= <span class="string">10</span>)
+
+<span class="comment"># M&eacute;dia m&oacute;vel de 7 dias</span>
+w7 = Window.partitionBy(<span class="string">"region"</span>) \
+    .orderBy(<span class="string">"date"</span>) \
+    .rowsBetween(-<span class="string">6</span>, <span class="string">0</span>)
+
+df.withColumn(<span class="string">"media_movel_7d"</span>, F.avg(<span class="string">"value"</span>).over(w7))
+    </div>
+
+    <h2>Spark SQL e o Catalyst Optimizer</h2>
+    <p>
+      Voc&ecirc; pode usar SQL puro no Spark, inclusive via engines como <strong>Trino/Presto</strong> que na Shopee Express s&atilde;o o padr&atilde;o para queries ad-hoc sobre o Data Lake.
+    </p>
+
+    <!-- SVG: Query execution flow -->
+    <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" width="100%" style="max-width:700px;margin:2rem auto;display:block;">
+      <!-- Steps -->
+      <rect x="10" y="25" width="110" height="50" rx="6" fill="#a7a5ff" fill-opacity="0.15" stroke="#a7a5ff" stroke-opacity="0.3"/>
+      <text x="65" y="45" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk" font-size="10" font-weight="600">SQL QUERY</text>
+      <text x="65" y="60" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="8">Usu&aacute;rio</text>
+      <text x="135" y="54" text-anchor="middle" fill="#45484f" font-family="Inter" font-size="14">&rarr;</text>
+      <rect x="150" y="25" width="110" height="50" rx="6" fill="#af88ff" fill-opacity="0.15" stroke="#af88ff" stroke-opacity="0.3"/>
+      <text x="205" y="45" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk" font-size="10" font-weight="600">CATALYST</text>
+      <text x="205" y="60" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="8">Otimizador</text>
+      <text x="275" y="54" text-anchor="middle" fill="#45484f" font-family="Inter" font-size="14">&rarr;</text>
+      <rect x="290" y="25" width="110" height="50" rx="6" fill="#af88ff" fill-opacity="0.15" stroke="#af88ff" stroke-opacity="0.3"/>
+      <text x="345" y="45" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk" font-size="10" font-weight="600">PHYSICAL PLAN</text>
+      <text x="345" y="60" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="8">Gera&ccedil;&atilde;o de c&oacute;digo</text>
+      <text x="415" y="54" text-anchor="middle" fill="#45484f" font-family="Inter" font-size="14">&rarr;</text>
+      <rect x="430" y="25" width="110" height="50" rx="6" fill="#8ce7ff" fill-opacity="0.15" stroke="#8ce7ff" stroke-opacity="0.3"/>
+      <text x="485" y="45" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk" font-size="10" font-weight="600">EXECUTORS</text>
+      <text x="485" y="60" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="8">Processamento</text>
+      <text x="555" y="54" text-anchor="middle" fill="#45484f" font-family="Inter" font-size="14">&rarr;</text>
+      <rect x="570" y="25" width="110" height="50" rx="6" fill="#8ce7ff" fill-opacity="0.15" stroke="#8ce7ff" stroke-opacity="0.3"/>
+      <text x="625" y="45" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk" font-size="10" font-weight="600">RESULTADO</text>
+      <text x="625" y="60" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="8">DataFrame / Table</text>
+    </svg>
+
+    <div class="code-block">
+<span class="comment"># Registrar DataFrame como tabela tempor&aacute;ria</span>
+df.createOrReplaceTempView(<span class="string">"pedidos"</span>)
+
+<span class="comment"># SQL puro</span>
+resultado = spark.sql(<span class="string">"""
+    SELECT region,
+           COUNT(*) AS total,
+           AVG(value) AS ticket_medio,
+           SUM(value) AS receita
+    FROM pedidos
+    WHERE date >= '2026-01-01'
+    GROUP BY region
+    ORDER BY receita DESC
+"""</span>)
+
+resultado.show()
+    </div>
+
+    <h2>Otimiza&ccedil;&atilde;o e performance</h2>
+    <p>
+      Usar PySpark &eacute; f&aacute;cil. Usar <strong>bem</strong> exige entender como o Spark distribui e processa dados.
+    </p>
+
+    <h3>1. Particionamento</h3>
+    <p>
+      O n&uacute;mero de parti&ccedil;&otilde;es define o paralelismo. Poucas parti&ccedil;&otilde;es = workers ociosos. Muitas = overhead de coordena&ccedil;&atilde;o.
+    </p>
+    <div class="code-block">
+<span class="comment"># Ver parti&ccedil;&otilde;es atuais</span>
+df.rdd.getNumPartitions()
+
+<span class="comment"># Reparticionar (shuffle)</span>
+df = df.repartition(<span class="string">200</span>, <span class="string">"region"</span>)
+
+<span class="comment"># Coalesce (sem shuffle &mdash; s&oacute; reduz)</span>
+df = df.coalesce(<span class="string">10</span>)
+    </div>
+
+    <h3>2. Cache e Persist</h3>
+    <p>
+      Se voc&ecirc; usa o mesmo DataFrame mais de uma vez, fa&ccedil;a cache para evitar reprocessamento.
+    </p>
+    <div class="code-block">
+<span class="comment"># Cache em mem&oacute;ria</span>
+df.cache()
+
+<span class="comment"># Persist com n&iacute;vel espec&iacute;fico</span>
+<span class="keyword">from</span> pyspark <span class="keyword">import</span> StorageLevel
+df.persist(StorageLevel.MEMORY_AND_DISK)
+    </div>
+
+    <h3>3. Broadcast Joins</h3>
+    <p>
+      Quando uma tabela &eacute; pequena (dimens&atilde;o, lookup), use broadcast para evitar shuffle &mdash; a tabela inteira &eacute; enviada a cada worker.
+    </p>
+
+    <h3>4. Evite UDFs sempre que poss&iacute;vel</h3>
+    <p>
+      UDFs (User Defined Functions) em Python s&atilde;o serializadas e executadas fora da JVM, o que mata a performance. Prefira fun&ccedil;&otilde;es nativas do <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">pyspark.sql.functions</code>.
+    </p>
+
+    <div class="callout">
+      <p><strong>Regra de ouro:</strong> se existe uma fun&ccedil;&atilde;o em <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">F.</code> (pyspark.sql.functions), use-a ao inv&eacute;s de escrever uma UDF. A diferen&ccedil;a de performance pode ser de 10x a 100x.</p>
+    </div>
+
+    <h2>Quando usar PySpark</h2>
+
+    <div class="callout">
+      <p><strong>Use PySpark quando:</strong> seus dados excedem a mem&oacute;ria de uma m&aacute;quina, voc&ecirc; precisa de processamento distribu&iacute;do, ou seus pipelines rodam em ambiente de cluster (EMR, Databricks, Dataproc).</p>
+    </div>
+
+    <p><strong>Use PySpark quando:</strong></p>
+    <ul>
+      <li>Volume de dados &gt; 10 GB (limite pr&aacute;tico do Pandas)</li>
+      <li>Pipelines que rodam em produ&ccedil;&atilde;o com schedule (Airflow + Spark)</li>
+      <li>Queries complexas sobre Data Lake (Parquet, Delta Lake, Iceberg)</li>
+      <li>Necessidade de integra&ccedil;&atilde;o com ecossistema Hadoop/Hive</li>
+    </ul>
+
+    <p><strong>N&atilde;o use PySpark quando:</strong></p>
+    <ul>
+      <li>Dados cabem na mem&oacute;ria &mdash; Pandas &eacute; mais simples e r&aacute;pido para prototipa&ccedil;&atilde;o</li>
+      <li>An&aacute;lise explorat&oacute;ria r&aacute;pida em dataset pequeno</li>
+      <li>Overhead de configura&ccedil;&atilde;o de cluster n&atilde;o justifica o volume</li>
+    </ul>
+
+    <h2>O que vem a seguir</h2>
+    <p>
+      Agora que voc&ecirc; entende como processar dados em escala, o pr&oacute;ximo passo &eacute; usar essa infraestrutura para <strong>prever o futuro</strong>. No artigo sobre <strong>Forecasting &amp; S&eacute;ries Temporais</strong>, mostramos como construir modelos de previs&atilde;o de demanda &mdash; exatamente o tipo de pipeline que roda sobre PySpark em produ&ccedil;&atilde;o na &aacute;rea de S&amp;OP.
+    </p>
+
+  </article>
+
+  <div class="bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent h-[1px] w-full max-w-[800px] mx-auto"></div>
+
+  <!-- Author + Next -->
+  <section class="px-8 py-16 max-w-[800px] mx-auto flex flex-col md:flex-row gap-12 justify-between items-start">
+    <div class="flex items-center gap-4">
+      <img src="https://github.com/RodrigoPuertas.png" alt="Rodrigo Puertas" class="w-12 h-12 rounded-full border border-outline-variant/30"/>
+      <div>
+        <div class="text-sm font-bold text-on-surface">Rodrigo Puertas</div>
+        <div class="text-[0.6875rem] text-outline uppercase tracking-widest">Cientista de Dados &middot; Shopee</div>
+      </div>
+    </div>
+    <a href="../artigos.html" class="inline-flex items-center gap-2 px-6 py-3 border border-outline-variant/30 rounded text-[0.6875rem] font-bold uppercase tracking-widest hover:border-primary transition-all group">
+      <span class="material-symbols-outlined text-sm group-hover:text-primary transition-colors">arrow_back</span>
+      Ver todos os artigos
+    </a>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#0b0e14] border-t border-[#22262f] py-12">
+  <div class="w-full flex flex-col md:flex-row justify-between items-center px-12 gap-6">
+    <div class="text-sm font-black text-[#ecedf6]">PUERTAS.DEV</div>
+    <div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">&copy; 2026 RODRIGO PUERTAS // KNOWLEDGE BASE</div>
+    <div class="flex gap-8">
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="cursor-glow"></div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

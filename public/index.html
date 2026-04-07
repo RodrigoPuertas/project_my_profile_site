@@ -1,190 +1,46 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
+<html class="dark" lang="pt-BR"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>KINETIC ARCHITECT // Engineered Precision</title>
+<title>PUERTAS.DEV // Engineered Precision</title>
+<meta name="description" content="Rodrigo Puertas — Cientista de Dados e Engenheiro de Computação. Especialista em Analytics, Machine Learning e Data Engineering com Python, PySpark e SQL."/>
+<meta property="og:title" content="PUERTAS.DEV // Engineered Precision"/>
+<meta property="og:description" content="Portfólio de Rodrigo Puertas — Data Science, Machine Learning e Data Engineering."/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="https://github.com/RodrigoPuertas.png"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "primary-fixed-dim": "#8885ff",
-              "surface": "#0b0e14",
-              "on-surface-variant": "#a9abb3",
-              "on-error": "#490013",
-              "primary-dim": "#645efb",
-              "on-tertiary-fixed-variant": "#005564",
-              "on-primary-fixed-variant": "#1a0099",
-              "tertiary": "#8ce7ff",
-              "outline-variant": "#45484f",
-              "surface-tint": "#a7a5ff",
-              "on-secondary": "#2b0065",
-              "error": "#ff6e84",
-              "on-primary": "#1c00a0",
-              "outline": "#73757d",
-              "primary-container": "#9795ff",
-              "on-secondary-container": "#e1d0ff",
-              "on-tertiary": "#005464",
-              "background": "#0b0e14",
-              "secondary-dim": "#8a4cfc",
-              "surface-container-high": "#1c2028",
-              "surface-variant": "#22262f",
-              "error-dim": "#d73357",
-              "secondary-fixed": "#dcc9ff",
-              "surface-container-lowest": "#000000",
-              "surface-dim": "#0b0e14",
-              "surface-container-low": "#10131a",
-              "on-secondary-fixed-variant": "#6514d6",
-              "tertiary-fixed-dim": "#40ceed",
-              "on-background": "#ecedf6",
-              "error-container": "#a70138",
-              "on-secondary-fixed": "#430097",
-              "on-primary-container": "#14007e",
-              "on-primary-fixed": "#000000",
-              "on-error-container": "#ffb2b9",
-              "inverse-primary": "#4e45e4",
-              "inverse-surface": "#f9f9ff",
-              "surface-container-highest": "#22262f",
-              "secondary-fixed-dim": "#d0b8ff",
-              "secondary-container": "#6001d1",
-              "on-surface": "#ecedf6",
-              "secondary": "#af88ff",
-              "primary": "#a7a5ff",
-              "surface-container": "#161a21",
-              "tertiary-container": "#53ddfc",
-              "on-tertiary-container": "#004b58",
-              "tertiary-fixed": "#53ddfc",
-              "primary-fixed": "#9795ff",
-              "inverse-on-surface": "#52555c",
-              "tertiary-dim": "#40ceed",
-              "surface-bright": "#282c36",
-              "on-tertiary-fixed": "#003640"
-            },
-            fontFamily: {
-              "headline": ["Space Grotesk"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-          },
-        },
-      }
-    </script>
+<script src="js/tailwind-config.js"></script>
+<link href="css/shared.css" rel="stylesheet"/>
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-        .grid-texture {
-            background-image: linear-gradient(to right, #45484f 1px, transparent 1px),
-                              linear-gradient(to bottom, #45484f 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.05;
-        }
-        .editorial-shadow {
-            box-shadow: 0 40px 80px -20px rgba(167, 165, 255, 0.08);
-        }
-        body {
-            background-color: #0b0e14;
-            color: #ecedf6;
-            font-family: 'Inter', sans-serif;
-            cursor: none;
-        }
-        a, button { cursor: none; }
-
-        /* CURSOR */
-        #cursor-dot {
-            position: fixed;
-            top: 0; left: 0;
-            width: 6px; height: 6px;
-            background: #fff;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.4s ease, width 0.2s, height 0.2s, background 0.2s;
-            mix-blend-mode: difference;
-        }
-        #cursor-ring {
-            position: fixed;
-            top: 0; left: 0;
-            width: 40px; height: 40px;
-            border: 1px solid rgba(167, 165, 255, 0.7);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.4s ease, width 0.35s cubic-bezier(.23,1,.32,1), height 0.35s cubic-bezier(.23,1,.32,1), border-color 0.3s;
-        }
-        #cursor-ring::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, #a7a5ff, transparent 60%, #8ce7ff, transparent);
-            opacity: 0.4;
-            animation: spinRing 3s linear infinite;
-            -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px));
-            mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px));
-        }
-        #cursor-glow {
-            position: fixed;
-            top: 0; left: 0;
-            width: 350px; height: 350px;
-            background: radial-gradient(circle, rgba(167, 165, 255, 0.06) 0%, transparent 65%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9997;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        /* Visível ao mover */
-        body.cursor-active #cursor-dot,
-        body.cursor-active #cursor-ring,
-        body.cursor-active #cursor-glow { opacity: 1; }
-
-        /* Hover em links/botões */
-        body.cursor-hover #cursor-dot {
-            width: 10px; height: 10px;
-        }
-        body.cursor-hover #cursor-ring {
-            width: 64px; height: 64px;
-            border-color: rgba(140, 231, 255, 0.5);
-        }
-        @keyframes spinRing {
-            from { transform: rotate(0deg); }
-            to   { transform: rotate(360deg); }
-        }
-        .marquee-track {
-            display: flex;
-            gap: 3rem;
-            width: max-content;
-            animation: marquee 25s linear infinite;
-        }
-        .marquee-track:hover {
-            animation-play-state: paused;
-        }
-        @keyframes marquee {
-            from { transform: translateX(0); }
-            to   { transform: translateX(-50%); }
-        }
-        h1, h2, h3 {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-    </style>
+    .grid-texture {
+        background-image: linear-gradient(to right, #45484f 1px, transparent 1px),
+                          linear-gradient(to bottom, #45484f 1px, transparent 1px);
+        background-size: 40px 40px;
+        opacity: 0.05;
+    }
+    .marquee-track {
+        display: flex;
+        gap: 3rem;
+        width: max-content;
+        animation: marquee 25s linear infinite;
+    }
+    .marquee-track:hover {
+        animation-play-state: paused;
+    }
+    @keyframes marquee {
+        from { transform: translateX(0); }
+        to   { transform: translateX(-50%); }
+    }
+</style>
 </head>
 <body class="selection:bg-primary-container selection:text-on-primary-container">
 <!-- TopAppBar -->
 <header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
-<div class="text-xl font-bold tracking-tighter text-[#ecedf6] dark:text-[#ecedf6]">KINETIC ARCHITECT</div>
+<div class="text-xl font-bold tracking-tighter text-[#ecedf6] dark:text-[#ecedf6]">PUERTAS.DEV</div>
 <nav class="hidden md:flex items-center gap-8">
 <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="index.html">Overview</a>
 <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="#sobre">Sobre</a>
@@ -324,99 +180,101 @@
 </div>
 <div class="mt-12 grid grid-cols-2 gap-8 border-t border-outline-variant/20 pt-12">
 <div>
-<div class="text-3xl font-headline font-bold text-tertiary">99.99%</div>
-<div class="text-[0.6875rem] uppercase tracking-widest text-outline">Target Uptime Delivery</div>
+<div class="text-3xl font-headline font-bold text-tertiary">12 SOCs</div>
+<div class="text-[0.6875rem] uppercase tracking-widest text-outline">Monitoramento Nacional</div>
 </div>
 <div>
-<div class="text-3xl font-headline font-bold text-primary">40%</div>
-<div class="text-[0.6875rem] uppercase tracking-widest text-outline">Avg. Latency Reduction</div>
+<div class="text-3xl font-headline font-bold text-primary">6 KPIs</div>
+<div class="text-[0.6875rem] uppercase tracking-widest text-outline">Estratégicos em Tempo Real</div>
 </div>
 </div>
 </div>
 </section>
-<!-- Projects - Bento Grid Style -->
+<!-- Projetos Reais - Bento Grid Style -->
 <section class="py-32 px-8 md:px-20 bg-surface-container-lowest">
 <div class="flex justify-between items-end mb-16">
 <div>
-<span class="text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-primary mb-4 block">Case Studies</span>
-<h2 class="text-5xl font-bold tracking-tighter">TECHNICAL IMPACT</h2>
+<span class="text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-primary mb-4 block">Projetos Reais</span>
+<h2 class="text-5xl font-bold tracking-tighter">IMPACTO TÉCNICO</h2>
 </div>
 <div class="hidden md:block text-outline text-right font-mono text-[0.625rem] tracking-widest">
-                    SCROLL_TO_EXPLORE<br/>[ARCHIVE_2024]
+                    SCROLL_TO_EXPLORE<br/>[ARQUIVO_2026]
                 </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-<!-- Project 1 -->
+<!-- Projeto 1: Report Nacional -->
 <div class="md:col-span-2 group relative overflow-hidden rounded-xl bg-surface-container-highest border border-outline-variant/10 hover:border-primary/40 transition-all duration-500">
 <div class="p-8 md:p-12 relative z-10 flex flex-col h-full justify-between min-h-[400px]">
 <div>
 <div class="flex items-center gap-4 mb-6">
-<span class="material-symbols-outlined text-tertiary" data-icon="hub">hub</span>
-<span class="text-[0.6875rem] font-bold uppercase tracking-widest text-on-surface/60">FinTech Backbone</span>
+<span class="material-symbols-outlined text-tertiary" data-icon="monitoring">monitoring</span>
+<span class="text-[0.6875rem] font-bold uppercase tracking-widest text-on-surface/60">Shopee Express</span>
 </div>
-<h3 class="text-3xl font-bold mb-4">Ultra-Low Latency Ledger</h3>
-<p class="text-on-surface-variant max-w-md">Re-architected the core transactional pipeline using Kafka and Go, achieving sub-millisecond propagation across global nodes.</p>
+<h3 class="text-3xl font-bold mb-4">Report em Tempo Real Nacional</h3>
+<p class="text-on-surface-variant max-w-md">Pipeline automatizado em Python com web scraping e requisições HTTP para coleta de dados em tempo real de API. Informações tratadas e integradas ao Looker Studio, acompanhando 6 KPIs estratégicos nos 12 SOCs da operação nacional.</p>
 </div>
 <div class="flex items-end justify-between mt-8">
 <div class="flex gap-2">
-<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-tertiary border border-tertiary/20">KAFKA</span>
-<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-tertiary border border-tertiary/20">GOLANG</span>
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-tertiary border border-tertiary/20">PYTHON</span>
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-tertiary border border-tertiary/20">WEB SCRAPING</span>
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-tertiary border border-tertiary/20">LOOKER STUDIO</span>
 </div>
 <div class="text-right">
-<span class="block text-[0.6rem] uppercase tracking-widest text-outline">Performance Gain</span>
-<span class="text-2xl font-headline font-bold text-primary">-40% Latency</span>
+<span class="block text-[0.6rem] uppercase tracking-widest text-outline">Cobertura</span>
+<span class="text-2xl font-headline font-bold text-primary">12 SOCs</span>
 </div>
 </div>
 </div>
 <div class="absolute inset-0 bg-gradient-to-t from-surface-container-highest to-transparent opacity-60"></div>
 </div>
-<!-- Project 2 -->
-<div class="group relative overflow-hidden rounded-xl bg-surface-container-high border border-outline-variant/10 p-8 flex flex-col justify-between">
+<!-- Projeto 2: Over Book -->
+<div class="group relative overflow-hidden rounded-xl bg-surface-container-high border border-outline-variant/10 hover:border-secondary/40 p-8 flex flex-col justify-between transition-all duration-500">
 <div>
 <div class="flex items-center gap-4 mb-6">
-<span class="material-symbols-outlined text-secondary" data-icon="cloud">cloud</span>
+<span class="material-symbols-outlined text-secondary" data-icon="event_available">event_available</span>
 </div>
-<h3 class="text-2xl font-bold mb-4">Cloud Migration: E-comm</h3>
-<p class="text-sm text-on-surface-variant">Migrated a legacy monolithic architecture to a serverless AWS environment with zero downtime.</p>
+<h3 class="text-2xl font-bold mb-4">Dashboard Over Book de Pacientes</h3>
+<p class="text-sm text-on-surface-variant">Estudo analítico de overbooking baseado na assiduidade dos pacientes, permitindo otimizar a agenda e reduzir ociosidade dos profissionais de saúde.</p>
 </div>
 <div class="mt-8">
-<div class="h-1 bg-outline-variant/20 w-full mb-4 overflow-hidden">
-<div class="h-full bg-secondary w-[85%]"></div>
-</div>
-<div class="flex justify-between text-[0.6rem] font-bold uppercase tracking-widest">
-<span class="text-outline">Efficiency</span>
-<span class="text-secondary">+85%</span>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-secondary border border-secondary/20">POWER BI</span>
 </div>
 </div>
 </div>
-<!-- Project 3 -->
-<div class="group relative overflow-hidden rounded-xl bg-surface-container-high border border-outline-variant/10 p-8 flex flex-col justify-between">
+<!-- Projeto 3: Gestão Recepcionistas -->
+<div class="group relative overflow-hidden rounded-xl bg-surface-container-high border border-outline-variant/10 hover:border-tertiary/40 p-8 flex flex-col justify-between transition-all duration-500">
 <div>
 <div class="flex items-center gap-4 mb-6">
-<span class="material-symbols-outlined text-primary" data-icon="analytics">analytics</span>
+<span class="material-symbols-outlined text-tertiary" data-icon="groups">groups</span>
 </div>
-<h3 class="text-2xl font-bold mb-4">Real-time ML Pipeline</h3>
-<p class="text-sm text-on-surface-variant">Built a Spark-driven pipeline for predictive maintenance, handling 1.2M events/sec.</p>
+<h3 class="text-2xl font-bold mb-4">Dashboard Gestão de Recepcionistas</h3>
+<p class="text-sm text-on-surface-variant">Painel com previsão de quantidade de recepcionistas para o próximo dia, indicadores de TMA e TME, construído com Power BI e queries SQL Server.</p>
 </div>
-<div class="mt-8 flex justify-between items-center">
-<div class="text-[0.6875rem] font-headline text-on-surface/60">1.2M EVENTS/S</div>
-<a class="w-10 h-10 rounded-full flex items-center justify-center border border-outline-variant group-hover:bg-primary group-hover:border-primary transition-all" href="#">
-<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
-</a>
+<div class="mt-8">
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-tertiary border border-tertiary/20">POWER BI</span>
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-tertiary border border-tertiary/20">SQL SERVER</span>
 </div>
 </div>
-<!-- Project 4 -->
-<div class="md:col-span-2 group relative overflow-hidden rounded-xl bg-surface-container-highest border border-outline-variant/10 p-8 md:p-12 flex flex-col md:flex-row gap-8 items-center">
-<div class="w-full md:w-1/2">
-<img class="w-full aspect-video object-cover rounded-lg grayscale hover:grayscale-0 transition-all duration-700" data-alt="Abstract 3D data visualization showing complex network nodes and interconnected glowing pathways in deep purple and cyan colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVnix1DqyPysJhe1xymfZXkzIumEHPh3BrizSAozdG0fFfz8YOlGXXcWKTqHCEygSH2pCoJUTpgFlJr2mYwnFamqNvwTq9NxgNewzROOhQRpmh2k3Reegpr071PHRwDe8EVfyqrRGomlA8Z-C2eUndrQEiUdkaTk54XqO3vatDFOBGM5O8l2qgGlKkcUPTcuEIemRug0fMyzDK7pfhyyWpSi3DvqdbzN1nxo81x8T3oWyRtIJpcHtHB1rGZeyTGjTybe3wEnwAAi8"/>
 </div>
-<div class="w-full md:w-1/2">
-<span class="text-[0.625rem] font-black uppercase tracking-[0.2em] text-secondary mb-2 block">System Design</span>
-<h3 class="text-2xl font-bold mb-4">Observability Suite</h3>
-<p class="text-on-surface-variant text-sm mb-6">Customized Prometheus &amp; Grafana dashboarding for deep-packet inspection and anomaly detection across 500+ microservices.</p>
-<div class="flex gap-4">
-<span class="text-on-surface font-headline font-medium text-sm">PROMETHEUS</span>
-<span class="text-on-surface font-headline font-medium text-sm">ELK STACK</span>
+<!-- Projeto 4: Experiência do Cliente -->
+<div class="md:col-span-2 group relative overflow-hidden rounded-xl bg-surface-container-highest border border-outline-variant/10 hover:border-primary/40 p-8 md:p-12 flex flex-col justify-between transition-all duration-500">
+<div>
+<div class="flex items-center gap-4 mb-6">
+<span class="material-symbols-outlined text-primary" data-icon="sentiment_satisfied">sentiment_satisfied</span>
+<span class="text-[0.6875rem] font-bold uppercase tracking-widest text-on-surface/60">Otimização Operacional</span>
+</div>
+<h3 class="text-3xl font-bold mb-4">Dashboard Experiência do Cliente</h3>
+<p class="text-on-surface-variant max-w-lg">Solução para eliminar ociosidade de médicos, substituindo a ordem de atendimento por sequência de chegada pela fila do médico. Controle da quantidade de pessoas em cada recepção em tempo real.</p>
+</div>
+<div class="flex items-end justify-between mt-8">
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded-sm bg-surface-container-low text-[0.6rem] font-bold text-primary border border-primary/20">POWER BI</span>
+</div>
+<div class="text-right">
+<span class="block text-[0.6rem] uppercase tracking-widest text-outline">Impacto</span>
+<span class="text-2xl font-headline font-bold text-tertiary">Zero Ociosidade</span>
 </div>
 </div>
 </div>
@@ -443,27 +301,79 @@
 <h3 class="text-2xl font-bold font-headline uppercase tracking-widest">Carreira</h3>
 </div>
 <div class="space-y-12 border-l border-outline-variant/30 ml-6 pl-8 relative">
+<!-- Shopee - Analista de Dados S&OP -->
 <div class="relative">
 <div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-primary border-4 border-surface shadow-[0_0_15px_rgba(167,165,255,0.5)]"></div>
-<span class="text-[0.6875rem] font-bold uppercase tracking-widest text-primary block mb-2">MAI 2024 - ATUAL</span>
-<h4 class="text-lg md:text-xl font-bold mb-1">Analista de Dados / S&OP</h4>
-<div class="text-on-surface-variant font-medium mb-4 text-sm">Shopee</div>
-<p class="text-sm text-on-surface-variant/80 leading-relaxed max-w-md">Sales & Operations Planning, foco em Solutions Engineering, planejamento, forecasting e tomada de decisão.</p>
+<span class="text-[0.6875rem] font-bold uppercase tracking-widest text-primary block mb-2">DEZ 2025 - ATUAL</span>
+<h4 class="text-lg md:text-xl font-bold mb-1">Analista de Dados — S&OP</h4>
+<div class="text-on-surface-variant font-medium mb-4 text-sm">Shopee Express · São Paulo, SP</div>
+<p class="text-sm text-on-surface-variant/80 leading-relaxed max-w-md">Solutions Engineering aplicado a S&OP e Forecasting. Owner dos modelos oficiais de forecast (ML), planejamento de capacidade e expansão da malha logística. Pipelines analíticos em SQL (Trino/Presto) e Python.</p>
 <div class="mt-3 flex gap-2 flex-wrap">
-  <span class="text-[0.65rem] border border-outline-variant/50 px-2 py-1 rounded text-primary">PySpark</span>
-  <span class="text-[0.65rem] border border-outline-variant/50 px-2 py-1 rounded text-primary">SQL</span>
-  <span class="text-[0.65rem] border border-outline-variant/50 px-2 py-1 rounded text-primary">Machine Learning</span>
+  <span class="text-[0.65rem] border border-primary/30 px-2 py-1 rounded text-primary">PySpark</span>
+  <span class="text-[0.65rem] border border-primary/30 px-2 py-1 rounded text-primary">SQL</span>
+  <span class="text-[0.65rem] border border-primary/30 px-2 py-1 rounded text-primary">Machine Learning</span>
+  <span class="text-[0.65rem] border border-primary/30 px-2 py-1 rounded text-primary">Forecasting</span>
 </div>
 </div>
+<!-- Shopee - Analista de Inventário e Dados -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-primary border-4 border-surface shadow-[0_0_15px_rgba(167,165,255,0.3)]"></div>
+<span class="text-[0.6875rem] font-bold uppercase tracking-widest text-primary block mb-2">MAI 2024 - ATUAL</span>
+<h4 class="text-lg md:text-xl font-bold mb-1">Analista de Inventário e Dados</h4>
+<div class="text-on-surface-variant font-medium mb-4 text-sm">Shopee Express · São Paulo, SP</div>
+<p class="text-sm text-on-surface-variant/80 leading-relaxed max-w-md">Gerenciamento de inventário em operações Middle Mile (Cross Docking). Análise de backlog, monitoramento de loss rate, dashboards operacionais e automações em Python e ML.</p>
+<div class="mt-3 flex gap-2 flex-wrap">
+  <span class="text-[0.65rem] border border-primary/30 px-2 py-1 rounded text-primary">Python</span>
+  <span class="text-[0.65rem] border border-primary/30 px-2 py-1 rounded text-primary">Machine Learning</span>
+</div>
+</div>
+<!-- Vivo -->
 <div class="relative">
 <div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-outline-variant border-4 border-surface"></div>
 <span class="text-[0.6875rem] font-bold uppercase tracking-widest text-outline block mb-2">AGO 2023 - ABR 2024</span>
 <h4 class="text-lg md:text-xl font-bold mb-1">Analista de Dados (Estágio)</h4>
-<div class="text-on-surface-variant font-medium mb-4 text-sm">Vivo (Telefônica Brasil)</div>
-<p class="text-sm text-on-surface-variant/80 leading-relaxed max-w-md">Coleta, organização, análise e interpretação de dados relevantes para apoiar estratégias corporativas.</p>
+<div class="text-on-surface-variant font-medium mb-4 text-sm">Vivo (Telefônica Brasil) · São Paulo, SP</div>
+<p class="text-sm text-on-surface-variant/80 leading-relaxed max-w-md">Análise e interpretação de dados para decisões estratégicas. Soluções automatizadas com Python, SSIS e SQL Server para otimização de processos.</p>
 <div class="mt-3 flex gap-2 flex-wrap">
-  <span class="text-[0.65rem] border border-outline-variant/50 px-2 py-1 rounded text-outline">Python</span>
-  <span class="text-[0.65rem] border border-outline-variant/50 px-2 py-1 rounded text-outline">EDA</span>
+  <span class="text-[0.65rem] border border-secondary/30 px-2 py-1 rounded text-secondary">Python</span>
+  <span class="text-[0.65rem] border border-secondary/30 px-2 py-1 rounded text-secondary">SQL Server</span>
+  <span class="text-[0.65rem] border border-secondary/30 px-2 py-1 rounded text-secondary">SSIS</span>
+</div>
+</div>
+<!-- Casa da Esperança -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-outline-variant border-4 border-surface"></div>
+<span class="text-[0.6875rem] font-bold uppercase tracking-widest text-outline block mb-2">MAI 2023 - AGO 2023</span>
+<h4 class="text-lg md:text-xl font-bold mb-1">Analista de Dados (Estágio)</h4>
+<div class="text-on-surface-variant font-medium mb-4 text-sm">Casa da Esperança de Santo André</div>
+<p class="text-sm text-on-surface-variant/80 leading-relaxed max-w-md">Análise exploratória, dashboards em Power BI, identificação de insights e recomendações baseadas em dados para stakeholders.</p>
+<div class="mt-3 flex gap-2 flex-wrap">
+  <span class="text-[0.65rem] border border-secondary/30 px-2 py-1 rounded text-secondary">Power BI</span>
+  <span class="text-[0.65rem] border border-secondary/30 px-2 py-1 rounded text-secondary">Validação de Dados</span>
+</div>
+</div>
+<!-- Intercâmbio EUA -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-outline-variant border-4 border-surface"></div>
+<span class="text-[0.6875rem] font-bold uppercase tracking-widest text-outline block mb-2">DEZ 2022 - FEV 2023</span>
+<h4 class="text-lg md:text-xl font-bold mb-1">Intercâmbio — EUA</h4>
+<div class="text-on-surface-variant font-medium mb-4 text-sm">Hyatt Regency Lake Tahoe &amp; Diamond Peak Ski Resort · Nevada, EUA</div>
+<p class="text-sm text-on-surface-variant/80 leading-relaxed max-w-md">Experiência internacional com trabalho em hotelaria e gastronomia. Desenvolvimento de soft skills em ambiente multicultural.</p>
+<div class="mt-3 flex gap-2 flex-wrap">
+  <span class="text-[0.65rem] border border-tertiary/30 px-2 py-1 rounded text-tertiary">Trabalho em Equipe</span>
+  <span class="text-[0.65rem] border border-tertiary/30 px-2 py-1 rounded text-tertiary">Comunicação</span>
+</div>
+</div>
+<!-- Presys -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-outline-variant border-4 border-surface"></div>
+<span class="text-[0.6875rem] font-bold uppercase tracking-widest text-outline block mb-2">FEV 2022 - DEZ 2022</span>
+<h4 class="text-lg md:text-xl font-bold mb-1">Estagiário de Desenvolvimento</h4>
+<div class="text-on-surface-variant font-medium mb-4 text-sm">Presys Instrumentos e Sistemas · São Paulo, SP</div>
+<p class="text-sm text-on-surface-variant/80 leading-relaxed max-w-md">Suporte ao gerenciamento de qualidade, testes E2E e de interface, validação de sistemas e correção de bugs na linha standard e advanced.</p>
+<div class="mt-3 flex gap-2 flex-wrap">
+  <span class="text-[0.65rem] border border-tertiary/30 px-2 py-1 rounded text-tertiary">.NET / C#</span>
+  <span class="text-[0.65rem] border border-tertiary/30 px-2 py-1 rounded text-tertiary">Testes E2E</span>
 </div>
 </div>
 </div>
@@ -512,8 +422,8 @@
 <!-- Footer -->
 <footer class="bg-[#0b0e14] dark:bg-[#0b0e14] border-t border-[#22262f] full-width py-12">
 <div class="w-full flex flex-col md:flex-row justify-between items-center px-12 gap-6">
-<div class="text-sm font-black text-[#ecedf6]">KINETIC ARCHITECT</div>
-<div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">© 2024 KINETIC ARCHITECT // ENGINEERED PRECISION</div>
+<div class="text-sm font-black text-[#ecedf6]">PUERTAS.DEV</div>
+<div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">© 2026 PUERTAS.DEV // ENGINEERED PRECISION</div>
 <div class="flex gap-8">
 <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
 <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>

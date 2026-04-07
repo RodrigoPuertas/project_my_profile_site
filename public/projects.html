@@ -1,121 +1,26 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html class="dark" lang="pt-BR"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>RODRIGO PUERTAS | ARQUIVO DE PROJETOS</title>
+<meta name="description" content="Arquivo de projetos de Rodrigo Puertas — Engenharia de Dados, Machine Learning e Analytics."/>
+<meta property="og:title" content="Projetos | RODRIGO PUERTAS"/>
+<meta property="og:description" content="Curadoria técnica de projetos em Data Engineering, Machine Learning e Analytics."/>
+<meta property="og:type" content="website"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "primary-fixed-dim": "#8885ff",
-              "surface": "#0b0e14",
-              "on-surface-variant": "#a9abb3",
-              "on-error": "#490013",
-              "primary-dim": "#645efb",
-              "on-tertiary-fixed-variant": "#005564",
-              "on-primary-fixed-variant": "#1a0099",
-              "tertiary": "#8ce7ff",
-              "outline-variant": "#45484f",
-              "surface-tint": "#a7a5ff",
-              "on-secondary": "#2b0065",
-              "error": "#ff6e84",
-              "on-primary": "#1c00a0",
-              "outline": "#73757d",
-              "primary-container": "#9795ff",
-              "on-secondary-container": "#e1d0ff",
-              "on-tertiary": "#005464",
-              "background": "#0b0e14",
-              "secondary-dim": "#8a4cfc",
-              "surface-container-high": "#1c2028",
-              "surface-variant": "#22262f",
-              "error-dim": "#d73357",
-              "secondary-fixed": "#dcc9ff",
-              "surface-container-lowest": "#000000",
-              "surface-dim": "#0b0e14",
-              "surface-container-low": "#10131a",
-              "on-secondary-fixed-variant": "#6514d6",
-              "tertiary-fixed-dim": "#40ceed",
-              "on-background": "#ecedf6",
-              "error-container": "#a70138",
-              "on-secondary-fixed": "#430097",
-              "on-primary-container": "#14007e",
-              "on-primary-fixed": "#000000",
-              "on-error-container": "#ffb2b9",
-              "inverse-primary": "#4e45e4",
-              "inverse-surface": "#f9f9ff",
-              "surface-container-highest": "#22262f",
-              "secondary-fixed-dim": "#d0b8ff",
-              "secondary-container": "#6001d1",
-              "on-surface": "#ecedf6",
-              "secondary": "#af88ff",
-              "primary": "#a7a5ff",
-              "surface-container": "#161a21",
-              "tertiary-container": "#53ddfc",
-              "on-tertiary-container": "#004b58",
-              "tertiary-fixed": "#53ddfc",
-              "primary-fixed": "#9795ff",
-              "inverse-on-surface": "#52555c",
-              "tertiary-dim": "#40ceed",
-              "surface-bright": "#282c36",
-              "on-tertiary-fixed": "#003640"
-            },
-            fontFamily: {
-              "headline": ["Space Grotesk"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-          },
-        },
-      }
-    </script>
+<script src="js/tailwind-config.js"></script>
+<link href="css/shared.css" rel="stylesheet"/>
 <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-        .editorial-shadow {
-            box-shadow: 0 40px 80px -20px rgba(167, 165, 255, 0.08);
-        }
-        body {
-            background-color: #0b0e14;
-            color: #ecedf6;
-            font-family: 'Inter', sans-serif;
-        }
-        h1, h2, h3 {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        /* 
-           CUSTOM CURSOR IMPLEMENTATION COMMENT:
-           Future integration should include a dot/ring cursor that follows mouse position.
-           Example:
-           <div id="cursor-ring" class="fixed w-8 h-8 border border-primary/30 rounded-full pointer-events-none z-[9999] transition-transform duration-150"></div>
-           <div id="cursor-dot" class="fixed w-1.5 h-1.5 bg-primary rounded-full pointer-events-none z-[9999]"></div>
-        */
-    
-        body { cursor: none; }
-        a, button { cursor: none; }
-        #cursor-dot { position: fixed; top: 0; left: 0; width: 6px; height: 6px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.2s, height 0.2s; mix-blend-mode: difference; }
-        #cursor-ring { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px solid rgba(167, 165, 255, 0.7); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.35s cubic-bezier(.23,1,.32,1), height 0.35s cubic-bezier(.23,1,.32,1), border-color 0.3s; }
-        #cursor-ring::before { content: ''; position: absolute; inset: -1px; border-radius: 50%; background: conic-gradient(from 0deg, #a7a5ff, transparent 60%, #8ce7ff, transparent); opacity: 0.4; animation: spinRing 3s linear infinite; -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); }
-        #cursor-glow { position: fixed; top: 0; left: 0; width: 350px; height: 350px; background: radial-gradient(circle, rgba(167, 165, 255, 0.06) 0%, transparent 65%); border-radius: 50%; pointer-events: none; z-index: 9997; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease; }
-        body.cursor-active #cursor-dot, body.cursor-active #cursor-ring, body.cursor-active #cursor-glow { opacity: 1; }
-        body.cursor-hover #cursor-dot { width: 10px; height: 10px; }
-        body.cursor-hover #cursor-ring { width: 64px; height: 64px; border-color: rgba(140, 231, 255, 0.5); }
-        @keyframes spinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
     </style>
 </head>
 <body class="selection:bg-primary-container selection:text-on-primary-container">
 <!-- TopAppBar matching SCREEN_21 style -->
 <header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
-<div class="text-xl font-bold tracking-tighter text-[#ecedf6]">KINETIC ARCHITECT</div>
+<div class="text-xl font-bold tracking-tighter text-[#ecedf6]">PUERTAS.DEV</div>
 <nav class="hidden md:flex items-center gap-8">
 <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="index.html">Overview</a>
 <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#8ce7ff] font-bold border-b border-[#8ce7ff] pb-1" href="projects.html">Projetos</a>
@@ -253,7 +158,7 @@
 <p class="text-on-surface-variant text-lg mb-12">Estou aceitando projetos de consultoria focados em infraestrutura de alta carga e estratégia de dados.</p>
 <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
 <a class="w-full md:w-auto px-12 py-4 bg-on-background text-surface font-bold uppercase tracking-widest text-sm hover:bg-primary transition-colors" href="consult.html">Iniciar auditoria técnica</a>
-<a class="group flex items-center gap-3 text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-on-surface" href="index.html">DOCUMENTAÇÃO TÉCNICA <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">north_east</span></a>
+<a class="group flex items-center gap-3 text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-on-surface" href="index.html">DOCUMENTAÃ‡ÃO TÃ‰CNICA <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">north_east</span></a>
 </div>
 </div>
 </section>
@@ -264,7 +169,7 @@
 <footer class="bg-[#0b0e14] border-t border-[#22262f] py-12">
 <div class="w-full flex flex-col md:flex-row justify-between items-center px-12 gap-6">
 <div class="text-sm font-black text-[#ecedf6]">RODRIGO PUERTAS</div>
-<div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">© 2024 RODRIGO PUERTAS // ENGINEERED PRECISION</div>
+<div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">© 2026 PUERTAS.DEV // ENGINEERED PRECISION</div>
 <div class="flex gap-8">
 <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
 <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>

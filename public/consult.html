@@ -1,114 +1,29 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html class="dark" lang="pt-BR"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Consultoria de Projetos | RP_ENGINEERING</title>
+<meta name="description" content="Consultoria de projetos em Data Science, Machine Learning e Data Engineering por Rodrigo Puertas."/>
+<meta property="og:title" content="Consultoria | PUERTAS.DEV"/>
+<meta property="og:description" content="Consultoria estratégica focada em engenharia de dados e machine learning."/>
+<meta property="og:type" content="website"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "on-surface": "#ecedf6",
-                        "primary-fixed-dim": "#8885ff",
-                        "secondary-dim": "#8a4cfc",
-                        "secondary-fixed": "#dcc9ff",
-                        "surface-container-highest": "#22262f",
-                        "inverse-on-surface": "#52555c",
-                        "tertiary-fixed": "#53ddfc",
-                        "secondary-fixed-dim": "#d0b8ff",
-                        "secondary": "#af88ff",
-                        "tertiary-fixed-dim": "#40ceed",
-                        "on-secondary-fixed-variant": "#6514d6",
-                        "primary-container": "#9795ff",
-                        "tertiary-dim": "#40ceed",
-                        "surface-container-low": "#10131a",
-                        "tertiary-container": "#53ddfc",
-                        "on-primary-fixed-variant": "#1a0099",
-                        "error": "#ff6e84",
-                        "surface": "#0b0e14",
-                        "outline-variant": "#45484f",
-                        "on-tertiary-container": "#004b58",
-                        "inverse-primary": "#4e45e4",
-                        "on-primary-fixed": "#000000",
-                        "on-primary": "#1c00a0",
-                        "on-error": "#490013",
-                        "error-dim": "#d73357",
-                        "surface-container-high": "#1c2028",
-                        "outline": "#73757d",
-                        "on-primary-container": "#14007e",
-                        "primary-dim": "#645efb",
-                        "on-secondary": "#2b0065",
-                        "secondary-container": "#6001d1",
-                        "on-surface-variant": "#a9abb3",
-                        "on-error-container": "#ffb2b9",
-                        "on-secondary-fixed": "#430097",
-                        "on-tertiary-fixed-variant": "#005564",
-                        "on-secondary-container": "#e1d0ff",
-                        "surface-variant": "#22262f",
-                        "surface-tint": "#a7a5ff",
-                        "inverse-surface": "#f9f9ff",
-                        "on-tertiary": "#005464",
-                        "background": "#0b0e14",
-                        "surface-container": "#161a21",
-                        "primary": "#a7a5ff",
-                        "surface-container-lowest": "#000000",
-                        "on-tertiary-fixed": "#003640",
-                        "primary-fixed": "#9795ff",
-                        "surface-bright": "#282c36",
-                        "surface-dim": "#0b0e14",
-                        "error-container": "#a70138",
-                        "tertiary": "#8ce7ff",
-                        "on-background": "#ecedf6"
-                    },
-                    fontFamily: {
-                        "headline": ["Space Grotesk"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    },
-                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-                },
-            },
-        }
-    </script>
+<script src="js/tailwind-config.js"></script>
+<link href="css/shared.css" rel="stylesheet"/>
 <style>
         body {
-            background-color: #0b0e14;
-            color: #ecedf6;
-            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-        }
-        /* Custom cursor placeholder notes:
-           - Implementation requires a fixed div with a dot/ring.
-           - JS listener for mousemove to update translate properties.
-           - Pointer-events: none to avoid interfering with interactions.
-        */
-    
-        body { cursor: none; }
-        a, button { cursor: none; }
-        #cursor-dot { position: fixed; top: 0; left: 0; width: 6px; height: 6px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.2s, height 0.2s; mix-blend-mode: difference; }
-        #cursor-ring { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px solid rgba(167, 165, 255, 0.7); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.35s cubic-bezier(.23,1,.32,1), height 0.35s cubic-bezier(.23,1,.32,1), border-color 0.3s; }
-        #cursor-ring::before { content: ''; position: absolute; inset: -1px; border-radius: 50%; background: conic-gradient(from 0deg, #a7a5ff, transparent 60%, #8ce7ff, transparent); opacity: 0.4; animation: spinRing 3s linear infinite; -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); }
-        #cursor-glow { position: fixed; top: 0; left: 0; width: 350px; height: 350px; background: radial-gradient(circle, rgba(167, 165, 255, 0.06) 0%, transparent 65%); border-radius: 50%; pointer-events: none; z-index: 9997; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease; }
-        body.cursor-active #cursor-dot, body.cursor-active #cursor-ring, body.cursor-active #cursor-glow { opacity: 1; }
-        body.cursor-hover #cursor-dot { width: 10px; height: 10px; }
-        body.cursor-hover #cursor-ring { width: 64px; height: 64px; border-color: rgba(140, 231, 255, 0.5); }
-        @keyframes spinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
     </style>
 </head>
 <body class="dark bg-surface selection:bg-primary/30">
 <!-- TopAppBar Updated to match SCREEN_21 -->
 <header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
-<div class="text-xl font-bold tracking-tighter text-[#ecedf6]">KINETIC ARCHITECT</div>
+<div class="text-xl font-bold tracking-tighter text-[#ecedf6]">PUERTAS.DEV</div>
 <nav class="hidden md:flex items-center gap-8">
 <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="index.html">Overview</a>
 <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="projects.html">Projetos</a>
@@ -212,7 +127,7 @@
 </div>
 <div class="pt-4">
 <button id="form-btn" class="w-full py-5 bg-gradient-to-r from-indigo-600 to-violet-700 text-on-surface font-headline font-extrabold uppercase tracking-[0.2em] rounded-lg shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:scale-[1.01] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50" type="submit">
-  INICIAR AUDITORIA TÉCNICA
+  INICIAR AUDITORIA TÃ‰CNICA
   <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">bolt</span>
 </button>
 <p id="form-status" class="text-center mt-4 text-[0.75rem] min-h-[1.25rem]" aria-live="polite"></p>
@@ -229,8 +144,8 @@
 <!-- Footer Updated to match SCREEN_21 -->
 <footer class="bg-[#0b0e14] border-t border-[#22262f] py-12">
 <div class="w-full flex flex-col md:flex-row justify-between items-center px-12 gap-6">
-<div class="text-sm font-black text-[#ecedf6]">KINETIC ARCHITECT</div>
-<div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">© 2024 KINETIC ARCHITECT // ENGINEERED PRECISION</div>
+<div class="text-sm font-black text-[#ecedf6]">PUERTAS.DEV</div>
+<div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">© 2026 PUERTAS.DEV // ENGINEERED PRECISION</div>
 <div class="flex gap-8">
 <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
 <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] hover:translate-x-1 transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>

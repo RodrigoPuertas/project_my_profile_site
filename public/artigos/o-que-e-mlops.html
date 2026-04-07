@@ -1,0 +1,567 @@
+﻿<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>O que é MLOps? | Rodrigo Puertas</title>
+<meta name="description" content="Como levar modelos de ML do Jupyter para produção com qualidade, rastreabilidade e escalabilidade."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="../js/tailwind-config.js"></script>
+<link href="../css/shared.css" rel="stylesheet"/>
+<link href="../css/article.css" rel="stylesheet"/>
+</head>
+<body class="selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
+  <div class="text-xl font-bold tracking-tighter text-[#ecedf6]">PUERTAS.DEV</div>
+  <nav class="hidden md:flex items-center gap-8">
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../index.html">Overview</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../projects.html">Projetos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#8ce7ff] font-bold border-b border-[#8ce7ff] pb-1" href="../artigos.html">Artigos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../index.html#cta">Contato</a>
+  </nav>
+  <div class="flex items-center gap-4">
+    <a href="../consult.html" class="hidden md:block bg-gradient-to-br from-primary to-secondary-dim px-6 py-2 rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity">Consultoria</a>
+    <button class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 z-50" id="nav-toggle" aria-label="Abrir menu">
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+    </button>
+  </div>
+  <div class="bg-gradient-to-r from-transparent via-[#22262f] to-transparent h-[1px] w-full absolute bottom-0 left-0"></div>
+</header>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="hidden fixed inset-0 bg-[#0b0e14]/95 backdrop-blur-md z-40 flex-col justify-center items-center gap-8 font-['Space_Grotesk'] text-xl uppercase tracking-widest">
+  <a href="../index.html" class="text-primary hover:text-white">Overview</a>
+  <a href="../projects.html" class="text-primary hover:text-white">Projetos</a>
+  <a href="../artigos.html" class="text-white">Artigos</a>
+  <a href="../consult.html" class="text-primary hover:text-white">Consultoria</a>
+  <a href="../index.html#cta" class="text-primary hover:text-white">Contato</a>
+</div>
+
+<main class="pt-20">
+
+  <!-- Article Hero -->
+  <section class="px-8 pt-20 pb-16 md:pt-32 md:pb-20 max-w-[800px] mx-auto">
+    <!-- Breadcrumb -->
+    <a href="../artigos.html" class="inline-flex items-center gap-2 text-[0.6875rem] uppercase tracking-widest text-outline hover:text-primary transition-colors mb-12">
+      <span class="material-symbols-outlined text-sm">arrow_back</span>
+      Knowledge Base
+    </a>
+
+    <!-- Meta -->
+    <div class="flex flex-wrap items-center gap-4 mb-8">
+      <span class="px-3 py-1 rounded-sm bg-surface-container-high text-[0.6rem] font-bold text-secondary border border-secondary/20 uppercase tracking-widest">MLOps</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">10 min leitura</span>
+      <span class="text-outline-variant">•</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">Abril 2026</span>
+      <span class="text-outline-variant">•</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">Rodrigo Puertas</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
+      O que é <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-tertiary">MLOps?</span>
+    </h1>
+    <p class="text-xl text-on-surface-variant font-light leading-relaxed">
+      Como levar modelos de ML do Jupyter para produção com qualidade, rastreabilidade e escalabilidade.
+    </p>
+  </section>
+
+  <!-- Divider -->
+  <div class="bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent h-[1px] w-full max-w-[800px] mx-auto"></div>
+
+  <!-- Article Content -->
+  <article class="article-body px-8 py-16 max-w-[800px] mx-auto">
+
+    <h2>O que é MLOps</h2>
+    <p>
+      MLOps (Machine Learning Operations) é o conjunto de práticas, ferramentas e cultura que une <strong>Machine Learning</strong>, <strong>Engenharia de Software</strong> e <strong>Operações (Ops)</strong> para automatizar e padronizar todo o ciclo de vida de modelos de ML em produção.
+    </p>
+    <p>
+      O termo surgiu como uma extensão natural do DevOps para o mundo de dados. Assim como DevOps resolveu o conflito histórico entre desenvolvedores e times de infraestrutura, MLOps resolve o conflito entre cientistas de dados que criam modelos em notebooks e engenheiros que precisam manter esses modelos rodando de forma confiável em produção.
+    </p>
+
+    <div class="callout">
+      <p><strong>Definição objetiva:</strong> MLOps é a disciplina de engenharia que aplica princípios de DevOps â€” CI/CD, automação, monitoramento, infraestrutura como código â€” ao ciclo de vida completo de modelos de Machine Learning, desde o treinamento até o deploy e o monitoramento contínuo.</p>
+    </div>
+
+    <p>
+      Se DevOps cuida de <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">código â†’ build â†’ deploy â†’ monitoramento</code>, MLOps cuida de <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">dados â†’ treinamento â†’ validação â†’ deploy â†’ monitoramento â†’ retrain</code>. A diferença fundamental é que no ML, além do código mudar, os <strong>dados também mudam</strong> â€” e isso introduz uma camada extra de complexidade.
+    </p>
+
+    <h2>O problema que MLOps resolve</h2>
+    <p>
+      Existe um gap enorme entre treinar um modelo num Jupyter Notebook e colocá-lo em produção de verdade. Segundo pesquisas da indústria, cerca de <strong>87% dos modelos de ML nunca chegam Ã  produção</strong>. Por quê?
+    </p>
+    <ul>
+      <li><strong>O notebook não é produção</strong> â€” código não-modular, dependências não versionadas, sem testes</li>
+      <li><strong>Dados mudam silenciosamente</strong> â€” data drift e concept drift degradam performance sem aviso</li>
+      <li><strong>Não há reprodutibilidade</strong> â€” ninguém sabe qual versão do modelo está rodando, com quais dados foi treinado, quais hiperparâmetros foram usados</li>
+      <li><strong>Retrain é manual</strong> â€” alguém precisa lembrar de retreinar o modelo, comparar métricas, fazer deploy manualmente</li>
+      <li><strong>Sem monitoramento</strong> â€” o modelo pode estar errando em produção por semanas e ninguém percebe</li>
+    </ul>
+
+    <div class="callout">
+      <p><strong>A metáfora:</strong> Imagine um chef que cria uma receita incrível na cozinha experimental, mas não tem como replicá-la na cozinha do restaurante. Não há receita escrita, os ingredientes mudam todo dia, e ninguém verifica se o prato continua bom. Isso é ML sem MLOps.</p>
+    </div>
+
+    <p>
+      MLOps existe para fechar esse gap. Ã‰ a ponte que transforma experimentos em notebooks em sistemas de ML confiáveis, rastreáveis e escaláveis.
+    </p>
+
+    <h2>Os pilares do MLOps</h2>
+
+    <h3>1. Versionamento de modelos e dados</h3>
+    <p>
+      Assim como versionamos código com Git, precisamos versionar modelos (pesos, arquitetura, hiperparâmetros) e dados de treinamento. Ferramentas como <strong>DVC</strong> (Data Version Control) e <strong>MLflow</strong> permitem rastrear exatamente qual modelo foi treinado com quais dados e parâmetros.
+    </p>
+
+    <div class="code-block">
+<span class="comment"># Versionamento com DVC</span>
+<span class="keyword">dvc</span> init
+<span class="keyword">dvc</span> add data/training_set.parquet
+<span class="keyword">git</span> add data/training_set.parquet.dvc .gitignore
+<span class="keyword">git</span> commit -m <span class="string">"v2: adiciona novos dados de março"</span>
+<span class="keyword">dvc</span> push
+    </div>
+
+    <h3>2. CI/CD para Machine Learning</h3>
+    <p>
+      Continuous Integration e Continuous Delivery adaptados para ML. Toda vez que novo código ou novos dados entram no pipeline, o sistema automaticamente retreina o modelo, roda testes de qualidade (data validation, model validation) e, se tudo passar, faz deploy.
+    </p>
+    <ul>
+      <li><strong>CI</strong> â€” testes unitários do código de feature engineering, validação de schema de dados, testes de integração do pipeline</li>
+      <li><strong>CD</strong> â€” deploy automático após validação, canary releases, rollback automático se métricas degradarem</li>
+      <li><strong>CT (Continuous Training)</strong> â€” retreino automático quando novos dados chegam ou quando drift é detectado</li>
+    </ul>
+
+    <h3>3. Monitoramento em produção</h3>
+    <p>
+      Diferente de software tradicional, modelos de ML podem "quebrar silenciosamente" â€” continuar retornando predições, mas com qualidade degradada. Monitorar ML em produção exige:
+    </p>
+    <ul>
+      <li><strong>Data drift</strong> â€” a distribuição dos dados de entrada mudou?</li>
+      <li><strong>Concept drift</strong> â€” a relação entre features e target mudou?</li>
+      <li><strong>Métricas de performance</strong> â€” accuracy, latência, throughput</li>
+      <li><strong>Alertas automáticos</strong> â€” notificação quando métricas cruzam thresholds</li>
+    </ul>
+
+    <h3>4. Reprodutibilidade</h3>
+    <p>
+      Cada execução do pipeline deve ser 100% reproduzível. Isso significa rastrear: versão do código, versão dos dados, hiperparâmetros, seed aleatória, versão das dependências (Docker), e ambiente de execução. Se algo der errado em produção, você precisa conseguir voltar no tempo e entender exatamente o que aconteceu.
+    </p>
+
+    <div class="code-block">
+<span class="comment"># Exemplo de tracking com MLflow</span>
+<span class="keyword">import</span> mlflow
+
+<span class="keyword">with</span> mlflow.start_run():
+    mlflow.log_param(<span class="string">"n_estimators"</span>, <span class="string">200</span>)
+    mlflow.log_param(<span class="string">"max_depth"</span>, <span class="string">10</span>)
+    mlflow.log_param(<span class="string">"data_version"</span>, <span class="string">"v2.3"</span>)
+
+    model.fit(X_train, y_train)
+
+    mlflow.log_metric(<span class="string">"accuracy"</span>, <span class="string">0.94</span>)
+    mlflow.log_metric(<span class="string">"f1_score"</span>, <span class="string">0.91</span>)
+    mlflow.sklearn.log_model(model, <span class="string">"model"</span>)
+    </div>
+
+    <h2>Pipeline MLOps típico</h2>
+    <p>
+      Um pipeline MLOps completo forma um ciclo contínuo. O fluxo abaixo mostra as etapas desde a ingestão de dados até o retraining automático:
+    </p>
+
+    <!-- SVG Flowchart: Pipeline MLOps -->
+    <svg width="100%" viewBox="0 0 800 420" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:1.5rem;">
+      <defs>
+        <linearGradient id="gradPrimary" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#a7a5ff;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#af88ff;stop-opacity:1"/>
+        </linearGradient>
+        <linearGradient id="gradTertiary" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#8ce7ff;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#a7a5ff;stop-opacity:1"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Background -->
+      <rect width="800" height="420" rx="8" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+
+      <!-- Title -->
+      <text x="400" y="35" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600" letter-spacing="0.1em" text-transform="uppercase">PIPELINE MLOPS</text>
+
+      <!-- Step 1: Dados -->
+      <rect x="30" y="70" width="130" height="56" rx="4" fill="#161a21" stroke="#a7a5ff" stroke-width="1.5"/>
+      <text x="95" y="95" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700">DADOS</text>
+      <text x="95" y="112" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Ingestao &amp; Validacao</text>
+
+      <!-- Arrow 1â†’2 -->
+      <line x1="160" y1="98" x2="190" y2="98" stroke="#a7a5ff" stroke-width="1.5" marker-end="url(#arrowPrimary)"/>
+
+      <!-- Step 2: Feature Engineering -->
+      <rect x="190" y="70" width="130" height="56" rx="4" fill="#161a21" stroke="#a7a5ff" stroke-width="1.5"/>
+      <text x="255" y="95" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700">FEATURES</text>
+      <text x="255" y="112" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Feature Engineering</text>
+
+      <!-- Arrow 2â†’3 -->
+      <line x1="320" y1="98" x2="350" y2="98" stroke="#a7a5ff" stroke-width="1.5"/>
+
+      <!-- Step 3: Treinamento -->
+      <rect x="350" y="70" width="130" height="56" rx="4" fill="#161a21" stroke="#af88ff" stroke-width="1.5"/>
+      <text x="415" y="95" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700">TREINAMENTO</text>
+      <text x="415" y="112" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Model Training</text>
+
+      <!-- Arrow 3â†’4 -->
+      <line x1="480" y1="98" x2="510" y2="98" stroke="#af88ff" stroke-width="1.5"/>
+
+      <!-- Step 4: Validacao -->
+      <rect x="510" y="70" width="130" height="56" rx="4" fill="#161a21" stroke="#af88ff" stroke-width="1.5"/>
+      <text x="575" y="95" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700">VALIDACAO</text>
+      <text x="575" y="112" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Testes &amp; Metricas</text>
+
+      <!-- Arrow 4â†’5 -->
+      <line x1="640" y1="98" x2="670" y2="98" stroke="#8ce7ff" stroke-width="1.5"/>
+
+      <!-- Step 5: Deploy -->
+      <rect x="640" y="70" width="130" height="56" rx="4" fill="#161a21" stroke="#8ce7ff" stroke-width="1.5"/>
+      <text x="705" y="95" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700">DEPLOY</text>
+      <text x="705" y="112" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Serving &amp; Release</text>
+
+      <!-- Arrow 5 down -->
+      <line x1="705" y1="126" x2="705" y2="180" stroke="#8ce7ff" stroke-width="1.5"/>
+
+      <!-- Step 6: Monitoramento -->
+      <rect x="580" y="180" width="250" height="56" rx="4" fill="#161a21" stroke="#8ce7ff" stroke-width="1.5"/>
+      <text x="705" y="205" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700">MONITORAMENTO</text>
+      <text x="705" y="222" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Data Drift / Performance / Alertas</text>
+
+      <!-- Arrow 6 down to retrain -->
+      <line x1="705" y1="236" x2="705" y2="290" stroke="#af88ff" stroke-width="1.5"/>
+
+      <!-- Step 7: Retrain -->
+      <rect x="580" y="290" width="250" height="56" rx="4" fill="#161a21" stroke="#af88ff" stroke-width="1.5"/>
+      <text x="705" y="315" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700">RETRAIN</text>
+      <text x="705" y="332" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Retreino Automático / Trigger</text>
+
+      <!-- Loop arrow: Retrain back to Dados -->
+      <path d="M 580 318 L 95 318 L 95 126" fill="none" stroke="url(#gradPrimary)" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <polygon points="91,130 95,118 99,130" fill="#a7a5ff"/>
+
+      <!-- Loop label -->
+      <rect x="280" y="335" width="170" height="28" rx="4" fill="#161a21" stroke="#22262f" stroke-width="1"/>
+      <text x="365" y="354" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">CICLO CONTINUO</text>
+
+      <!-- Decorative arrows -->
+      <defs>
+        <marker id="arrowPrimary" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#a7a5ff"/>
+        </marker>
+      </defs>
+
+      <!-- Version Control bar at bottom -->
+      <rect x="30" y="385" width="740" height="24" rx="4" fill="#161a21" stroke="#22262f" stroke-width="1"/>
+      <text x="400" y="401" text-anchor="middle" fill="#45484f" font-family="Inter, sans-serif" font-size="9" letter-spacing="0.15em">GIT / DVC / MLFLOW â€” VERSIONAMENTO DE CÃ“DIGO, DADOS E MODELOS</text>
+    </svg>
+
+    <h2>Ferramentas do ecossistema MLOps</h2>
+    <p>
+      O ecossistema de ferramentas MLOps cresceu rapidamente. Não existe uma ferramenta que resolva tudo â€” na prática, você monta um stack combinando ferramentas por categoria. Aqui estão as principais:
+    </p>
+
+    <!-- SVG Diagram: Tools Ecosystem -->
+    <svg width="100%" viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:1.5rem;">
+      <!-- Background -->
+      <rect width="800" height="480" rx="8" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+
+      <!-- Title -->
+      <text x="400" y="35" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600" letter-spacing="0.1em">ECOSSISTEMA DE FERRAMENTAS</text>
+
+      <!-- Category 1: Experiment Tracking -->
+      <rect x="30" y="60" width="360" height="170" rx="6" fill="#161a21" stroke="#a7a5ff" stroke-width="1"/>
+      <rect x="30" y="60" width="360" height="32" rx="6" fill="#a7a5ff" fill-opacity="0.1"/>
+      <text x="210" y="82" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" letter-spacing="0.08em">EXPERIMENT TRACKING</text>
+
+      <!-- MLflow -->
+      <rect x="50" y="108" width="150" height="50" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="125" y="130" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600">MLflow</text>
+      <text x="125" y="148" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Open Source / Popular</text>
+
+      <!-- W&B -->
+      <rect x="220" y="108" width="150" height="50" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="295" y="130" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600">Weights &amp; Biases</text>
+      <text x="295" y="148" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">SaaS / Colaborativo</text>
+
+      <!-- Neptune -->
+      <rect x="50" y="172" width="150" height="44" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="125" y="199" text-anchor="middle" fill="#a9abb3" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="500">Neptune.ai</text>
+
+      <!-- CometML -->
+      <rect x="220" y="172" width="150" height="44" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="295" y="199" text-anchor="middle" fill="#a9abb3" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="500">Comet ML</text>
+
+      <!-- Category 2: Orchestration -->
+      <rect x="410" y="60" width="360" height="170" rx="6" fill="#161a21" stroke="#af88ff" stroke-width="1"/>
+      <rect x="410" y="60" width="360" height="32" rx="6" fill="#af88ff" fill-opacity="0.1"/>
+      <text x="590" y="82" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" letter-spacing="0.08em">ORCHESTRATION</text>
+
+      <!-- Airflow -->
+      <rect x="430" y="108" width="150" height="50" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="505" y="130" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600">Airflow</text>
+      <text x="505" y="148" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Apache / Standard</text>
+
+      <!-- Kubeflow -->
+      <rect x="600" y="108" width="150" height="50" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="675" y="130" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600">Kubeflow</text>
+      <text x="675" y="148" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Kubernetes Native</text>
+
+      <!-- Prefect -->
+      <rect x="430" y="172" width="150" height="44" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="505" y="199" text-anchor="middle" fill="#a9abb3" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="500">Prefect</text>
+
+      <!-- Dagster -->
+      <rect x="600" y="172" width="150" height="44" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="675" y="199" text-anchor="middle" fill="#a9abb3" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="500">Dagster</text>
+
+      <!-- Category 3: Model Serving -->
+      <rect x="30" y="250" width="360" height="170" rx="6" fill="#161a21" stroke="#8ce7ff" stroke-width="1"/>
+      <rect x="30" y="250" width="360" height="32" rx="6" fill="#8ce7ff" fill-opacity="0.1"/>
+      <text x="210" y="272" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" letter-spacing="0.08em">MODEL SERVING</text>
+
+      <!-- BentoML -->
+      <rect x="50" y="298" width="150" height="50" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="125" y="320" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600">BentoML</text>
+      <text x="125" y="338" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Python Native / Facil</text>
+
+      <!-- Seldon -->
+      <rect x="220" y="298" width="150" height="50" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="295" y="320" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600">Seldon Core</text>
+      <text x="295" y="338" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Kubernetes / Enterprise</text>
+
+      <!-- TF Serving -->
+      <rect x="50" y="362" width="150" height="44" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="125" y="389" text-anchor="middle" fill="#a9abb3" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="500">TF Serving</text>
+
+      <!-- Triton -->
+      <rect x="220" y="362" width="150" height="44" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="295" y="389" text-anchor="middle" fill="#a9abb3" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="500">NVIDIA Triton</text>
+
+      <!-- Category 4: Monitoring -->
+      <rect x="410" y="250" width="360" height="170" rx="6" fill="#161a21" stroke="#ff6e84" stroke-width="1"/>
+      <rect x="410" y="250" width="360" height="32" rx="6" fill="#ff6e84" fill-opacity="0.1"/>
+      <text x="590" y="272" text-anchor="middle" fill="#ff6e84" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700" letter-spacing="0.08em">MONITORING</text>
+
+      <!-- Evidently -->
+      <rect x="430" y="298" width="150" height="50" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="505" y="320" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600">Evidently AI</text>
+      <text x="505" y="338" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Open Source / Reports</text>
+
+      <!-- WhyLabs -->
+      <rect x="600" y="298" width="150" height="50" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="675" y="320" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600">WhyLabs</text>
+      <text x="675" y="338" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">SaaS / Profiling</text>
+
+      <!-- Grafana -->
+      <rect x="430" y="362" width="150" height="44" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="505" y="389" text-anchor="middle" fill="#a9abb3" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="500">Grafana + Prom.</text>
+
+      <!-- NannyML -->
+      <rect x="600" y="362" width="150" height="44" rx="4" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="675" y="389" text-anchor="middle" fill="#a9abb3" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="500">NannyML</text>
+
+      <!-- Bottom label -->
+      <text x="400" y="460" text-anchor="middle" fill="#45484f" font-family="Inter, sans-serif" font-size="9" letter-spacing="0.15em">ESCOLHA FERRAMENTAS POR MATURIDADE DO TIME, INFRA DISPONÃVEL E COMPLEXIDADE DO PROBLEMA</text>
+    </svg>
+
+    <p>
+      A regra de ouro: <strong>comece simples</strong>. Um MLflow local + scripts bem organizados + cron job para retrain já é MLOps. Você não precisa de Kubernetes no dia um.
+    </p>
+
+    <h2>Níveis de maturidade MLOps</h2>
+    <p>
+      O Google propôs um framework de maturidade em três níveis que se tornou referência na indústria. Cada nível adiciona automação progressiva ao ciclo de vida de ML:
+    </p>
+
+    <!-- SVG Levels Diagram -->
+    <svg width="100%" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:1.5rem;">
+      <defs>
+        <linearGradient id="gradLevel0" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#45484f;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#73757d;stop-opacity:1"/>
+        </linearGradient>
+        <linearGradient id="gradLevel1" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#af88ff;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#a7a5ff;stop-opacity:1"/>
+        </linearGradient>
+        <linearGradient id="gradLevel2" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#8ce7ff;stop-opacity:1"/>
+          <stop offset="100%" style="stop-color:#a7a5ff;stop-opacity:1"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Background -->
+      <rect width="800" height="400" rx="8" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+
+      <!-- Title -->
+      <text x="400" y="35" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="14" font-weight="600" letter-spacing="0.1em">NIVEIS DE MATURIDADE MLOPS</text>
+
+      <!-- Level 0 -->
+      <rect x="50" y="65" width="700" height="90" rx="6" fill="#161a21" stroke="#45484f" stroke-width="1"/>
+      <!-- Level indicator bar -->
+      <rect x="50" y="65" width="8" height="90" rx="4" fill="url(#gradLevel0)"/>
+      <!-- Level badge -->
+      <rect x="75" y="78" width="80" height="24" rx="4" fill="#45484f" fill-opacity="0.2" stroke="#45484f" stroke-width="1"/>
+      <text x="115" y="95" text-anchor="middle" fill="#73757d" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">LEVEL 0</text>
+      <!-- Level title -->
+      <text x="175" y="95" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="15" font-weight="600">Manual Process</text>
+      <!-- Description -->
+      <text x="75" y="120" fill="#a9abb3" font-family="Inter, sans-serif" font-size="11">Treinamento manual em notebooks. Deploy manual (copiar artefatos). Sem versionamento. Sem monitoramento.</text>
+      <text x="75" y="140" fill="#a9abb3" font-family="Inter, sans-serif" font-size="11">Cientista de dados faz tudo: treina, valida, faz deploy, monitora, ou não monitora.</text>
+
+      <!-- Progress bar L0 -->
+      <rect x="580" y="82" width="150" height="6" rx="3" fill="#22262f"/>
+      <rect x="580" y="82" width="30" height="6" rx="3" fill="url(#gradLevel0)"/>
+      <text x="580" y="104" fill="#45484f" font-family="Inter, sans-serif" font-size="9">Automação: ~0%</text>
+
+      <!-- Level 1 -->
+      <rect x="50" y="175" width="700" height="90" rx="6" fill="#161a21" stroke="#af88ff" stroke-width="1"/>
+      <rect x="50" y="175" width="8" height="90" rx="4" fill="url(#gradLevel1)"/>
+      <rect x="75" y="188" width="80" height="24" rx="4" fill="#af88ff" fill-opacity="0.15" stroke="#af88ff" stroke-width="1"/>
+      <text x="115" y="205" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">LEVEL 1</text>
+      <text x="175" y="205" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="15" font-weight="600">ML Pipeline Automation</text>
+      <text x="75" y="230" fill="#a9abb3" font-family="Inter, sans-serif" font-size="11">Pipeline de treinamento automatizado. Continuous Training com novos dados. Feature store. Experiment tracking.</text>
+      <text x="75" y="250" fill="#a9abb3" font-family="Inter, sans-serif" font-size="11">Modelo retreina automaticamente, mas deploy ainda requer aprovacao humana.</text>
+
+      <rect x="580" y="192" width="150" height="6" rx="3" fill="#22262f"/>
+      <rect x="580" y="192" width="90" height="6" rx="3" fill="url(#gradLevel1)"/>
+      <text x="580" y="214" fill="#af88ff" font-family="Inter, sans-serif" font-size="9">Automação: ~60%</text>
+
+      <!-- Level 2 -->
+      <rect x="50" y="285" width="700" height="90" rx="6" fill="#161a21" stroke="#8ce7ff" stroke-width="1"/>
+      <rect x="50" y="285" width="8" height="90" rx="4" fill="url(#gradLevel2)"/>
+      <rect x="75" y="298" width="80" height="24" rx="4" fill="#8ce7ff" fill-opacity="0.15" stroke="#8ce7ff" stroke-width="1"/>
+      <text x="115" y="315" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">LEVEL 2</text>
+      <text x="175" y="315" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="15" font-weight="600">CI/CD Pipeline Automation</text>
+      <text x="75" y="340" fill="#a9abb3" font-family="Inter, sans-serif" font-size="11">CI/CD completo para ML. Deploy automático após validação. Monitoramento + alertas + rollback automático.</text>
+      <text x="75" y="360" fill="#a9abb3" font-family="Inter, sans-serif" font-size="11">Pipeline e totalmente automatizado: dados novos â†’ retrain â†’ validacao â†’ deploy â†’ monitoramento â†’ retrain.</text>
+
+      <rect x="580" y="302" width="150" height="6" rx="3" fill="#22262f"/>
+      <rect x="580" y="302" width="150" height="6" rx="3" fill="url(#gradLevel2)"/>
+      <text x="580" y="324" fill="#8ce7ff" font-family="Inter, sans-serif" font-size="9">Automação: ~100%</text>
+    </svg>
+
+    <div class="callout">
+      <p><strong>Realidade do mercado:</strong> A maioria das empresas brasileiras ainda está no Level 0 ou transicionando para o Level 1. Chegar ao Level 2 exige maturidade de engenharia, cultura de dados e investimento em infraestrutura. Não tente pular etapas, evolua incrementalmente.</p>
+    </div>
+
+    <h3>O que muda em cada nível</h3>
+    <ul>
+      <li><strong>Level 0 â†’ 1:</strong> Você sai de scripts soltos para um pipeline orquestrado. O retreino vira automático. Você começa a versionar experimentos.</li>
+      <li><strong>Level 1 â†’ 2:</strong> Você adiciona CI/CD ao pipeline de ML. Testes automatizados validam dados e modelos antes do deploy. Monitoramento fecha o loop com retrain automático.</li>
+    </ul>
+
+    <h2>Quando implementar MLOps</h2>
+
+    <div class="callout">
+      <p><strong>Comece com MLOps quando:</strong> você tem pelo menos um modelo em produção, ou quase lá, sua equipe perde tempo fazendo deploy e retrain manual, e você não consegue responder com confiança "qual versão do modelo está em produção agora?"</p>
+    </div>
+
+    <div class="callout">
+      <p><strong>Não comece com MLOps quando:</strong> você ainda está na fase de exploração e não sabe se ML resolve o problema. Nesse estágio, foque em validar a hipótese e provar valor. MLOps vem depois.</p>
+    </div>
+
+    <h3>Checklist prático para começar</h3>
+    <ul>
+      <li><strong>Versione tudo</strong> â€” código (Git), dados (DVC), experimentos (MLflow). Esse é o passo zero.</li>
+      <li><strong>Separe treinamento de serving</strong> â€” o código que treina o modelo não deve ser o mesmo que serve predições. Crie um pipeline de treinamento e uma API de serving separados.</li>
+      <li><strong>Automatize o retrain</strong> â€” mesmo que seja um cron job simples. O objetivo é que o retreino não dependa de alguém lembrar de fazer.</li>
+      <li><strong>Monitore o básico</strong> â€” distribuição das features de entrada, latência das predições, volume de requests. Se algo mudar drasticamente, você precisa saber.</li>
+      <li><strong>Documente o pipeline</strong> â€” um diagrama simples mostrando de onde vêm os dados, como o modelo é treinado, e como chega em produção.</li>
+    </ul>
+
+    <div class="code-block">
+<span class="comment"># Exemplo: pipeline MLOps minimo com GitHub Actions</span>
+<span class="comment"># .github/workflows/retrain.yml</span>
+
+<span class="keyword">name</span>: Retrain Model
+<span class="keyword">on</span>:
+  <span class="keyword">schedule</span>:
+    - cron: <span class="string">'0 6 * * 1'</span>  <span class="comment"># toda segunda 6h</span>
+  <span class="keyword">workflow_dispatch</span>:
+
+<span class="keyword">jobs</span>:
+  <span class="keyword">retrain</span>:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install -r requirements.txt
+      - run: python src/train.py
+      - run: python src/evaluate.py
+      - run: |
+          <span class="keyword">if</span> [ <span class="string">"$(cat metrics/improved.txt)"</span> == <span class="string">"true"</span> ]; <span class="keyword">then</span>
+            python src/deploy.py
+          <span class="keyword">fi</span>
+    </div>
+
+    <h2>O que vem a seguir</h2>
+    <p>
+      MLOps depende diretamente da qualidade dos dados que alimentam seus pipelines. Para entender como construir pipelines de dados robustos, Feature Stores, Data Lakes e toda a infraestrutura que sustenta ML em produção, o próximo passo é estudar <strong>Engenharia de Dados</strong>.
+    </p>
+    <p>
+      E se você ainda não leu o artigo anterior sobre <strong>Machine Learning</strong>, vale começar por lá para entender os fundamentos que MLOps operacionaliza.
+    </p>
+
+  </article>
+
+  <!-- Divider -->
+  <div class="bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent h-[1px] w-full max-w-[800px] mx-auto"></div>
+
+  <!-- Author + Next -->
+  <section class="px-8 py-16 max-w-[800px] mx-auto flex flex-col md:flex-row gap-12 justify-between items-start">
+    <!-- Author -->
+    <div class="flex items-center gap-4">
+      <img src="https://github.com/RodrigoPuertas.png" alt="Rodrigo Puertas" class="w-12 h-12 rounded-full border border-outline-variant/30"/>
+      <div>
+        <div class="text-sm font-bold text-on-surface">Rodrigo Puertas</div>
+        <div class="text-[0.6875rem] text-outline uppercase tracking-widest">Cientista de Dados · Shopee</div>
+      </div>
+    </div>
+    <!-- Back to list -->
+    <a href="../artigos.html" class="inline-flex items-center gap-2 px-6 py-3 border border-outline-variant/30 rounded text-[0.6875rem] font-bold uppercase tracking-widest hover:border-primary transition-all group">
+      <span class="material-symbols-outlined text-sm group-hover:text-primary transition-colors">arrow_back</span>
+      Ver todos os artigos
+    </a>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#0b0e14] border-t border-[#22262f] py-12">
+  <div class="w-full flex flex-col md:flex-row justify-between items-center px-12 gap-6">
+    <div class="text-sm font-black text-[#ecedf6]">PUERTAS.DEV</div>
+    <div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">&copy; 2026 RODRIGO PUERTAS // KNOWLEDGE BASE</div>
+    <div class="flex gap-8">
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="cursor-glow"></div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>O que é Data Engineering? | Rodrigo Puertas</title>
+<meta name="description" content="Pipelines, ETL, Data Lakes e Warehouses: a infraestrutura que sustenta toda análise de dados."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary-fixed-dim": "#8885ff", "surface": "#0b0e14", "on-surface-variant": "#a9abb3",
+          "on-error": "#490013", "primary-dim": "#645efb", "tertiary": "#8ce7ff",
+          "outline-variant": "#45484f", "surface-tint": "#a7a5ff", "on-secondary": "#2b0065",
+          "error": "#ff6e84", "on-primary": "#1c00a0", "outline": "#73757d",
+          "primary-container": "#9795ff", "on-secondary-container": "#e1d0ff",
+          "background": "#0b0e14", "secondary-dim": "#8a4cfc",
+          "surface-container-high": "#1c2028", "surface-variant": "#22262f",
+          "secondary-fixed": "#dcc9ff", "surface-container-lowest": "#000000",
+          "surface-container-low": "#10131a", "on-background": "#ecedf6",
+          "on-surface": "#ecedf6", "secondary": "#af88ff", "primary": "#a7a5ff",
+          "surface-container": "#161a21", "tertiary-container": "#53ddfc",
+          "primary-fixed": "#9795ff", "surface-container-highest": "#22262f",
+          "surface-bright": "#282c36",
+        },
+        fontFamily: { "headline": ["Space Grotesk"], "body": ["Inter"], "label": ["Inter"] },
+        borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+  body { background-color: #0b0e14; color: #ecedf6; font-family: 'Inter', sans-serif; cursor: none; }
+  a, button { cursor: none; }
+  h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
+
+  /* Cursor */
+  #cursor-dot { position: fixed; top: 0; left: 0; width: 6px; height: 6px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.2s, height 0.2s; mix-blend-mode: difference; }
+  #cursor-ring { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px solid rgba(167, 165, 255, 0.7); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.35s cubic-bezier(.23,1,.32,1), height 0.35s cubic-bezier(.23,1,.32,1); }
+  #cursor-ring::before { content: ''; position: absolute; inset: -1px; border-radius: 50%; background: conic-gradient(from 0deg, #a7a5ff, transparent 60%, #8ce7ff, transparent); opacity: 0.4; animation: spinRing 3s linear infinite; -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); }
+  #cursor-glow { position: fixed; top: 0; left: 0; width: 350px; height: 350px; background: radial-gradient(circle, rgba(167, 165, 255, 0.06) 0%, transparent 65%); border-radius: 50%; pointer-events: none; z-index: 9997; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease; }
+  body.cursor-active #cursor-dot, body.cursor-active #cursor-ring, body.cursor-active #cursor-glow { opacity: 1; }
+  body.cursor-hover #cursor-dot { width: 10px; height: 10px; }
+  body.cursor-hover #cursor-ring { width: 64px; height: 64px; border-color: rgba(140, 231, 255, 0.5); }
+  @keyframes spinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* Article Typography */
+  .article-body p { margin-bottom: 1.5rem; line-height: 1.9; color: #a9abb3; font-size: 1.0625rem; }
+  .article-body h2 { font-size: 1.75rem; font-weight: 700; margin-top: 3rem; margin-bottom: 1rem; color: #ecedf6; letter-spacing: -0.02em; }
+  .article-body h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem; color: #ecedf6; }
+  .article-body strong { color: #ecedf6; font-weight: 600; }
+  .article-body ul { margin-bottom: 1.5rem; padding-left: 1.5rem; list-style: none; }
+  .article-body ul li { position: relative; padding-left: 1.25rem; margin-bottom: 0.5rem; color: #a9abb3; font-size: 1.0625rem; line-height: 1.8; }
+  .article-body ul li::before { content: '—'; position: absolute; left: 0; color: #a7a5ff; font-weight: 600; }
+  .callout { background: #161a21; border-left: 3px solid #a7a5ff; padding: 1.25rem 1.5rem; border-radius: 0 0.25rem 0.25rem 0; margin-bottom: 1.5rem; }
+  .callout p { margin: 0; color: #ecedf6; font-size: 0.9375rem; }
+  .code-block { background: #000; border: 1px solid #22262f; border-radius: 0.25rem; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.875rem; color: #8ce7ff; overflow-x: auto; }
+  .code-block .comment { color: #45484f; }
+  .code-block .keyword { color: #a7a5ff; }
+  .code-block .string { color: #af88ff; }
+</style>
+</head>
+<body class="selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
+  <div class="text-xl font-bold tracking-tighter text-[#ecedf6]">PUERTAS.DEV</div>
+  <nav class="hidden md:flex items-center gap-8">
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../index.html">Overview</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../projects.html">Projetos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#8ce7ff] font-bold border-b border-[#8ce7ff] pb-1" href="../artigos.html">Artigos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../index.html#cta">Contato</a>
+  </nav>
+  <div class="flex items-center gap-4">
+    <a href="../consult.html" class="hidden md:block bg-gradient-to-br from-primary to-secondary-dim px-6 py-2 rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity">Consultoria</a>
+    <button class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 z-50" id="nav-toggle" aria-label="Abrir menu">
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+    </button>
+  </div>
+  <div class="bg-gradient-to-r from-transparent via-[#22262f] to-transparent h-[1px] w-full absolute bottom-0 left-0"></div>
+</header>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="hidden fixed inset-0 bg-[#0b0e14]/95 backdrop-blur-md z-40 flex-col justify-center items-center gap-8 font-['Space_Grotesk'] text-xl uppercase tracking-widest">
+  <a href="../index.html" class="text-primary hover:text-white">Overview</a>
+  <a href="../projects.html" class="text-primary hover:text-white">Projetos</a>
+  <a href="../artigos.html" class="text-white">Artigos</a>
+  <a href="../consult.html" class="text-primary hover:text-white">Consultoria</a>
+  <a href="../index.html#cta" class="text-primary hover:text-white">Contato</a>
+</div>
+
+<main class="pt-20">
+
+  <!-- Article Hero -->
+  <section class="px-8 pt-20 pb-16 md:pt-32 md:pb-20 max-w-[800px] mx-auto">
+    <!-- Breadcrumb -->
+    <a href="../artigos.html" class="inline-flex items-center gap-2 text-[0.6875rem] uppercase tracking-widest text-outline hover:text-primary transition-colors mb-12">
+      <span class="material-symbols-outlined text-sm">arrow_back</span>
+      Knowledge Base
+    </a>
+
+    <!-- Meta -->
+    <div class="flex flex-wrap items-center gap-4 mb-8">
+      <span class="px-3 py-1 rounded-sm bg-surface-container-high text-[0.6rem] font-bold text-tertiary border border-tertiary/20 uppercase tracking-widest">Data Engineering</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">12 min leitura</span>
+      <span class="text-outline-variant">•</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">Abril 2026</span>
+      <span class="text-outline-variant">•</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">Rodrigo Puertas</span>
+    </div>
+
+    <!-- Title -->
+    <h1 class="text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
+      O que é <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-tertiary">Data Engineering?</span>
+    </h1>
+    <p class="text-xl text-on-surface-variant font-light leading-relaxed">
+      Pipelines, ETL, Data Lakes e Warehouses: a infraestrutura que sustenta toda análise de dados.
+    </p>
+  </section>
+
+  <!-- Divider -->
+  <div class="bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent h-[1px] w-full max-w-[800px] mx-auto"></div>
+
+  <!-- Article Content -->
+  <article class="article-body px-8 py-16 max-w-[800px] mx-auto">
+
+    <h2>O que faz um Data Engineer?</h2>
+    <p>
+      Data Engineering (Engenharia de Dados) é a disciplina responsável por projetar, construir e manter a infraestrutura que permite a coleta, o armazenamento, a transformação e a disponibilização de dados em escala. Sem ela, cientistas de dados não têm dados limpos para modelar, analistas não têm tabelas confiáveis para consultar, e dashboards mentem.
+    </p>
+    <p>
+      É a fundação invisível: quando funciona, ninguém percebe. Quando falha, tudo desmorona.
+    </p>
+
+    <div class="callout">
+      <p><strong>Definição técnica:</strong> Engenharia de Dados é a prática de projetar e operar sistemas que coletam dados brutos de diversas fontes, transformam esses dados em formatos confiáveis e os disponibilizam para consumo por equipes de analytics, ciência de dados e produto.</p>
+    </div>
+
+    <h3>Data Engineer vs Data Scientist vs Data Analyst</h3>
+    <p>
+      Essas três funções se complementam, mas têm escopos distintos:
+    </p>
+    <ul>
+      <li><strong>Data Engineer (DE)</strong> — Constrói e mantém os pipelines e a infraestrutura. Foco em confiabilidade, escalabilidade e performance. Ferramentas: SQL, Spark, Airflow, dbt, Kafka.</li>
+      <li><strong>Data Scientist (DS)</strong> — Cria modelos preditivos e algoritmos de Machine Learning. Consome dados preparados pelo DE. Ferramentas: Python, Scikit-learn, PyTorch, notebooks.</li>
+      <li><strong>Data Analyst (DA)</strong> — Extrai insights de negócio a partir dos dados. Cria dashboards e relatórios. Ferramentas: SQL, Excel, Tableau, Power BI, Looker.</li>
+    </ul>
+    <p>
+      O Data Engineer é quem garante que os dados cheguem limpos, no formato certo, no lugar certo, no tempo certo. Sem esse trabalho, DS e DA ficam parados.
+    </p>
+
+    <h2>ETL vs ELT</h2>
+    <p>
+      ETL e ELT representam duas abordagens para mover dados de sistemas de origem para sistemas de destino. A diferença está na ordem em que a transformação acontece.
+    </p>
+
+    <h3>ETL — Extract, Transform, Load</h3>
+    <p>
+      A abordagem tradicional. Os dados são extraídos da fonte, transformados em um servidor intermediário (muitas vezes on-premise) e depois carregados no destino. Era o padrão antes da nuvem dominar.
+    </p>
+    <ul>
+      <li><strong>Vantagem</strong> — Dados chegam já limpos e estruturados no destino</li>
+      <li><strong>Desvantagem</strong> — Transformação é bottleneck; difícil escalar; reprocessamento caro</li>
+    </ul>
+
+    <h3>ELT — Extract, Load, Transform</h3>
+    <p>
+      A abordagem moderna. Os dados brutos são extraídos e carregados diretamente no destino (geralmente um Data Warehouse na nuvem como BigQuery, Snowflake ou Redshift), e a transformação acontece lá dentro, aproveitando o poder computacional do warehouse.
+    </p>
+    <ul>
+      <li><strong>Vantagem</strong> — Escalabilidade nativa; dados brutos preservados; reprocessamento fácil</li>
+      <li><strong>Desvantagem</strong> — Requer governança forte para não virar um "lixão de dados"</li>
+    </ul>
+
+    <!-- SVG: ETL vs ELT Flowchart -->
+    <svg width="100%" viewBox="0 0 760 370" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:1.5rem;">
+      <!-- Background -->
+      <rect width="760" height="370" rx="8" fill="#0b0e14"/>
+      <rect width="760" height="370" rx="8" stroke="#22262f" stroke-width="1"/>
+
+      <!-- Title -->
+      <text x="380" y="35" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="700">ETL vs ELT</text>
+
+      <!-- ETL Row -->
+      <text x="380" y="70" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="600">ETL — Abordagem Tradicional</text>
+
+      <!-- Extract -->
+      <rect x="40" y="90" width="150" height="54" rx="4" fill="#161a21" stroke="#a7a5ff" stroke-width="1.5"/>
+      <text x="115" y="113" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">EXTRACT</text>
+      <text x="115" y="131" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Fontes de dados</text>
+
+      <!-- Arrow 1 -->
+      <line x1="190" y1="117" x2="240" y2="117" stroke="#a7a5ff" stroke-width="1.5"/>
+      <polygon points="240,113 250,117 240,121" fill="#a7a5ff"/>
+
+      <!-- Transform -->
+      <rect x="250" y="90" width="150" height="54" rx="4" fill="#161a21" stroke="#af88ff" stroke-width="1.5"/>
+      <text x="325" y="113" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">TRANSFORM</text>
+      <text x="325" y="131" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Servidor intermediario</text>
+
+      <!-- Arrow 2 -->
+      <line x1="400" y1="117" x2="450" y2="117" stroke="#af88ff" stroke-width="1.5"/>
+      <polygon points="450,113 460,117 450,121" fill="#af88ff"/>
+
+      <!-- Load -->
+      <rect x="460" y="90" width="150" height="54" rx="4" fill="#161a21" stroke="#8ce7ff" stroke-width="1.5"/>
+      <text x="535" y="113" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">LOAD</text>
+      <text x="535" y="131" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Data Warehouse</text>
+
+      <!-- Result ETL -->
+      <line x1="610" y1="117" x2="660" y2="117" stroke="#8ce7ff" stroke-width="1.5"/>
+      <polygon points="660,113 670,117 660,121" fill="#8ce7ff"/>
+      <text x="715" y="121" text-anchor="middle" fill="#45484f" font-family="Inter, sans-serif" font-size="10">Dados limpos</text>
+
+      <!-- Divider line -->
+      <line x1="40" y1="175" x2="720" y2="175" stroke="#22262f" stroke-width="1" stroke-dasharray="4,4"/>
+
+      <!-- ELT Row -->
+      <text x="380" y="210" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="600">ELT — Abordagem Moderna</text>
+
+      <!-- Extract -->
+      <rect x="40" y="228" width="150" height="54" rx="4" fill="#161a21" stroke="#a7a5ff" stroke-width="1.5"/>
+      <text x="115" y="251" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">EXTRACT</text>
+      <text x="115" y="269" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Fontes de dados</text>
+
+      <!-- Arrow 1 -->
+      <line x1="190" y1="255" x2="240" y2="255" stroke="#a7a5ff" stroke-width="1.5"/>
+      <polygon points="240,251 250,255 240,259" fill="#a7a5ff"/>
+
+      <!-- Load -->
+      <rect x="250" y="228" width="150" height="54" rx="4" fill="#161a21" stroke="#8ce7ff" stroke-width="1.5"/>
+      <text x="325" y="251" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">LOAD</text>
+      <text x="325" y="269" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Data Warehouse (raw)</text>
+
+      <!-- Arrow 2 -->
+      <line x1="400" y1="255" x2="450" y2="255" stroke="#8ce7ff" stroke-width="1.5"/>
+      <polygon points="450,251 460,255 450,259" fill="#8ce7ff"/>
+
+      <!-- Transform -->
+      <rect x="460" y="228" width="150" height="54" rx="4" fill="#161a21" stroke="#af88ff" stroke-width="1.5"/>
+      <text x="535" y="251" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">TRANSFORM</text>
+      <text x="535" y="269" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Dentro do Warehouse</text>
+
+      <!-- Result ELT -->
+      <line x1="610" y1="255" x2="660" y2="255" stroke="#af88ff" stroke-width="1.5"/>
+      <polygon points="660,251 670,255 660,259" fill="#af88ff"/>
+      <text x="715" y="259" text-anchor="middle" fill="#45484f" font-family="Inter, sans-serif" font-size="10">Dados limpos</text>
+
+      <!-- Bottom labels -->
+      <rect x="120" y="318" width="180" height="30" rx="4" fill="#161a21" stroke="#22262f" stroke-width="1"/>
+      <text x="210" y="337" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Transformação antes do load</text>
+
+      <rect x="460" y="318" width="180" height="30" rx="4" fill="#161a21" stroke="#22262f" stroke-width="1"/>
+      <text x="550" y="337" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Transformação dentro do destino</text>
+    </svg>
+
+    <h2>Arquitetura de Dados Moderna</h2>
+    <p>
+      Uma arquitetura de dados moderna segue um fluxo claro: dados nascem em diversas fontes, passam por uma camada de ingestão, são armazenados em um Data Lake com camadas progressivas de refinamento, migram para um Data Warehouse otimizado para consultas analíticas, e finalmente alimentam dashboards, relatórios e modelos de Machine Learning.
+    </p>
+
+    <!-- SVG: Architecture Diagram -->
+    <svg width="100%" viewBox="0 0 760 440" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:1.5rem;">
+      <!-- Background -->
+      <rect width="760" height="440" rx="8" fill="#0b0e14"/>
+      <rect width="760" height="440" rx="8" stroke="#22262f" stroke-width="1"/>
+
+      <!-- Title -->
+      <text x="380" y="35" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="700">Arquitetura de Dados Moderna</text>
+
+      <!-- SOURCES -->
+      <rect x="20" y="65" width="100" height="140" rx="4" fill="#161a21" stroke="#a7a5ff" stroke-width="1.5"/>
+      <text x="70" y="88" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700">SOURCES</text>
+      <text x="70" y="112" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">APIs</text>
+      <text x="70" y="128" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Databases</text>
+      <text x="70" y="144" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Event Streams</text>
+      <text x="70" y="160" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Flat Files</text>
+      <text x="70" y="176" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">SaaS Tools</text>
+      <text x="70" y="192" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">IoT Sensors</text>
+
+      <!-- Arrow -->
+      <line x1="120" y1="135" x2="148" y2="135" stroke="#a7a5ff" stroke-width="1.5"/>
+      <polygon points="148,131 158,135 148,139" fill="#a7a5ff"/>
+
+      <!-- INGESTION -->
+      <rect x="158" y="85" width="90" height="100" rx="4" fill="#161a21" stroke="#af88ff" stroke-width="1.5"/>
+      <text x="203" y="108" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="700">INGESTION</text>
+      <text x="203" y="130" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Kafka</text>
+      <text x="203" y="146" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Airbyte</text>
+      <text x="203" y="162" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Fivetran</text>
+      <text x="203" y="178" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Debezium</text>
+
+      <!-- Arrow -->
+      <line x1="248" y1="135" x2="276" y2="135" stroke="#af88ff" stroke-width="1.5"/>
+      <polygon points="276,131 286,135 276,139" fill="#af88ff"/>
+
+      <!-- DATA LAKE -->
+      <rect x="286" y="60" width="210" height="200" rx="4" fill="#161a21" stroke="#8ce7ff" stroke-width="1.5"/>
+      <text x="391" y="83" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk, sans-serif" font-size="12" font-weight="700">DATA LAKE</text>
+
+      <!-- Raw Layer -->
+      <rect x="300" y="96" width="180" height="42" rx="3" fill="#0b0e14" stroke="#45484f" stroke-width="1"/>
+      <text x="390" y="114" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">RAW (Bronze)</text>
+      <text x="390" y="130" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Dados brutos, sem transformação</text>
+
+      <!-- Curated Layer -->
+      <rect x="300" y="146" width="180" height="42" rx="3" fill="#0b0e14" stroke="#45484f" stroke-width="1"/>
+      <text x="390" y="164" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">CURATED (Silver)</text>
+      <text x="390" y="180" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Dados limpos e deduplicados</text>
+
+      <!-- Refined Layer -->
+      <rect x="300" y="196" width="180" height="42" rx="3" fill="#0b0e14" stroke="#45484f" stroke-width="1"/>
+      <text x="390" y="214" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">REFINED (Gold)</text>
+      <text x="390" y="230" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Modelos de negocio prontos</text>
+
+      <!-- Arrow -->
+      <line x1="496" y1="160" x2="524" y2="160" stroke="#8ce7ff" stroke-width="1.5"/>
+      <polygon points="524,156 534,160 524,164" fill="#8ce7ff"/>
+
+      <!-- DATA WAREHOUSE -->
+      <rect x="534" y="85" width="100" height="100" rx="4" fill="#161a21" stroke="#a7a5ff" stroke-width="1.5"/>
+      <text x="584" y="106" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="700">DATA</text>
+      <text x="584" y="120" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="700">WAREHOUSE</text>
+      <text x="584" y="144" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">BigQuery</text>
+      <text x="584" y="160" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Snowflake</text>
+      <text x="584" y="176" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Redshift</text>
+
+      <!-- Arrow -->
+      <line x1="634" y1="135" x2="660" y2="105" stroke="#a7a5ff" stroke-width="1.5"/>
+      <polygon points="656,101 666,101 660,111" fill="#a7a5ff"/>
+      <line x1="634" y1="135" x2="660" y2="165" stroke="#a7a5ff" stroke-width="1.5"/>
+      <polygon points="656,169 666,169 660,159" fill="#a7a5ff"/>
+
+      <!-- ANALYTICS -->
+      <rect x="668" y="70" width="75" height="55" rx="4" fill="#161a21" stroke="#af88ff" stroke-width="1.5"/>
+      <text x="705" y="91" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="700">ANALYTICS</text>
+      <text x="705" y="109" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">BI / Dashboards</text>
+
+      <!-- ML -->
+      <rect x="668" y="140" width="75" height="55" rx="4" fill="#161a21" stroke="#8ce7ff" stroke-width="1.5"/>
+      <text x="705" y="161" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="700">ML</text>
+      <text x="705" y="179" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="9">Modelos / APIs</text>
+
+      <!-- Orchestration bar at bottom -->
+      <rect x="20" y="290" width="723" height="50" rx="4" fill="#161a21" stroke="#22262f" stroke-width="1"/>
+      <text x="381" y="312" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">ORQUESTRAÇÃO &amp; OBSERVABILIDADE</text>
+      <text x="381" y="330" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Apache Airflow / Dagster / Prefect / dbt / Great Expectations / Monte Carlo</text>
+
+      <!-- Governance bar -->
+      <rect x="20" y="355" width="723" height="50" rx="4" fill="#161a21" stroke="#22262f" stroke-width="1"/>
+      <text x="381" y="377" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="600">GOVERNANCA &amp; SEGURANCA</text>
+      <text x="381" y="395" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Data Catalog / Access Control / Lineage / Data Quality / Compliance (LGPD)</text>
+
+      <!-- Vertical dashed lines connecting main flow to bottom bars -->
+      <line x1="70" y1="205" x2="70" y2="290" stroke="#22262f" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="203" y1="185" x2="203" y2="290" stroke="#22262f" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="391" y1="260" x2="391" y2="290" stroke="#22262f" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="584" y1="185" x2="584" y2="290" stroke="#22262f" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="705" y1="195" x2="705" y2="290" stroke="#22262f" stroke-width="1" stroke-dasharray="3,3"/>
+    </svg>
+
+    <p>
+      O ponto central dessa arquitetura é que cada camada tem uma responsabilidade clara. A ingestão traz os dados; o Data Lake armazena com fidelidade; o Warehouse otimiza para consultas; e a camada de consumo entrega valor.
+    </p>
+
+    <h2>Data Lake vs Data Warehouse vs Data Lakehouse</h2>
+    <p>
+      Essas tres arquiteturas de armazenamento coexistem no ecossistema moderno de dados. Cada uma tem trade-offs distintos:
+    </p>
+
+    <!-- SVG: Comparison Diagram -->
+    <svg width="100%" viewBox="0 0 760 420" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:1.5rem;">
+      <!-- Background -->
+      <rect width="760" height="420" rx="8" fill="#0b0e14"/>
+      <rect width="760" height="420" rx="8" stroke="#22262f" stroke-width="1"/>
+
+      <!-- Title -->
+      <text x="380" y="35" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="700">Data Lake vs Data Warehouse vs Data Lakehouse</text>
+
+      <!-- Column Headers -->
+      <!-- Data Lake -->
+      <rect x="25" y="55" width="225" height="40" rx="4" fill="#161a21" stroke="#a7a5ff" stroke-width="1.5"/>
+      <text x="137" y="80" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700">Data Lake</text>
+
+      <!-- Data Warehouse -->
+      <rect x="267" y="55" width="225" height="40" rx="4" fill="#161a21" stroke="#af88ff" stroke-width="1.5"/>
+      <text x="380" y="80" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700">Data Warehouse</text>
+
+      <!-- Data Lakehouse -->
+      <rect x="509" y="55" width="225" height="40" rx="4" fill="#161a21" stroke="#8ce7ff" stroke-width="1.5"/>
+      <text x="621" y="80" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk, sans-serif" font-size="13" font-weight="700">Data Lakehouse</text>
+
+      <!-- Row 1: Armazenamento -->
+      <text x="15" y="125" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">ARMAZENA-</text>
+      <text x="15" y="137" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">MENTO</text>
+
+      <rect x="95" y="110" width="155" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="172" y="133" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Arquivos (S3, GCS, ADLS)</text>
+
+      <rect x="267" y="110" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="380" y="133" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Tabelas otimizadas (columnar)</text>
+
+      <rect x="509" y="110" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="621" y="133" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Arquivos + camada de tabela</text>
+
+      <!-- Row 2: Formato -->
+      <text x="15" y="177" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">FORMATO</text>
+
+      <rect x="95" y="162" width="155" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="172" y="185" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Qualquer (JSON, CSV, Parquet)</text>
+
+      <rect x="267" y="162" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="380" y="185" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Estruturado (schema-on-write)</text>
+
+      <rect x="509" y="162" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="621" y="185" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Parquet/ORC + Delta/Iceberg</text>
+
+      <!-- Row 3: Schema -->
+      <text x="15" y="229" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">SCHEMA</text>
+
+      <rect x="95" y="214" width="155" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="172" y="237" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Schema-on-read</text>
+
+      <rect x="267" y="214" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="380" y="237" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Schema-on-write</text>
+
+      <rect x="509" y="214" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="621" y="237" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Schema enforcement + evolution</text>
+
+      <!-- Row 4: Performance -->
+      <text x="15" y="281" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">QUERIES</text>
+
+      <rect x="95" y="266" width="155" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="172" y="289" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Lento para SQL ad-hoc</text>
+
+      <rect x="267" y="266" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="380" y="289" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Muito rapido (otimizado)</text>
+
+      <rect x="509" y="266" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="621" y="289" text-anchor="middle" fill="#a9abb3" font-family="Inter, sans-serif" font-size="10">Rapido com query engines</text>
+
+      <!-- Row 5: ACID -->
+      <text x="15" y="333" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">ACID</text>
+
+      <rect x="95" y="318" width="155" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="172" y="341" text-anchor="middle" fill="#ff6e84" font-family="Inter, sans-serif" font-size="10">Nao nativo</text>
+
+      <rect x="267" y="318" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="380" y="341" text-anchor="middle" fill="#8ce7ff" font-family="Inter, sans-serif" font-size="10">Sim, completo</text>
+
+      <rect x="509" y="318" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="621" y="341" text-anchor="middle" fill="#8ce7ff" font-family="Inter, sans-serif" font-size="10">Sim (Delta Lake, Iceberg)</text>
+
+      <!-- Row 6: Exemplos -->
+      <text x="15" y="385" fill="#ecedf6" font-family="Space Grotesk, sans-serif" font-size="10" font-weight="600">EXEMPLOS</text>
+
+      <rect x="95" y="370" width="155" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="172" y="393" text-anchor="middle" fill="#a7a5ff" font-family="Inter, sans-serif" font-size="10">S3 + Athena, GCS</text>
+
+      <rect x="267" y="370" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="380" y="393" text-anchor="middle" fill="#af88ff" font-family="Inter, sans-serif" font-size="10">BigQuery, Snowflake, Redshift</text>
+
+      <rect x="509" y="370" width="225" height="38" rx="3" fill="#0b0e14" stroke="#22262f" stroke-width="1"/>
+      <text x="621" y="393" text-anchor="middle" fill="#8ce7ff" font-family="Inter, sans-serif" font-size="10">Databricks, Apache Iceberg</text>
+    </svg>
+
+    <div class="callout">
+      <p><strong>Tendencia atual:</strong> O Data Lakehouse esta se consolidando como a arquitetura preferida, combinando o custo e flexibilidade do Data Lake com a performance e governanca do Data Warehouse. Delta Lake e Apache Iceberg lideram essa convergencia.</p>
+    </div>
+
+    <h2>Ferramentas essenciais do Data Engineer</h2>
+    <p>
+      O toolkit de um engenheiro de dados moderno e vasto, mas algumas ferramentas se tornaram indispensaveis:
+    </p>
+
+    <h3>SQL</h3>
+    <p>
+      A língua franca dos dados. Todo pipeline, todo warehouse, toda transformação passa por SQL. Não importa se você usa Spark, dbt ou BigQuery — SQL está no centro.
+    </p>
+
+    <h3>Apache Spark / PySpark</h3>
+    <p>
+      O motor de processamento distribuído mais utilizado no mundo. Processa terabytes de dados em paralelo usando clusters. PySpark é a interface Python que torna o Spark acessível para quem vem de data science.
+    </p>
+
+    <h3>Apache Airflow</h3>
+    <p>
+      O orquestrador de pipelines mais popular. Permite definir DAGs (Directed Acyclic Graphs) em Python que representam fluxos de trabalho. Cada task é um passo do pipeline, e o Airflow gerencia dependências, agendamento, retries e alertas.
+    </p>
+
+    <h3>dbt (Data Build Tool)</h3>
+    <p>
+      Revolucionou a transformação de dados. Permite escrever transformações em SQL puro, versionar no Git, testar automaticamente e documentar. É o "T" do ELT moderno.
+    </p>
+
+    <h3>Plataformas de Cloud</h3>
+    <ul>
+      <li><strong>AWS</strong> — S3, Glue, Redshift, EMR, Kinesis</li>
+      <li><strong>GCP</strong> — GCS, BigQuery, Dataflow, Dataproc, Pub/Sub</li>
+      <li><strong>Azure</strong> — ADLS, Synapse, Data Factory, Databricks</li>
+    </ul>
+    <p>
+      A maioria das empresas usa pelo menos um desses ecossistemas. Saber navegar entre serviços de storage, compute e orquestração na nuvem é fundamental.
+    </p>
+
+    <h3>Ferramentas de ingestão</h3>
+    <ul>
+      <li><strong>Apache Kafka</strong> — Streaming de eventos em tempo real</li>
+      <li><strong>Airbyte / Fivetran</strong> — Ingestão de dados de SaaS e APIs</li>
+      <li><strong>Debezium</strong> — Change Data Capture (CDC) de bancos relacionais</li>
+    </ul>
+
+    <h2>Qualidade de dados</h2>
+    <p>
+      De nada adianta ter pipelines rápidos e infraestrutura robusta se os dados que fluem são inconsistentes, duplicados ou incompletos. Qualidade de dados é um dos maiores desafios — e uma das maiores responsabilidades — do Data Engineer.
+    </p>
+
+    <h3>Dimensões de qualidade</h3>
+    <ul>
+      <li><strong>Completude</strong> — Os dados estao completos? Ha campos nulos inesperados?</li>
+      <li><strong>Unicidade</strong> — Existem registros duplicados?</li>
+      <li><strong>Consistencia</strong> — Os dados concordam entre diferentes fontes?</li>
+      <li><strong>Freshness (Frescor)</strong> — Os dados estao atualizados? Quanto tempo entre o evento e a disponibilizacao?</li>
+      <li><strong>Conformidade</strong> — Os dados respeitam o schema e as regras de negocio esperadas?</li>
+      <li><strong>Acuracia</strong> — Os dados refletem a realidade?</li>
+    </ul>
+
+    <h3>Data Contracts</h3>
+    <p>
+      Data Contracts são acordos formais entre produtores e consumidores de dados. Eles definem o schema, a frequência de atualização, as garantias de qualidade e o SLA esperado. É como uma API contract, mas para dados.
+    </p>
+
+    <div class="callout">
+      <p><strong>Na prática:</strong> Um data contract pode ser um arquivo YAML no repositório que define: nome do dataset, owner, schema (colunas + tipos), testes de qualidade obrigatórios, SLA de freshness e canal de comunicação para incidentes.</p>
+    </div>
+
+    <h3>Ferramentas de qualidade</h3>
+    <ul>
+      <li><strong>Great Expectations</strong> — Framework open-source para testes de dados</li>
+      <li><strong>dbt tests</strong> — Testes de unicidade, nao-nulo, relacionamentos e custom SQL</li>
+      <li><strong>Monte Carlo / Elementary</strong> — Observabilidade de dados (data observability)</li>
+      <li><strong>Soda</strong> — Monitoramento e validacao de qualidade</li>
+    </ul>
+
+    <h2>Pipeline na prática</h2>
+    <p>
+      Vamos construir um exemplo simplificado de pipeline ELT que extrai dados de uma API, carrega em um Data Lake e transforma usando SQL.
+    </p>
+
+    <h3>1. Extração e carga (Python)</h3>
+    <div class="code-block">
+<span class="comment"># extract_and_load.py</span>
+<span class="comment"># Extrai dados de uma API e carrega no Data Lake (S3)</span>
+<span class="keyword">import</span> requests
+<span class="keyword">import</span> boto3
+<span class="keyword">import</span> json
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+<span class="keyword">def</span> extract_orders():
+    <span class="string">"""Extrai pedidos da API de vendas."""</span>
+    response = requests.get(
+        <span class="string">"https://api.example.com/orders"</span>,
+        params={<span class="string">"date"</span>: datetime.today().strftime(<span class="string">"%Y-%m-%d"</span>)}
+    )
+    <span class="keyword">return</span> response.json()
+
+<span class="keyword">def</span> load_to_s3(data, bucket, key):
+    <span class="string">"""Carrega dados brutos no S3 (camada raw)."""</span>
+    s3 = boto3.client(<span class="string">"s3"</span>)
+    s3.put_object(
+        Bucket=bucket,
+        Key=key,
+        Body=json.dumps(data),
+        ContentType=<span class="string">"application/json"</span>
+    )
+
+<span class="comment"># Execução</span>
+orders = extract_orders()
+today = datetime.today().strftime(<span class="string">"%Y/%m/%d"</span>)
+load_to_s3(
+    data=orders,
+    bucket=<span class="string">"data-lake-raw"</span>,
+    key=f<span class="string">"orders/{today}/orders.json"</span>
+)
+<span class="keyword">print</span>(f<span class="string">"Loaded {len(orders)} orders to S3"</span>)
+    </div>
+
+    <h3>2. Transformação (SQL com dbt)</h3>
+    <div class="code-block">
+<span class="comment">-- models/marts/fct_orders.sql</span>
+<span class="comment">-- Modelo dbt: transforma pedidos brutos em fato de vendas</span>
+
+<span class="keyword">WITH</span> raw_orders <span class="keyword">AS</span> (
+    <span class="keyword">SELECT</span> *
+    <span class="keyword">FROM</span> {{ ref(<span class="string">'stg_orders'</span>) }}
+),
+
+enriched <span class="keyword">AS</span> (
+    <span class="keyword">SELECT</span>
+        o.order_id,
+        o.customer_id,
+        o.order_date,
+        o.total_amount,
+        o.status,
+        c.customer_segment,
+        c.acquisition_channel,
+        <span class="comment">-- Métricas derivadas</span>
+        <span class="keyword">CASE</span>
+            <span class="keyword">WHEN</span> o.total_amount >= <span class="string">500</span> <span class="keyword">THEN</span> <span class="string">'high_value'</span>
+            <span class="keyword">WHEN</span> o.total_amount >= <span class="string">100</span> <span class="keyword">THEN</span> <span class="string">'medium_value'</span>
+            <span class="keyword">ELSE</span> <span class="string">'low_value'</span>
+        <span class="keyword">END</span> <span class="keyword">AS</span> order_tier,
+        ROW_NUMBER() OVER(
+            PARTITION BY o.customer_id
+            ORDER BY o.order_date
+        ) <span class="keyword">AS</span> order_sequence
+    <span class="keyword">FROM</span> raw_orders o
+    <span class="keyword">LEFT JOIN</span> {{ ref(<span class="string">'dim_customers'</span>) }} c
+        <span class="keyword">ON</span> o.customer_id = c.customer_id
+    <span class="keyword">WHERE</span> o.status != <span class="string">'cancelled'</span>
+)
+
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> enriched
+    </div>
+
+    <h3>3. Orquestração (Airflow DAG)</h3>
+    <div class="code-block">
+<span class="comment"># dags/orders_pipeline.py</span>
+<span class="keyword">from</span> airflow <span class="keyword">import</span> DAG
+<span class="keyword">from</span> airflow.operators.python <span class="keyword">import</span> PythonOperator
+<span class="keyword">from</span> airflow.operators.bash <span class="keyword">import</span> BashOperator
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta
+
+default_args = {
+    <span class="string">"owner"</span>: <span class="string">"data-eng"</span>,
+    <span class="string">"retries"</span>: <span class="string">2</span>,
+    <span class="string">"retry_delay"</span>: timedelta(minutes=<span class="string">5</span>),
+}
+
+<span class="keyword">with</span> DAG(
+    dag_id=<span class="string">"orders_pipeline"</span>,
+    schedule_interval=<span class="string">"0 6 * * *"</span>,  <span class="comment"># Todo dia as 6h</span>
+    start_date=datetime(<span class="string">2026</span>, <span class="string">1</span>, <span class="string">1</span>),
+    default_args=default_args,
+    catchup=<span class="keyword">False</span>,
+) <span class="keyword">as</span> dag:
+
+    extract = PythonOperator(
+        task_id=<span class="string">"extract_orders"</span>,
+        python_callable=extract_orders,
+    )
+
+    load = PythonOperator(
+        task_id=<span class="string">"load_to_s3"</span>,
+        python_callable=load_to_s3,
+    )
+
+    transform = BashOperator(
+        task_id=<span class="string">"dbt_run"</span>,
+        bash_command=<span class="string">"dbt run --models fct_orders"</span>,
+    )
+
+    test = BashOperator(
+        task_id=<span class="string">"dbt_test"</span>,
+        bash_command=<span class="string">"dbt test --models fct_orders"</span>,
+    )
+
+    extract >> load >> transform >> test
+    </div>
+
+    <p>
+      Esse pipeline roda diariamente: extrai dados da API, carrega no S3 (camada raw), transforma com dbt no warehouse e executa testes de qualidade automaticamente.
+    </p>
+
+    <h2>O que vem a seguir</h2>
+    <p>
+      Data Engineering é o alicerce. Sem pipelines confiáveis, não há dados confiáveis. Sem dados confiáveis, não há modelos confiáveis. Neste artigo, cobrimos os fundamentos: ETL vs ELT, arquitetura moderna, Data Lakes e Warehouses, ferramentas essenciais e qualidade de dados.
+    </p>
+    <p>
+      Para se aprofundar no processamento distribuído — a ferramenta que escala seus pipelines para bilhões de registros — o próximo passo é dominar o <strong>PySpark</strong>. Veja o artigo sobre <a href="o-que-e-pyspark.html" class="text-primary hover:text-tertiary transition-colors underline underline-offset-4">O que é PySpark</a> para continuar sua jornada.
+    </p>
+    <p>
+      E se você quer entender como os dados que seus pipelines produzem alimentam modelos inteligentes, volte ao artigo sobre <a href="o-que-e-machine-learning.html" class="text-primary hover:text-tertiary transition-colors underline underline-offset-4">Machine Learning</a>.
+    </p>
+
+  </article>
+
+  <!-- Divider -->
+  <div class="bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent h-[1px] w-full max-w-[800px] mx-auto"></div>
+
+  <!-- Author + Next -->
+  <section class="px-8 py-16 max-w-[800px] mx-auto flex flex-col md:flex-row gap-12 justify-between items-start">
+    <!-- Author -->
+    <div class="flex items-center gap-4">
+      <img src="https://github.com/RodrigoPuertas.png" alt="Rodrigo Puertas" class="w-12 h-12 rounded-full border border-outline-variant/30"/>
+      <div>
+        <div class="text-sm font-bold text-on-surface">Rodrigo Puertas</div>
+        <div class="text-[0.6875rem] text-outline uppercase tracking-widest">Cientista de Dados · Shopee</div>
+      </div>
+    </div>
+    <!-- Back to list -->
+    <a href="../artigos.html" class="inline-flex items-center gap-2 px-6 py-3 border border-outline-variant/30 rounded text-[0.6875rem] font-bold uppercase tracking-widest hover:border-primary transition-all group">
+      <span class="material-symbols-outlined text-sm group-hover:text-primary transition-colors">arrow_back</span>
+      Ver todos os artigos
+    </a>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#0b0e14] border-t border-[#22262f] py-12">
+  <div class="w-full flex flex-col md:flex-row justify-between items-center px-12 gap-6">
+    <div class="text-sm font-black text-[#ecedf6]">PUERTAS.DEV</div>
+    <div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">&copy; 2026 RODRIGO PUERTAS // KNOWLEDGE BASE</div>
+    <div class="flex gap-8">
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="cursor-glow"></div>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
