@@ -245,24 +245,5 @@
 <div id="cursor-glow"></div>
 
 <script src="js/main.js"></script>
-<script>
-  // Filter articles
-  const filterBtns = document.querySelectorAll('[data-filter]');
-  const articleCards = document.querySelectorAll('[data-category]');
-
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const filter = btn.dataset.filter;
-      filterBtns.forEach(b => { b.classList.remove('text-primary'); b.classList.add('text-on-surface/40'); });
-      btn.classList.add('text-primary'); btn.classList.remove('text-on-surface/40');
-      articleCards.forEach(card => {
-        const match = filter === 'todos' || card.dataset.category === filter;
-        card.style.opacity = match ? (card.classList.contains('card-em-breve') ? '0.45' : '1') : '0.1';
-        card.style.transform = match ? 'scale(1)' : 'scale(0.97)';
-        card.style.transition = 'opacity 0.3s, transform 0.3s';
-      });
-    });
-  });
-</script>
 </body>
 </html>

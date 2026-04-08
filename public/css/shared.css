@@ -7,11 +7,14 @@ body {
   background-color: #0b0e14;
   color: #ecedf6;
   font-family: "Inter", sans-serif;
+  position: relative;
+  isolation: isolate;
 }
 
 @media (hover: hover) {
-  body { cursor: none; }
-  a, button { cursor: none; }
+  body.cursor-enhanced { cursor: none; }
+  body.cursor-enhanced a,
+  body.cursor-enhanced button { cursor: none; }
 }
 
 h1,
@@ -106,4 +109,65 @@ body.cursor-hover #cursor-ring {
 @keyframes spinRing {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+#binary-trail-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+header,
+main,
+footer {
+  position: relative;
+  z-index: 2;
+}
+
+.binary-trail-char {
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-family: Consolas, "SFMono-Regular", Menlo, Monaco, "Liberation Mono", monospace;
+  font-weight: 600;
+  line-height: 1;
+  color: #7fd4ff;
+  text-shadow: 0 0 8px rgba(127, 212, 255, 0.75), 0 0 16px rgba(58, 160, 255, 0.4);
+  opacity: 0;
+  will-change: transform, opacity;
+  transform: translate3d(var(--bt-x, 0px), var(--bt-y, 0px), 0) scale(0.55);
+  animation-name: binaryTrailFloat;
+  animation-timing-function: cubic-bezier(0.2, 0.65, 0.2, 1);
+  animation-fill-mode: forwards;
+}
+
+@keyframes binaryTrailFloat {
+  0% {
+    opacity: 0.08;
+    transform: translate3d(var(--bt-x), var(--bt-y), 0) scale(0.5);
+  }
+  28% {
+    opacity: 0.95;
+    transform: translate3d(
+      calc(var(--bt-x) + (var(--bt-dx) * 0.35)),
+      calc(var(--bt-y) + (var(--bt-dy) * 0.35)),
+      0
+    ) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(
+      calc(var(--bt-x) + var(--bt-dx)),
+      calc(var(--bt-y) + var(--bt-dy)),
+      0
+    ) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #binary-trail-layer {
+    display: none;
+  }
 }
