@@ -64,16 +64,26 @@
   font-size: 0.9375rem;
 }
 
-.code-block {
+pre.code-block {
   background: #000;
   border: 1px solid #22262f;
   border-radius: 0.25rem;
   padding: 1.25rem 1.5rem;
-  margin-bottom: 1.5rem;
+  margin: 0 0 1.5rem;
   font-family: "Courier New", monospace;
   font-size: 0.875rem;
+  line-height: 1.7;
   color: #8ce7ff;
+  white-space: pre;
   overflow-x: auto;
+}
+
+pre.code-block code {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  padding: 0;
 }
 
 .code-block .comment { color: #45484f; }

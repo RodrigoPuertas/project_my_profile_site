@@ -5,12 +5,27 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Forecasting &amp; S&eacute;ries Temporais | Rodrigo Puertas</title>
 <meta name="description" content="Como prever demanda e comportamento usando s&eacute;ries temporais: ARIMA, Prophet e modelos de ML."/>
+<meta property="og:title" content="Forecasting &amp; S&eacute;ries Temporais | Rodrigo Puertas"/>
+<meta property="og:description" content="Como prever demanda e comportamento usando s&eacute;ries temporais: ARIMA, Prophet e modelos de ML."/>
+<meta property="og:type" content="article"/>
+<meta property="og:image" content="https://github.com/RodrigoPuertas.png"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Forecasting &amp; S&eacute;ries Temporais | Rodrigo Puertas"/>
+<meta name="twitter:description" content="Como prever demanda e comportamento usando s&eacute;ries temporais: ARIMA, Prophet e modelos de ML."/>
+<meta name="twitter:image" content="https://github.com/RodrigoPuertas.png"/>
+<meta name="theme-color" content="#0b0e14"/>
+<link rel="canonical" href="https://puertas.dev/artigos/forecasting-series-temporais"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="../js/tailwind-config.js"></script>
 <link href="../css/shared.css" rel="stylesheet"/>
 <link href="../css/article.css" rel="stylesheet"/>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Forecasting & Séries Temporais","description":"Como prever demanda e comportamento usando séries temporais: ARIMA, Prophet e modelos de ML.","author":{"@type":"Person","name":"Rodrigo Puertas","url":"https://puertas.dev"},"datePublished":"2026-04","publisher":{"@type":"Person","name":"Rodrigo Puertas"}}
+</script>
 </head>
 <body class="selection:bg-primary-container selection:text-on-primary-container">
 
@@ -149,30 +164,59 @@
     </ul>
 
     <!-- SVG: ARIMA model selection flow -->
-    <svg viewBox="0 0 700 120" xmlns="http://www.w3.org/2000/svg" width="100%" style="max-width:700px;margin:2rem auto;display:block;">
-      <rect x="5" y="30" width="100" height="55" rx="6" fill="#a7a5ff" fill-opacity="0.15" stroke="#a7a5ff" stroke-opacity="0.3"/>
-      <text x="55" y="52" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk" font-size="9" font-weight="600">TESTE ADF</text>
-      <text x="55" y="68" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="8">Estacionariedade</text>
-      <text x="118" y="60" fill="#45484f" font-size="13">&rarr;</text>
-      <rect x="130" y="30" width="100" height="55" rx="6" fill="#af88ff" fill-opacity="0.15" stroke="#af88ff" stroke-opacity="0.3"/>
-      <text x="180" y="52" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk" font-size="9" font-weight="600">DIFERENCIA&Ccedil;&Atilde;O</text>
-      <text x="180" y="68" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="8">Par&acirc;metro d</text>
-      <text x="243" y="60" fill="#45484f" font-size="13">&rarr;</text>
-      <rect x="255" y="30" width="100" height="55" rx="6" fill="#af88ff" fill-opacity="0.15" stroke="#af88ff" stroke-opacity="0.3"/>
-      <text x="305" y="52" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk" font-size="9" font-weight="600">ACF / PACF</text>
-      <text x="305" y="68" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="8">Selecionar p, q</text>
-      <text x="368" y="60" fill="#45484f" font-size="13">&rarr;</text>
-      <rect x="380" y="30" width="100" height="55" rx="6" fill="#8ce7ff" fill-opacity="0.15" stroke="#8ce7ff" stroke-opacity="0.3"/>
-      <text x="430" y="52" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk" font-size="9" font-weight="600">FIT ARIMA</text>
-      <text x="430" y="68" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="8">Treinar modelo</text>
-      <text x="493" y="60" fill="#45484f" font-size="13">&rarr;</text>
-      <rect x="505" y="30" width="100" height="55" rx="6" fill="#8ce7ff" fill-opacity="0.15" stroke="#8ce7ff" stroke-opacity="0.3"/>
-      <text x="555" y="52" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk" font-size="9" font-weight="600">VALIDAR</text>
-      <text x="555" y="68" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="8">MAE / RMSE</text>
-      <text x="618" y="60" fill="#45484f" font-size="13">&rarr;</text>
-      <rect x="630" y="30" width="60" height="55" rx="6" fill="#a7a5ff" fill-opacity="0.2" stroke="#a7a5ff" stroke-opacity="0.4"/>
-      <text x="660" y="55" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk" font-size="9" font-weight="700">DEPLOY</text>
-      <text x="660" y="68" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="7">Produ&ccedil;&atilde;o</text>
+    <svg viewBox="0 0 700 100" xmlns="http://www.w3.org/2000/svg" width="100%" style="max-width:700px;margin:2rem auto;display:block;">
+      <rect x="0" y="0" width="700" height="100" rx="8" fill="#161a21"/>
+
+      <!-- Step 1: Teste ADF -->
+      <rect x="12" y="20" width="90" height="60" rx="6" fill="#a7a5ff" fill-opacity="0.12" stroke="#a7a5ff" stroke-opacity="0.4"/>
+      <text x="57" y="46" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk" font-size="9" font-weight="700">TESTE ADF</text>
+      <text x="57" y="62" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="7.5">Estacionariedade</text>
+
+      <!-- Arrow 1 -->
+      <line x1="106" y1="50" x2="120" y2="50" stroke="#45484f" stroke-width="1.5"/>
+      <polygon points="120,46 128,50 120,54" fill="#45484f"/>
+
+      <!-- Step 2: Diferenciação -->
+      <rect x="132" y="20" width="90" height="60" rx="6" fill="#af88ff" fill-opacity="0.12" stroke="#af88ff" stroke-opacity="0.4"/>
+      <text x="177" y="43" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk" font-size="8.5" font-weight="700">DIFERENCIA-</text>
+      <text x="177" y="54" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk" font-size="8.5" font-weight="700">&Ccedil;&Atilde;O</text>
+      <text x="177" y="68" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="7.5">Par&acirc;metro d</text>
+
+      <!-- Arrow 2 -->
+      <line x1="226" y1="50" x2="240" y2="50" stroke="#45484f" stroke-width="1.5"/>
+      <polygon points="240,46 248,50 240,54" fill="#45484f"/>
+
+      <!-- Step 3: ACF / PACF -->
+      <rect x="252" y="20" width="90" height="60" rx="6" fill="#af88ff" fill-opacity="0.12" stroke="#af88ff" stroke-opacity="0.4"/>
+      <text x="297" y="46" text-anchor="middle" fill="#af88ff" font-family="Space Grotesk" font-size="9" font-weight="700">ACF / PACF</text>
+      <text x="297" y="62" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="7.5">Selecionar p, q</text>
+
+      <!-- Arrow 3 -->
+      <line x1="346" y1="50" x2="360" y2="50" stroke="#45484f" stroke-width="1.5"/>
+      <polygon points="360,46 368,50 360,54" fill="#45484f"/>
+
+      <!-- Step 4: Fit ARIMA -->
+      <rect x="372" y="20" width="90" height="60" rx="6" fill="#8ce7ff" fill-opacity="0.12" stroke="#8ce7ff" stroke-opacity="0.4"/>
+      <text x="417" y="46" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk" font-size="9" font-weight="700">FIT ARIMA</text>
+      <text x="417" y="62" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="7.5">Treinar modelo</text>
+
+      <!-- Arrow 4 -->
+      <line x1="466" y1="50" x2="480" y2="50" stroke="#45484f" stroke-width="1.5"/>
+      <polygon points="480,46 488,50 480,54" fill="#45484f"/>
+
+      <!-- Step 5: Validar -->
+      <rect x="492" y="20" width="90" height="60" rx="6" fill="#8ce7ff" fill-opacity="0.12" stroke="#8ce7ff" stroke-opacity="0.4"/>
+      <text x="537" y="46" text-anchor="middle" fill="#8ce7ff" font-family="Space Grotesk" font-size="9" font-weight="700">VALIDAR</text>
+      <text x="537" y="62" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="7.5">MAE / RMSE</text>
+
+      <!-- Arrow 5 -->
+      <line x1="586" y1="50" x2="600" y2="50" stroke="#45484f" stroke-width="1.5"/>
+      <polygon points="600,46 608,50 600,54" fill="#45484f"/>
+
+      <!-- Step 6: Deploy -->
+      <rect x="612" y="20" width="76" height="60" rx="6" fill="#a7a5ff" fill-opacity="0.18" stroke="#a7a5ff" stroke-opacity="0.5"/>
+      <text x="650" y="46" text-anchor="middle" fill="#a7a5ff" font-family="Space Grotesk" font-size="9" font-weight="700">DEPLOY</text>
+      <text x="650" y="62" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="7.5">Produ&ccedil;&atilde;o</text>
     </svg>
 
     <p>
@@ -189,7 +233,7 @@
       Desenvolvido pelo Facebook (Meta), o <strong>Prophet</strong> &eacute; um modelo aditivo que decompoe a s&eacute;rie em tend&ecirc;ncia + sazonalidade + feriados + ru&iacute;do. Seu grande diferencial &eacute; a facilidade de uso e a capacidade de lidar com dados faltantes e outliers.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="keyword">from</span> prophet <span class="keyword">import</span> Prophet
 <span class="keyword">import</span> pandas <span class="keyword">as</span> pd
 
@@ -212,7 +256,7 @@ forecast = model.predict(future)
 <span class="comment"># Visualizar</span>
 model.plot(forecast)
 model.plot_components(forecast)
-    </div>
+    </code></pre>
 
     <h2>Modelos de ML para S&eacute;ries Temporais</h2>
     <p>
@@ -258,45 +302,47 @@ model.plot_components(forecast)
     </p>
 
     <!-- SVG: Metrics bar chart -->
-    <svg viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg" width="100%" style="max-width:700px;margin:2rem auto;display:block;">
-      <rect x="0" y="0" width="700" height="220" rx="8" fill="#161a21"/>
-      <text x="350" y="30" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk" font-size="13" font-weight="700">M&Eacute;TRICAS DE ERRO &mdash; EXEMPLO COMPARATIVO</text>
+    <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" width="100%" style="max-width:700px;margin:2rem auto;display:block;">
+      <rect x="0" y="0" width="700" height="300" rx="8" fill="#161a21"/>
 
-      <!-- Labels -->
-      <text x="100" y="70" text-anchor="end" fill="#a9abb3" font-family="Inter" font-size="11">MAE</text>
-      <text x="100" y="110" text-anchor="end" fill="#a9abb3" font-family="Inter" font-size="11">RMSE</text>
-      <text x="100" y="150" text-anchor="end" fill="#a9abb3" font-family="Inter" font-size="11">MAPE</text>
-      <text x="100" y="190" text-anchor="end" fill="#a9abb3" font-family="Inter" font-size="11">SMAPE</text>
-
-      <!-- MAE bars -->
-      <rect x="120" y="58" width="200" height="18" rx="3" fill="#a7a5ff" fill-opacity="0.3"/>
-      <text x="330" y="72" fill="#a7a5ff" font-family="Inter" font-size="10" font-weight="600">1,245</text>
-      <rect x="120" y="58" width="150" height="18" rx="3" fill="#8ce7ff" fill-opacity="0.3" y="58" x="380"/>
-      <text x="540" y="72" fill="#8ce7ff" font-family="Inter" font-size="10" font-weight="600">980</text>
-
-      <!-- RMSE bars -->
-      <rect x="120" y="98" width="250" height="18" rx="3" fill="#a7a5ff" fill-opacity="0.3"/>
-      <text x="380" y="112" fill="#a7a5ff" font-family="Inter" font-size="10" font-weight="600">1,890</text>
-      <rect x="380" y="98" width="180" height="18" rx="3" fill="#8ce7ff" fill-opacity="0.3"/>
-      <text x="570" y="112" fill="#8ce7ff" font-family="Inter" font-size="10" font-weight="600">1,350</text>
-
-      <!-- MAPE bars -->
-      <rect x="120" y="138" width="180" height="18" rx="3" fill="#a7a5ff" fill-opacity="0.3"/>
-      <text x="310" y="152" fill="#a7a5ff" font-family="Inter" font-size="10" font-weight="600">12.3%</text>
-      <rect x="380" y="138" width="120" height="18" rx="3" fill="#8ce7ff" fill-opacity="0.3"/>
-      <text x="510" y="152" fill="#8ce7ff" font-family="Inter" font-size="10" font-weight="600">8.1%</text>
-
-      <!-- SMAPE bars -->
-      <rect x="120" y="178" width="160" height="18" rx="3" fill="#a7a5ff" fill-opacity="0.3"/>
-      <text x="290" y="192" fill="#a7a5ff" font-family="Inter" font-size="10" font-weight="600">11.8%</text>
-      <rect x="380" y="178" width="110" height="18" rx="3" fill="#8ce7ff" fill-opacity="0.3"/>
-      <text x="500" y="192" fill="#8ce7ff" font-family="Inter" font-size="10" font-weight="600">7.6%</text>
+      <!-- Title -->
+      <text x="350" y="32" text-anchor="middle" fill="#ecedf6" font-family="Space Grotesk" font-size="13" font-weight="700">M&Eacute;TRICAS DE ERRO &mdash; EXEMPLO COMPARATIVO</text>
 
       <!-- Legend -->
-      <rect x="430" y="30" width="12" height="12" rx="2" fill="#a7a5ff" fill-opacity="0.3"/>
-      <text x="448" y="40" fill="#a7a5ff" font-family="Inter" font-size="9">ARIMA</text>
-      <rect x="510" y="30" width="12" height="12" rx="2" fill="#8ce7ff" fill-opacity="0.3"/>
-      <text x="528" y="40" fill="#8ce7ff" font-family="Inter" font-size="9">XGBoost</text>
+      <rect x="245" y="48" width="10" height="10" rx="2" fill="#a7a5ff"/>
+      <text x="261" y="57" fill="#a7a5ff" font-family="Space Grotesk" font-size="10" font-weight="600">ARIMA</text>
+      <rect x="345" y="48" width="10" height="10" rx="2" fill="#8ce7ff"/>
+      <text x="361" y="57" fill="#8ce7ff" font-family="Space Grotesk" font-size="10" font-weight="600">XGBoost</text>
+
+      <!-- MAE -->
+      <text x="110" y="96" text-anchor="end" fill="#ecedf6" font-family="Space Grotesk" font-size="12" font-weight="600">MAE</text>
+      <rect x="125" y="82" width="300" height="12" rx="3" fill="#a7a5ff" fill-opacity="0.15"/>
+      <rect x="125" y="82" width="300" height="12" rx="3" fill="#a7a5ff" fill-opacity="0.5"/>
+      <text x="432" y="93" fill="#a7a5ff" font-family="Inter" font-size="10" font-weight="700">1,245</text>
+      <rect x="125" y="100" width="236" height="12" rx="3" fill="#8ce7ff" fill-opacity="0.15"/>
+      <rect x="125" y="100" width="236" height="12" rx="3" fill="#8ce7ff" fill-opacity="0.5"/>
+      <text x="368" y="111" fill="#8ce7ff" font-family="Inter" font-size="10" font-weight="700">980</text>
+
+      <!-- RMSE -->
+      <text x="110" y="150" text-anchor="end" fill="#ecedf6" font-family="Space Grotesk" font-size="12" font-weight="600">RMSE</text>
+      <rect x="125" y="136" width="380" height="12" rx="3" fill="#a7a5ff" fill-opacity="0.5"/>
+      <text x="512" y="147" fill="#a7a5ff" font-family="Inter" font-size="10" font-weight="700">1,890</text>
+      <rect x="125" y="154" width="270" height="12" rx="3" fill="#8ce7ff" fill-opacity="0.5"/>
+      <text x="402" y="165" fill="#8ce7ff" font-family="Inter" font-size="10" font-weight="700">1,350</text>
+
+      <!-- MAPE -->
+      <text x="110" y="204" text-anchor="end" fill="#ecedf6" font-family="Space Grotesk" font-size="12" font-weight="600">MAPE</text>
+      <rect x="125" y="190" width="246" height="12" rx="3" fill="#a7a5ff" fill-opacity="0.5"/>
+      <text x="378" y="201" fill="#a7a5ff" font-family="Inter" font-size="10" font-weight="700">12.3%</text>
+      <rect x="125" y="208" width="162" height="12" rx="3" fill="#8ce7ff" fill-opacity="0.5"/>
+      <text x="294" y="219" fill="#8ce7ff" font-family="Inter" font-size="10" font-weight="700">8.1%</text>
+
+      <!-- SMAPE -->
+      <text x="110" y="258" text-anchor="end" fill="#ecedf6" font-family="Space Grotesk" font-size="12" font-weight="600">SMAPE</text>
+      <rect x="125" y="244" width="236" height="12" rx="3" fill="#a7a5ff" fill-opacity="0.5"/>
+      <text x="368" y="255" fill="#a7a5ff" font-family="Inter" font-size="10" font-weight="700">11.8%</text>
+      <rect x="125" y="262" width="152" height="12" rx="3" fill="#8ce7ff" fill-opacity="0.5"/>
+      <text x="284" y="273" fill="#8ce7ff" font-family="Inter" font-size="10" font-weight="700">7.6%</text>
     </svg>
 
     <ul>
@@ -332,7 +378,7 @@ model.plot_components(forecast)
 
     <h2>C&oacute;digo pr&aacute;tico: forecast com statsmodels</h2>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="keyword">import</span> pandas <span class="keyword">as</span> pd
 <span class="keyword">from</span> statsmodels.tsa.holtwinters <span class="keyword">import</span> ExponentialSmoothing
 
@@ -358,11 +404,11 @@ forecast = model.forecast(<span class="string">30</span>)
 <span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_absolute_error
 mae = mean_absolute_error(test[<span class="string">"volume"</span>], forecast)
 <span class="keyword">print</span>(f<span class="string">"MAE: {mae:.0f}"</span>)
-    </div>
+    </code></pre>
 
     <h2>O que vem a seguir</h2>
     <p>
-      Forecasting &eacute; o ponto onde Data Engineering, Machine Learning e decis&atilde;o de neg&oacute;cio se encontram. Para construir pipelines robustos que alimentam esses modelos, revise os artigos sobre <strong>Data Engineering</strong> e <strong>PySpark</strong>. Para entender o ciclo de vida completo em produ&ccedil;&atilde;o, confira o artigo sobre <strong>MLOps</strong>.
+      Forecasting &eacute; o ponto onde Data Engineering, Machine Learning e decis&atilde;o de neg&oacute;cio se encontram. Para construir pipelines robustos que alimentam esses modelos, revise os artigos sobre <a href="o-que-e-data-engineering.html">Data Engineering</a> e <a href="pyspark-na-pratica.html">PySpark</a>. Para entender o ciclo de vida completo em produ&ccedil;&atilde;o, confira o artigo sobre <a href="o-que-e-mlops.html">MLOps</a>.
     </p>
     <p>
       A s&eacute;rie completa cobre os fundamentos que sustentam qualquer opera&ccedil;&atilde;o de dados s&eacute;ria &mdash; do Python at&eacute; o deploy de modelos em escala.
@@ -395,8 +441,8 @@ mae = mean_absolute_error(test[<span class="string">"volume"</span>], forecast)
     <div class="text-sm font-black text-[#ecedf6]">PUERTAS.DEV</div>
     <div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">&copy; 2026 RODRIGO PUERTAS // KNOWLEDGE BASE</div>
     <div class="flex gap-8">
-      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
-      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://www.linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
   </div>
 </footer>

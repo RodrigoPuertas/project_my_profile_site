@@ -5,12 +5,27 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>PySpark na Pr&aacute;tica | Rodrigo Puertas</title>
 <meta name="description" content="Processamento distribu&iacute;do de dados em larga escala: quando e por que usar Spark ao inv&eacute;s de Pandas."/>
+<meta property="og:title" content="PySpark na Pr&aacute;tica | Rodrigo Puertas"/>
+<meta property="og:description" content="Processamento distribu&iacute;do de dados em larga escala: quando e por que usar Spark ao inv&eacute;s de Pandas."/>
+<meta property="og:type" content="article"/>
+<meta property="og:image" content="https://github.com/RodrigoPuertas.png"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PySpark na Pr&aacute;tica | Rodrigo Puertas"/>
+<meta name="twitter:description" content="Processamento distribu&iacute;do de dados em larga escala: quando e por que usar Spark ao inv&eacute;s de Pandas."/>
+<meta name="twitter:image" content="https://github.com/RodrigoPuertas.png"/>
+<meta name="theme-color" content="#0b0e14"/>
+<link rel="canonical" href="https://puertas.dev/artigos/pyspark-na-pratica"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="../js/tailwind-config.js"></script>
 <link href="../css/shared.css" rel="stylesheet"/>
 <link href="../css/article.css" rel="stylesheet"/>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"PySpark na Prática","description":"Processamento distribuído de dados em larga escala: quando e por que usar Spark ao invés de Pandas.","author":{"@type":"Person","name":"Rodrigo Puertas","url":"https://puertas.dev"},"datePublished":"2026-04","publisher":{"@type":"Person","name":"Rodrigo Puertas"}}
+</script>
 </head>
 <body class="selection:bg-primary-container selection:text-on-primary-container">
 
@@ -188,7 +203,7 @@
       A porta de entrada &eacute; o <strong>SparkSession</strong> &mdash; o ponto central para toda intera&ccedil;&atilde;o com o Spark.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> SparkSession
 
 <span class="comment"># Criar a sess&atilde;o</span>
@@ -203,7 +218,7 @@ df = spark.read.parquet(<span class="string">"s3://bucket/dados/"</span>)
 <span class="comment"># Verificar schema e contagem</span>
 df.printSchema()
 <span class="keyword">print</span>(f<span class="string">"Total de linhas: {df.count()}"</span>)
-    </div>
+    </code></pre>
 
     <p>
       Diferente do Pandas, o Spark usa <strong>lazy evaluation</strong>: opera&ccedil;&otilde;es como <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">filter()</code>, <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">select()</code> e <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">groupBy()</code> n&atilde;o executam imediatamente. O Spark constr&oacute;i um <strong>plano de execu&ccedil;&atilde;o otimizado</strong> e s&oacute; processa quando voc&ecirc; chama uma <strong>action</strong> como <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">count()</code>, <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">show()</code> ou <code style="background:#161a21;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">write()</code>.
@@ -212,7 +227,7 @@ df.printSchema()
     <h2>Opera&ccedil;&otilde;es essenciais</h2>
 
     <h3>Select, Filter e GroupBy</h3>
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Select e rename</span>
 df.select(<span class="string">"order_id"</span>, <span class="string">"value"</span>, <span class="string">"region"</span>)
 
@@ -228,10 +243,10 @@ df.groupBy(<span class="string">"region"</span>).agg(
     F.sum(<span class="string">"value"</span>).alias(<span class="string">"receita_total"</span>),
     F.avg(<span class="string">"value"</span>).alias(<span class="string">"ticket_medio"</span>)
 ).orderBy(F.desc(<span class="string">"receita_total"</span>))
-    </div>
+    </code></pre>
 
     <h3>Joins</h3>
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Inner join</span>
 pedidos.join(clientes, pedidos.cliente_id == clientes.id, <span class="string">"inner"</span>)
 
@@ -239,10 +254,10 @@ pedidos.join(clientes, pedidos.cliente_id == clientes.id, <span class="string">"
 <span class="keyword">from</span> pyspark.sql.functions <span class="keyword">import</span> broadcast
 
 pedidos.join(broadcast(regioes), <span class="string">"region_id"</span>, <span class="string">"left"</span>)
-    </div>
+    </code></pre>
 
     <h3>Window Functions</h3>
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="keyword">from</span> pyspark.sql.window <span class="keyword">import</span> Window
 
 <span class="comment"># Ranking por regi&atilde;o</span>
@@ -257,7 +272,7 @@ w7 = Window.partitionBy(<span class="string">"region"</span>) \
     .rowsBetween(-<span class="string">6</span>, <span class="string">0</span>)
 
 df.withColumn(<span class="string">"media_movel_7d"</span>, F.avg(<span class="string">"value"</span>).over(w7))
-    </div>
+    </code></pre>
 
     <h2>Spark SQL e o Catalyst Optimizer</h2>
     <p>
@@ -288,7 +303,7 @@ df.withColumn(<span class="string">"media_movel_7d"</span>, F.avg(<span class="s
       <text x="625" y="60" text-anchor="middle" fill="#a9abb3" font-family="Inter" font-size="8">DataFrame / Table</text>
     </svg>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Registrar DataFrame como tabela tempor&aacute;ria</span>
 df.createOrReplaceTempView(<span class="string">"pedidos"</span>)
 
@@ -305,7 +320,7 @@ resultado = spark.sql(<span class="string">"""
 """</span>)
 
 resultado.show()
-    </div>
+    </code></pre>
 
     <h2>Otimiza&ccedil;&atilde;o e performance</h2>
     <p>
@@ -316,7 +331,7 @@ resultado.show()
     <p>
       O n&uacute;mero de parti&ccedil;&otilde;es define o paralelismo. Poucas parti&ccedil;&otilde;es = workers ociosos. Muitas = overhead de coordena&ccedil;&atilde;o.
     </p>
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Ver parti&ccedil;&otilde;es atuais</span>
 df.rdd.getNumPartitions()
 
@@ -325,20 +340,20 @@ df = df.repartition(<span class="string">200</span>, <span class="string">"regio
 
 <span class="comment"># Coalesce (sem shuffle &mdash; s&oacute; reduz)</span>
 df = df.coalesce(<span class="string">10</span>)
-    </div>
+    </code></pre>
 
     <h3>2. Cache e Persist</h3>
     <p>
       Se voc&ecirc; usa o mesmo DataFrame mais de uma vez, fa&ccedil;a cache para evitar reprocessamento.
     </p>
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Cache em mem&oacute;ria</span>
 df.cache()
 
 <span class="comment"># Persist com n&iacute;vel espec&iacute;fico</span>
 <span class="keyword">from</span> pyspark <span class="keyword">import</span> StorageLevel
 df.persist(StorageLevel.MEMORY_AND_DISK)
-    </div>
+    </code></pre>
 
     <h3>3. Broadcast Joins</h3>
     <p>
@@ -407,8 +422,8 @@ df.persist(StorageLevel.MEMORY_AND_DISK)
     <div class="text-sm font-black text-[#ecedf6]">PUERTAS.DEV</div>
     <div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">&copy; 2026 RODRIGO PUERTAS // KNOWLEDGE BASE</div>
     <div class="flex gap-8">
-      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
-      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://www.linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
   </div>
 </footer>

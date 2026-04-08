@@ -29,16 +29,17 @@ h4 {
   position: fixed;
   top: 0;
   left: 0;
-  width: 6px;
-  height: 6px;
-  background: #fff;
+  width: 7px;
+  height: 7px;
+  background: #a7a5ff;
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
   opacity: 0;
-  transition: opacity 0.4s ease, width 0.2s, height 0.2s, background 0.2s;
-  mix-blend-mode: difference;
+  transition: opacity 0.4s ease, width 0.2s, height 0.2s, background 0.2s, box-shadow 0.3s;
+  box-shadow: 0 0 8px 2px rgba(167, 165, 255, 0.4);
+  will-change: transform, left, top;
 }
 
 #cursor-ring {
@@ -92,6 +93,8 @@ body.cursor-active #cursor-glow {
 body.cursor-hover #cursor-dot {
   width: 10px;
   height: 10px;
+  background: #8ce7ff;
+  box-shadow: 0 0 12px 4px rgba(140, 231, 255, 0.5);
 }
 
 body.cursor-hover #cursor-ring {

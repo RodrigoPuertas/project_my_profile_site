@@ -40,7 +40,7 @@ if (form) {
       return;
     }
 
-    if (formBtn) { formBtn.disabled = true; formBtn.textContent = 'Enviando...'; }
+    if (formBtn) { formBtn.dataset.originalText = formBtn.innerHTML; formBtn.disabled = true; formBtn.textContent = 'Enviando...'; }
     setStatus('', '');
 
     const corpo = assunto ? `[${assunto}]\n\n${mensagem}` : mensagem;
@@ -63,7 +63,7 @@ if (form) {
     } catch {
       setStatus('Erro de conexão. Tente novamente.', '#ff6e84');
     } finally {
-      if (formBtn) { formBtn.disabled = false; formBtn.textContent = 'Enviar Mensagem'; }
+      if (formBtn) { formBtn.disabled = false; formBtn.innerHTML = formBtn.dataset.originalText || 'Enviar Mensagem'; }
     }
   });
 
@@ -109,38 +109,109 @@ const glow = document.getElementById('cursor-glow');
 
 if (dot && ring && glow) {
   let mouseX = 0, mouseY = 0;
-  let ringX  = 0, ringY  = 0;
-  let glowX  = 0, glowY  = 0;
+  let prevMouseX = 0, prevMouseY = 0;
+  let ringX = 0, ringY = 0;
+  let ringVX = 0, ringVY = 0;
+  let glowX = 0, glowY = 0;
   let idleTimer = null;
+  let isHovering = false;
+  let magnetTarget = null;
 
   const showCursor = () => document.body.classList.add('cursor-active');
   const hideCursor = () => document.body.classList.remove('cursor-active');
 
   document.addEventListener('mousemove', e => {
+    prevMouseX = mouseX;
+    prevMouseY = mouseY;
     mouseX = e.clientX;
     mouseY = e.clientY;
-    dot.style.left = mouseX + 'px';
-    dot.style.top  = mouseY + 'px';
     showCursor();
     clearTimeout(idleTimer);
     idleTimer = setTimeout(hideCursor, 1200);
   });
 
+  // Click animation
+  document.addEventListener('mousedown', () => {
+    dot.style.transform = 'translate(-50%, -50%) scale(0.5)';
+    ring.style.transition = 'width 0.15s, height 0.15s, border-color 0.15s';
+    ring.style.width = '30px';
+    ring.style.height = '30px';
+  });
+  document.addEventListener('mouseup', () => {
+    dot.style.transform = 'translate(-50%, -50%) scale(1)';
+    ring.style.transition = 'width 0.4s cubic-bezier(.23,1,.32,1), height 0.4s cubic-bezier(.23,1,.32,1), border-color 0.3s';
+    ring.style.width = isHovering ? '64px' : '40px';
+    ring.style.height = isHovering ? '64px' : '40px';
+  });
+
   (function animateCursor() {
-    ringX += (mouseX - ringX) * 0.1;
-    ringY += (mouseY - ringY) * 0.1;
+    // Velocity for dot stretch
+    const vx = mouseX - prevMouseX;
+    const vy = mouseY - prevMouseY;
+    const speed = Math.sqrt(vx * vx + vy * vy);
+    const angle = Math.atan2(vy, vx) * (180 / Math.PI);
+    const stretch = Math.min(1 + speed * 0.04, 2.2);
+
+    // Dot position + velocity stretch
+    dot.style.left = mouseX + 'px';
+    dot.style.top = mouseY + 'px';
+    if (speed > 1.5) {
+      dot.style.transform = `translate(-50%, -50%) rotate(${angle}deg) scaleX(${stretch}) scaleY(${1 / Math.sqrt(stretch)})`;
+    } else {
+      dot.style.transform = 'translate(-50%, -50%) scale(1)';
+    }
+
+    // Ring: spring physics
+    const stiffness = 0.08;
+    const damping = 0.72;
+    let targetX = mouseX;
+    let targetY = mouseY;
+
+    // Magnetic snap
+    if (magnetTarget) {
+      const rect = magnetTarget.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dist = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2);
+      if (dist < 80) {
+        const pull = 0.35;
+        targetX = mouseX + (cx - mouseX) * pull;
+        targetY = mouseY + (cy - mouseY) * pull;
+      }
+    }
+
+    ringVX += (targetX - ringX) * stiffness;
+    ringVY += (targetY - ringY) * stiffness;
+    ringVX *= damping;
+    ringVY *= damping;
+    ringX += ringVX;
+    ringY += ringVY;
     ring.style.left = ringX + 'px';
-    ring.style.top  = ringY + 'px';
-    glowX += (mouseX - glowX) * 0.05;
-    glowY += (mouseY - glowY) * 0.05;
+    ring.style.top = ringY + 'px';
+
+    // Glow
+    glowX += (mouseX - glowX) * 0.04;
+    glowY += (mouseY - glowY) * 0.04;
     glow.style.left = glowX + 'px';
-    glow.style.top  = glowY + 'px';
+    glow.style.top = glowY + 'px';
+
+    prevMouseX += (mouseX - prevMouseX) * 0.6;
+    prevMouseY += (mouseY - prevMouseY) * 0.6;
+
     requestAnimationFrame(animateCursor);
   })();
 
   document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    el.addEventListener('mouseenter', () => {
+      isHovering = true;
+      magnetTarget = el;
+      document.body.classList.add('cursor-hover');
+    });
+    el.addEventListener('mouseleave', () => {
+      isHovering = false;
+      magnetTarget = null;
+      document.body.classList.remove('cursor-hover');
+    });
   });
 
   document.addEventListener('mouseleave', hideCursor);

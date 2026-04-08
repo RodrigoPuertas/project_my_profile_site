@@ -5,12 +5,27 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>O que é MLOps? | Rodrigo Puertas</title>
 <meta name="description" content="Como levar modelos de ML do Jupyter para produção com qualidade, rastreabilidade e escalabilidade."/>
+<meta property="og:title" content="O que é MLOps? | Rodrigo Puertas"/>
+<meta property="og:description" content="Como levar modelos de ML do Jupyter para produção com qualidade, rastreabilidade e escalabilidade."/>
+<meta property="og:type" content="article"/>
+<meta property="og:image" content="https://github.com/RodrigoPuertas.png"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="O que é MLOps? | Rodrigo Puertas"/>
+<meta name="twitter:description" content="Como levar modelos de ML do Jupyter para produção com qualidade, rastreabilidade e escalabilidade."/>
+<meta name="twitter:image" content="https://github.com/RodrigoPuertas.png"/>
+<meta name="theme-color" content="#0b0e14"/>
+<link rel="canonical" href="https://puertas.dev/artigos/o-que-e-mlops"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="../js/tailwind-config.js"></script>
 <link href="../css/shared.css" rel="stylesheet"/>
 <link href="../css/article.css" rel="stylesheet"/>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"O que é MLOps?","description":"Como levar modelos de ML do Jupyter para produção com qualidade, rastreabilidade e escalabilidade.","author":{"@type":"Person","name":"Rodrigo Puertas","url":"https://puertas.dev"},"datePublished":"2026-04","publisher":{"@type":"Person","name":"Rodrigo Puertas"}}
+</script>
 </head>
 <body class="selection:bg-primary-container selection:text-on-primary-container">
 
@@ -121,14 +136,14 @@
       Assim como versionamos código com Git, precisamos versionar modelos (pesos, arquitetura, hiperparâmetros) e dados de treinamento. Ferramentas como <strong>DVC</strong> (Data Version Control) e <strong>MLflow</strong> permitem rastrear exatamente qual modelo foi treinado com quais dados e parâmetros.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Versionamento com DVC</span>
 <span class="keyword">dvc</span> init
 <span class="keyword">dvc</span> add data/training_set.parquet
 <span class="keyword">git</span> add data/training_set.parquet.dvc .gitignore
 <span class="keyword">git</span> commit -m <span class="string">"v2: adiciona novos dados de março"</span>
 <span class="keyword">dvc</span> push
-    </div>
+    </code></pre>
 
     <h3>2. CI/CD para Machine Learning</h3>
     <p>
@@ -156,7 +171,7 @@
       Cada execução do pipeline deve ser 100% reproduzível. Isso significa rastrear: versão do código, versão dos dados, hiperparâmetros, seed aleatória, versão das dependências (Docker), e ambiente de execução. Se algo der errado em produção, você precisa conseguir voltar no tempo e entender exatamente o que aconteceu.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Exemplo de tracking com MLflow</span>
 <span class="keyword">import</span> mlflow
 
@@ -170,7 +185,7 @@
     mlflow.log_metric(<span class="string">"accuracy"</span>, <span class="string">0.94</span>)
     mlflow.log_metric(<span class="string">"f1_score"</span>, <span class="string">0.91</span>)
     mlflow.sklearn.log_model(model, <span class="string">"model"</span>)
-    </div>
+    </code></pre>
 
     <h2>Pipeline MLOps típico</h2>
     <p>
@@ -488,7 +503,7 @@
       <li><strong>Documente o pipeline</strong> â€” um diagrama simples mostrando de onde vêm os dados, como o modelo é treinado, e como chega em produção.</li>
     </ul>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Exemplo: pipeline MLOps minimo com GitHub Actions</span>
 <span class="comment"># .github/workflows/retrain.yml</span>
 
@@ -511,7 +526,7 @@
           <span class="keyword">if</span> [ <span class="string">"$(cat metrics/improved.txt)"</span> == <span class="string">"true"</span> ]; <span class="keyword">then</span>
             python src/deploy.py
           <span class="keyword">fi</span>
-    </div>
+    </code></pre>
 
     <h2>O que vem a seguir</h2>
     <p>
@@ -551,8 +566,8 @@
     <div class="text-sm font-black text-[#ecedf6]">PUERTAS.DEV</div>
     <div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">&copy; 2026 RODRIGO PUERTAS // KNOWLEDGE BASE</div>
     <div class="flex gap-8">
-      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
-      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://www.linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
   </div>
 </footer>
@@ -564,4 +579,4 @@
 <script src="../js/main.js"></script>
 </body>
 </html>
-
+

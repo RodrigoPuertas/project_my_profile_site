@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>404 | PUERTAS.DEV</title>
+<meta name="theme-color" content="#0b0e14"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x26A1;</text></svg>"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="js/tailwind-config.js"></script>
+<link href="css/shared.css" rel="stylesheet"/>
+</head>
+<body class="selection:bg-primary-container selection:text-on-primary-container">
+
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
+  <a href="index.html" class="text-xl font-bold tracking-tighter text-[#ecedf6]" aria-label="Ir para a homepage">PUERTAS.DEV</a>
+  <nav class="hidden md:flex items-center gap-8">
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="index.html">Overview</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="projects.html">Projetos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="artigos.html">Artigos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="index.html#cta">Contato</a>
+  </nav>
+  <a href="consult.html" class="hidden md:block bg-gradient-to-br from-primary to-secondary-dim px-6 py-2 rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity">Consultoria</a>
+  <div class="bg-gradient-to-r from-transparent via-[#22262f] to-transparent h-[1px] w-full absolute bottom-0 left-0"></div>
+</header>
+
+<main class="min-h-screen flex flex-col items-center justify-center px-8 text-center">
+  <p class="text-[0.6875rem] font-bold uppercase tracking-[0.3em] text-outline mb-6">Erro 404</p>
+  <h1 class="text-7xl md:text-9xl font-black tracking-tighter leading-none mb-6">
+    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-tertiary">404</span>
+  </h1>
+  <p class="text-xl text-on-surface-variant font-light max-w-md mb-12">
+    A p&aacute;gina que voc&ecirc; procura n&atilde;o existe ou foi movida.
+  </p>
+  <div class="flex flex-col sm:flex-row gap-4">
+    <a href="index.html" class="px-8 py-3 bg-gradient-to-br from-primary to-secondary-dim rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity">
+      Voltar ao in&iacute;cio
+    </a>
+    <a href="artigos.html" class="px-8 py-3 border border-outline-variant/30 rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-surface hover:border-primary transition-all">
+      Ver artigos
+    </a>
+  </div>
+</main>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="cursor-glow"></div>
+<script src="js/main.js"></script>
+</body>
+</html>

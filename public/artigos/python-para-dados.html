@@ -5,66 +5,27 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Python para Dados | Rodrigo Puertas</title>
 <meta name="description" content="Pandas, NumPy, Scikit-learn: o ecossistema Python que todo cientista de dados precisa dominar."/>
+<meta property="og:title" content="Python para Dados | Rodrigo Puertas"/>
+<meta property="og:description" content="Pandas, NumPy, Scikit-learn: o ecossistema Python que todo cientista de dados precisa dominar."/>
+<meta property="og:type" content="article"/>
+<meta property="og:image" content="https://github.com/RodrigoPuertas.png"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python para Dados | Rodrigo Puertas"/>
+<meta name="twitter:description" content="Pandas, NumPy, Scikit-learn: o ecossistema Python que todo cientista de dados precisa dominar."/>
+<meta name="twitter:image" content="https://github.com/RodrigoPuertas.png"/>
+<meta name="theme-color" content="#0b0e14"/>
+<link rel="canonical" href="https://puertas.dev/artigos/python-para-dados"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        colors: {
-          "primary-fixed-dim": "#8885ff", "surface": "#0b0e14", "on-surface-variant": "#a9abb3",
-          "on-error": "#490013", "primary-dim": "#645efb", "tertiary": "#8ce7ff",
-          "outline-variant": "#45484f", "surface-tint": "#a7a5ff", "on-secondary": "#2b0065",
-          "error": "#ff6e84", "on-primary": "#1c00a0", "outline": "#73757d",
-          "primary-container": "#9795ff", "on-secondary-container": "#e1d0ff",
-          "background": "#0b0e14", "secondary-dim": "#8a4cfc",
-          "surface-container-high": "#1c2028", "surface-variant": "#22262f",
-          "secondary-fixed": "#dcc9ff", "surface-container-lowest": "#000000",
-          "surface-container-low": "#10131a", "on-background": "#ecedf6",
-          "on-surface": "#ecedf6", "secondary": "#af88ff", "primary": "#a7a5ff",
-          "surface-container": "#161a21", "tertiary-container": "#53ddfc",
-          "primary-fixed": "#9795ff", "surface-container-highest": "#22262f",
-          "surface-bright": "#282c36",
-        },
-        fontFamily: { "headline": ["Space Grotesk"], "body": ["Inter"], "label": ["Inter"] },
-        borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
-      },
-    },
-  }
+<script src="../js/tailwind-config.js"></script>
+<link href="../css/shared.css" rel="stylesheet"/>
+<link href="../css/article.css" rel="stylesheet"/>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Python para Dados","description":"Pandas, NumPy, Scikit-learn: o ecossistema Python que todo cientista de dados precisa dominar.","author":{"@type":"Person","name":"Rodrigo Puertas","url":"https://puertas.dev"},"datePublished":"2026-03","publisher":{"@type":"Person","name":"Rodrigo Puertas"}}
 </script>
-<style>
-  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
-  body { background-color: #0b0e14; color: #ecedf6; font-family: 'Inter', sans-serif; cursor: none; }
-  a, button { cursor: none; }
-  h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
-
-  /* Cursor */
-  #cursor-dot { position: fixed; top: 0; left: 0; width: 6px; height: 6px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.2s, height 0.2s; mix-blend-mode: difference; }
-  #cursor-ring { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border: 1px solid rgba(167, 165, 255, 0.7); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease, width 0.35s cubic-bezier(.23,1,.32,1), height 0.35s cubic-bezier(.23,1,.32,1); }
-  #cursor-ring::before { content: ''; position: absolute; inset: -1px; border-radius: 50%; background: conic-gradient(from 0deg, #a7a5ff, transparent 60%, #8ce7ff, transparent); opacity: 0.4; animation: spinRing 3s linear infinite; -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px)); }
-  #cursor-glow { position: fixed; top: 0; left: 0; width: 350px; height: 350px; background: radial-gradient(circle, rgba(167, 165, 255, 0.06) 0%, transparent 65%); border-radius: 50%; pointer-events: none; z-index: 9997; transform: translate(-50%, -50%); opacity: 0; transition: opacity 0.4s ease; }
-  body.cursor-active #cursor-dot, body.cursor-active #cursor-ring, body.cursor-active #cursor-glow { opacity: 1; }
-  body.cursor-hover #cursor-dot { width: 10px; height: 10px; }
-  body.cursor-hover #cursor-ring { width: 64px; height: 64px; border-color: rgba(140, 231, 255, 0.5); }
-  @keyframes spinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-  /* Article Typography */
-  .article-body p { margin-bottom: 1.5rem; line-height: 1.9; color: #a9abb3; font-size: 1.0625rem; }
-  .article-body h2 { font-size: 1.75rem; font-weight: 700; margin-top: 3rem; margin-bottom: 1rem; color: #ecedf6; letter-spacing: -0.02em; }
-  .article-body h3 { font-size: 1.25rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem; color: #ecedf6; }
-  .article-body strong { color: #ecedf6; font-weight: 600; }
-  .article-body ul { margin-bottom: 1.5rem; padding-left: 1.5rem; list-style: none; }
-  .article-body ul li { position: relative; padding-left: 1.25rem; margin-bottom: 0.5rem; color: #a9abb3; font-size: 1.0625rem; line-height: 1.8; }
-  .article-body ul li::before { content: '—'; position: absolute; left: 0; color: #a7a5ff; font-weight: 600; }
-  .callout { background: #161a21; border-left: 3px solid #a7a5ff; padding: 1.25rem 1.5rem; border-radius: 0 0.25rem 0.25rem 0; margin-bottom: 1.5rem; }
-  .callout p { margin: 0; color: #ecedf6; font-size: 0.9375rem; }
-  .code-block { background: #000; border: 1px solid #22262f; border-radius: 0.25rem; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.875rem; color: #8ce7ff; overflow-x: auto; }
-  .code-block .comment { color: #45484f; }
-  .code-block .keyword { color: #a7a5ff; }
-  .code-block .string { color: #af88ff; }
-</style>
 </head>
 <body class="selection:bg-primary-container selection:text-on-primary-container">
 
@@ -211,7 +172,7 @@
       Enquanto listas Python são flexíveis (podem misturar tipos), arrays NumPy são homogêneos e contíguos em memória. Isso permite que operações matemáticas sejam executadas em C puro, sem overhead do interpretador Python.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="keyword">import</span> numpy <span class="keyword">as</span> np
 
 <span class="comment"># Criar arrays</span>
@@ -225,14 +186,14 @@ media = c.mean()
 desvio = c.std()
 
 <span class="keyword">print</span>(f<span class="string">"Média: {media:.4f}, Desvio: {desvio:.4f}"</span>)
-    </div>
+    </code></pre>
 
     <h3>Broadcasting: magia com dimensões</h3>
     <p>
       Broadcasting é o mecanismo que permite operar arrays de shapes diferentes sem copiar dados. Quando você soma um vetor a uma matriz, NumPy "expande" automaticamente o vetor para casar as dimensões. Isso elimina a necessidade de loops explícitos e mantém o código limpo.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Broadcasting: somar vetor a cada linha da matriz</span>
 matriz = np.array([[1, 2, 3],
                    [4, 5, 6],
@@ -246,7 +207,7 @@ resultado = matriz + vetor
 
 <span class="comment"># Normalização Z-score em uma linha</span>
 normalizado = (matriz - matriz.mean(axis=0)) / matriz.std(axis=0)
-    </div>
+    </code></pre>
 
     <div class="callout">
       <p><strong>Performance:</strong> Uma operação vetorizada em NumPy pode ser 100x mais rápida que o equivalente com um loop <code style="background:#0b0e14;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">for</code> em Python puro. Sempre que possível, evite iterar sobre arrays manualmente.</p>
@@ -307,7 +268,7 @@ normalizado = (matriz - matriz.mean(axis=0)) / matriz.std(axis=0)
       Pandas lê praticamente qualquer formato: CSV, Excel, JSON, Parquet, SQL, HTML. A inspeção inicial do DataFrame é o primeiro passo de qualquer análise.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="keyword">import</span> pandas <span class="keyword">as</span> pd
 
 <span class="comment"># Leitura de dados</span>
@@ -319,14 +280,14 @@ df.dtypes               <span class="comment"># tipos de cada coluna</span>
 df.describe()           <span class="comment"># estatísticas descritivas</span>
 df.isnull().sum()       <span class="comment"># valores faltantes por coluna</span>
 df.head(10)             <span class="comment"># primeiras 10 linhas</span>
-    </div>
+    </code></pre>
 
     <h3>Limpeza e transformação</h3>
     <p>
       Dados reais são sujos. Colunas com nomes inconsistentes, valores faltantes, tipos errados, duplicatas. Pandas oferece um arsenal de métodos para resolver cada um desses problemas de forma expressiva e encadeável.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Limpeza e transformação encadeada</span>
 df_clean = (
     df
@@ -352,7 +313,7 @@ resumo = (
     )
     .reset_index()
 )
-    </div>
+    </code></pre>
 
     <div class="callout">
       <p><strong>Dica profissional:</strong> Encadear operações com <code style="background:#0b0e14;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">method chaining</code> torna o código mais legível e evita variáveis intermediárias desnecessárias. Isso é especialmente útil em notebooks Jupyter.</p>
@@ -417,7 +378,7 @@ resumo = (
       Matplotlib segue o paradigma figure/axes. Você cria uma figura, adiciona eixos, e plota dados neles. É verboso, mas oferece controle absoluto.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
@@ -434,14 +395,14 @@ axes[1].set_title(<span class="string">"Distribuição de Margens"</span>)
 
 plt.tight_layout()
 plt.savefig(<span class="string">"relatorio.png"</span>, dpi=150)
-    </div>
+    </code></pre>
 
     <h3>Seaborn: estatística visual</h3>
     <p>
       Seaborn brilha quando você quer explorar relações entre variáveis. Com uma linha de código, você gera gráficos que exigiriam dezenas de linhas em Matplotlib puro.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="keyword">import</span> seaborn <span class="keyword">as</span> sns
 
 <span class="comment"># Correlação visual entre todas as variáveis numéricas</span>
@@ -452,7 +413,7 @@ sns.boxplot(data=df_clean, x=<span class="string">"categoria"</span>, y=<span cl
 
 <span class="comment"># Relação entre duas variáveis com regressão</span>
 sns.lmplot(data=df_clean, x=<span class="string">"receita"</span>, y=<span class="string">"lucro"</span>, hue=<span class="string">"categoria"</span>, height=6)
-    </div>
+    </code></pre>
 
     <h2>Scikit-learn: ML em poucas linhas</h2>
     <p>
@@ -462,7 +423,7 @@ sns.lmplot(data=df_clean, x=<span class="string">"receita"</span>, y=<span class
       O padrão de uso segue um pipeline claro: preparar os dados, escolher um modelo, treinar, avaliar e iterar.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> Pipeline
 <span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler
 <span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> GradientBoostingRegressor
@@ -492,7 +453,7 @@ scores = cross_val_score(pipe, X_train, y_train, cv=<span class="string">5</span
 pipe.fit(X_train, y_train)
 y_pred = pipe.predict(X_test)
 <span class="keyword">print</span>(f<span class="string">"MAE no teste: {mean_absolute_error(y_test, y_pred):.2f}"</span>)
-    </div>
+    </code></pre>
 
     <div class="callout">
       <p><strong>Pipeline vs. passos manuais:</strong> Sempre use <code style="background:#0b0e14;padding:2px 6px;border-radius:2px;font-size:0.875rem;color:#8ce7ff;">Pipeline</code> do Scikit-learn. Ele garante que pré-processamento e modelo sejam tratados como uma unidade, evitando data leakage durante a validação cruzada e simplificando o deploy.</p>
@@ -508,7 +469,7 @@ y_pred = pipe.predict(X_test)
       Nunca instale pacotes no Python global do sistema. Use ambientes isolados para cada projeto. Isso evita conflitos de versão e garante reprodutibilidade.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Criar e ativar ambiente virtual</span>
 python -m venv .venv
 source .venv/bin/activate   <span class="comment"># Linux/Mac</span>
@@ -519,14 +480,14 @@ pip install pandas numpy scikit-learn matplotlib seaborn
 
 <span class="comment"># Congelar versões</span>
 pip freeze > requirements.txt
-    </div>
+    </code></pre>
 
     <h3>Type hints e docstrings</h3>
     <p>
       Type hints tornam o código autodocumentado e permitem que IDEs e linters detectem erros antes da execução. Em projetos de dados, isso é especialmente útil para funções de transformação que recebem e retornam DataFrames.
     </p>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="keyword">import</span> pandas <span class="keyword">as</span> pd
 
 <span class="keyword">def</span> calcular_metricas(
@@ -548,7 +509,7 @@ pip freeze > requirements.txt
         margem=<span class="keyword">lambda</span> x: (x[coluna_receita] - x[coluna_custo]) / x[coluna_receita],
         roi=<span class="keyword">lambda</span> x: (x[coluna_receita] - x[coluna_custo]) / x[coluna_custo]
     )
-    </div>
+    </code></pre>
 
     <h3>Testes e linting</h3>
     <ul>
@@ -558,7 +519,7 @@ pip freeze > requirements.txt
       <li><strong>mypy</strong> — verificação estática de tipos. Encontra erros de tipo antes da execução.</li>
     </ul>
 
-    <div class="code-block">
+    <pre class="code-block"><code>
 <span class="comment"># Exemplo de teste com pytest</span>
 <span class="keyword">import</span> pytest
 <span class="keyword">import</span> pandas <span class="keyword">as</span> pd
@@ -572,7 +533,7 @@ pip freeze > requirements.txt
     <span class="keyword">assert</span> <span class="string">"roi"</span> <span class="keyword">in</span> resultado.columns
     <span class="keyword">assert</span> resultado[<span class="string">"margem"</span>].iloc[0] == pytest.approx(0.4)
     <span class="keyword">assert</span> resultado.shape[0] == 2
-    </div>
+    </code></pre>
 
     <h2>O que vem a seguir</h2>
     <p>
@@ -615,8 +576,8 @@ pip freeze > requirements.txt
     <div class="text-sm font-black text-[#ecedf6]">PUERTAS.DEV</div>
     <div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">&copy; 2026 RODRIGO PUERTAS // KNOWLEDGE BASE</div>
     <div class="flex gap-8">
-      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener">LinkedIn</a>
-      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener">GitHub</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://www.linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
   </div>
 </footer>
