@@ -11,11 +11,6 @@ body {
   isolation: isolate;
 }
 
-@media (hover: hover) {
-  body.cursor-enhanced { cursor: none; }
-  body.cursor-enhanced a,
-  body.cursor-enhanced button { cursor: none; }
-}
 
 h1,
 h2,
@@ -28,88 +23,6 @@ h4 {
   box-shadow: 0 40px 80px -20px rgba(167, 165, 255, 0.08);
 }
 
-#cursor-dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 7px;
-  height: 7px;
-  background: #a7a5ff;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.4s ease, width 0.2s, height 0.2s, background 0.2s, box-shadow 0.3s;
-  box-shadow: 0 0 8px 2px rgba(167, 165, 255, 0.4);
-  will-change: transform, left, top;
-}
-
-#cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(167, 165, 255, 0.7);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.4s ease, width 0.35s cubic-bezier(.23,1,.32,1), height 0.35s cubic-bezier(.23,1,.32,1), border-color 0.3s;
-}
-
-#cursor-ring::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, #a7a5ff, transparent 60%, #8ce7ff, transparent);
-  opacity: 0.4;
-  animation: spinRing 3s linear infinite;
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px));
-}
-
-#cursor-glow {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, rgba(167, 165, 255, 0.06) 0%, transparent 65%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9997;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-body.cursor-active #cursor-dot,
-body.cursor-active #cursor-ring,
-body.cursor-active #cursor-glow {
-  opacity: 1;
-}
-
-body.cursor-hover #cursor-dot {
-  width: 10px;
-  height: 10px;
-  background: #8ce7ff;
-  box-shadow: 0 0 12px 4px rgba(140, 231, 255, 0.5);
-}
-
-body.cursor-hover #cursor-ring {
-  width: 64px;
-  height: 64px;
-  border-color: rgba(140, 231, 255, 0.5);
-}
-
-@keyframes spinRing {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
 
 #binary-trail-layer {
   position: fixed;

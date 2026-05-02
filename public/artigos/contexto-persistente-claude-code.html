@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contexto Persistente no Claude Code | Rodrigo Puertas</title>
+<meta name="description" content="Como construir um sistema de memória para o Claude Code nunca mais esquecer seus projetos entre sessões."/>
+<meta property="og:title" content="Contexto Persistente no Claude Code | Rodrigo Puertas"/>
+<meta property="og:description" content="Como construir um sistema de memória para o Claude Code nunca mais esquecer seus projetos entre sessões."/>
+<meta property="og:type" content="article"/>
+<meta property="og:image" content="https://github.com/RodrigoPuertas.png"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Contexto Persistente no Claude Code | Rodrigo Puertas"/>
+<meta name="twitter:description" content="Como construir um sistema de memória para o Claude Code nunca mais esquecer seus projetos entre sessões."/>
+<meta name="twitter:image" content="https://github.com/RodrigoPuertas.png"/>
+<meta name="theme-color" content="#0b0e14"/>
+<link rel="canonical" href="https://puertas.dev/artigos/contexto-persistente-claude-code"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="../js/tailwind-config.js"></script>
+<link href="../css/shared.css" rel="stylesheet"/>
+<link href="../css/article.css" rel="stylesheet"/>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Contexto Persistente no Claude Code","description":"Como construir um sistema de memória para o Claude Code nunca mais esquecer seus projetos entre sessões.","author":{"@type":"Person","name":"Rodrigo Puertas","url":"https://puertas.dev"},"datePublished":"2026-05","publisher":{"@type":"Person","name":"Rodrigo Puertas"}}
+</script>
+</head>
+<body class="selection:bg-primary-container selection:text-on-primary-container">
+
+<!-- Header -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 backdrop-blur-md bg-[#0b0e14]/80 shadow-[0_4px_20px_rgba(167,165,255,0.04)]">
+  <div class="text-xl font-bold tracking-tighter text-[#ecedf6]">PUERTAS.DEV</div>
+  <nav class="hidden md:flex items-center gap-8">
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../index.html">Overview</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../projects.html">Projetos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#8ce7ff] font-bold border-b border-[#8ce7ff] pb-1" href="../artigos.html">Artigos</a>
+    <a class="font-['Space_Grotesk'] uppercase tracking-[0.05em] text-[0.6875rem] text-[#ecedf6]/60 hover:text-[#8ce7ff] transition-colors duration-300" href="../index.html#cta">Contato</a>
+  </nav>
+  <div class="flex items-center gap-4">
+    <a href="../consult.html" class="hidden md:block bg-gradient-to-br from-primary to-secondary-dim px-6 py-2 rounded-lg font-label text-[0.6875rem] font-bold uppercase tracking-widest text-on-primary hover:opacity-90 transition-opacity">Consultoria</a>
+    <button class="md:hidden flex flex-col justify-center gap-1.5 w-8 h-8 z-50" id="nav-toggle" aria-label="Abrir menu">
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+      <span class="block h-0.5 bg-white rounded transition-all"></span>
+    </button>
+  </div>
+  <div class="bg-gradient-to-r from-transparent via-[#22262f] to-transparent h-[1px] w-full absolute bottom-0 left-0"></div>
+</header>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu" class="hidden fixed inset-0 bg-[#0b0e14]/95 backdrop-blur-md z-40 flex-col justify-center items-center gap-8 font-['Space_Grotesk'] text-xl uppercase tracking-widest">
+  <a href="../index.html" class="text-primary hover:text-white">Overview</a>
+  <a href="../projects.html" class="text-primary hover:text-white">Projetos</a>
+  <a href="../artigos.html" class="text-white">Artigos</a>
+  <a href="../consult.html" class="text-primary hover:text-white">Consultoria</a>
+  <a href="../index.html#cta" class="text-primary hover:text-white">Contato</a>
+</div>
+
+<main class="pt-20">
+
+  <!-- Article Hero -->
+  <section class="px-8 pt-20 pb-16 md:pt-32 md:pb-20 max-w-[800px] mx-auto">
+    <a href="../artigos.html" class="inline-flex items-center gap-2 text-[0.6875rem] uppercase tracking-widest text-outline hover:text-primary transition-colors mb-12">
+      <span class="material-symbols-outlined text-sm">arrow_back</span>
+      Knowledge Base
+    </a>
+    <div class="flex flex-wrap items-center gap-4 mb-8">
+      <span class="px-3 py-1 rounded-sm bg-surface-container-high text-[0.6rem] font-bold text-secondary border border-secondary/20 uppercase tracking-widest">Ferramentas</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">8 min leitura</span>
+      <span class="text-outline-variant">•</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">Maio 2026</span>
+      <span class="text-outline-variant">•</span>
+      <span class="text-[0.6875rem] text-outline uppercase tracking-widest">Rodrigo Puertas</span>
+    </div>
+    <h1 class="text-4xl md:text-6xl font-bold leading-[1.05] tracking-tight mb-8">
+      Contexto <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-tertiary">Persistente</span><br/>no Claude Code
+    </h1>
+    <p class="text-xl text-on-surface-variant font-light leading-relaxed">
+      Como construir um sistema de memória em arquivos markdown para o Claude Code nunca mais esquecer seus projetos, decisões e histórico entre sessões.
+    </p>
+  </section>
+
+  <div class="bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent h-[1px] w-full max-w-[800px] mx-auto"></div>
+
+  <!-- Article Content -->
+  <article class="article-body px-8 py-16 max-w-[800px] mx-auto">
+
+    <h2>O problema</h2>
+    <p>
+      O Claude Code reseta o contexto a cada nova sessão. Isso significa que toda vez que você abre o editor, ele não sabe quem é você, quais projetos estão em andamento, quais decisões técnicas foram tomadas, nem o que foi feito na última sessão.
+    </p>
+    <p>
+      O fluxo sem nenhum sistema é sempre o mesmo: você abre o projeto, começa a digitar, e inevitavelmente precisa passar cinco minutos reexplicando contexto antes de conseguir trabalhar de verdade.
+    </p>
+
+    <div class="callout">
+      <p><strong>O custo real:</strong> não é só tempo perdido na explicação. É a degradação da qualidade das respostas — sem contexto completo, o Claude toma decisões genéricas que ignoram restrições e decisões anteriores do seu projeto.</p>
+    </div>
+
+    <p>
+      A solução não precisa de ferramentas externas, APIs ou configurações complexas. O Claude Code já tem um mecanismo nativo para isso: ele lê automaticamente arquivos chamados <code>CLAUDE.md</code> antes de qualquer sessão. O que falta é estruturar bem esses arquivos e automatizar o log de sessões.
+    </p>
+
+    <h2>A arquitetura</h2>
+    <p>
+      O sistema funciona em dois níveis: um contexto <strong>global</strong> sobre quem você é e como trabalha, e um contexto <strong>por projeto</strong> com stack, arquitetura e decisões específicas.
+    </p>
+
+    <pre class="code-block"><code>~/.claude/
+├── CLAUDE.md                    <span class="comment"># perfil global — lido em toda sessão</span>
+├── settings.json                <span class="comment"># hook de log automático</span>
+├── scripts/
+│   └── log-session.ps1          <span class="comment"># script do hook</span>
+└── memory/
+    ├── projects.md              <span class="comment"># status de cada projeto ativo</span>
+    ├── sessions.md              <span class="comment"># log do que foi feito</span>
+    └── decisions.md             <span class="comment"># decisões técnicas para não revisitar</span>
+
+cada-projeto/
+└── CLAUDE.md                    <span class="comment"># contexto específico do projeto</span></code></pre>
+
+    <p>
+      Tudo é markdown puro. Sem banco de dados, sem dependências, sem serviços externos. Versionável no Git, editável em qualquer editor.
+    </p>
+
+    <h2>Passo 1 — CLAUDE.md global</h2>
+    <p>
+      O arquivo <code>~/.claude/CLAUDE.md</code> é lido pelo Claude Code automaticamente em <strong>toda sessão</strong>, independente do projeto aberto. É onde você define quem é, como gosta de trabalhar e as regras de comportamento.
+    </p>
+
+    <pre class="code-block"><code><span class="comment"># Seu Nome — Contexto Global</span>
+
+<span class="keyword">## Quem sou eu</span>
+- Sua área de atuação e empresa
+- O que está construindo
+
+<span class="keyword">## Stack principal</span>
+- Linguagens, ferramentas, infra
+
+<span class="keyword">## Como trabalho</span>
+- Idioma e nível técnico preferido
+- Regras de abordagem
+
+<span class="keyword">## Regras para o Claude</span>
+1. Nunca peça para reexplicar o que já está em memory/ — leia primeiro
+2. Ao iniciar sessão: ler memory/projects.md e memory/sessions.md
+3. Ao encerrar sessão: atualizar memory/sessions.md
+4. Se houver CLAUDE.md no projeto atual: lê-lo antes de qualquer ação</code></pre>
+
+    <p>
+      A regra mais importante é a número 1. Sem ela, o Claude vai perguntar sobre coisas que já estão documentadas nos arquivos de memória.
+    </p>
+
+    <h2>Passo 2 — Estrutura de memória</h2>
+    <p>
+      Três arquivos na pasta <code>~/.claude/memory/</code> cobrem as informações que mais se perdem entre sessões.
+    </p>
+
+    <h3>projects.md</h3>
+    <p>Status de cada projeto ativo. Atualizado sempre que o estado de um projeto muda.</p>
+
+    <pre class="code-block"><code><span class="keyword">## Nome do Projeto</span>
+- <span class="string">**Stack:**</span> Python, FastAPI, PostgreSQL
+- <span class="string">**Status:**</span> Em andamento — fase de testes de integração
+- <span class="string">**Próximos passos:**</span>
+  - [ ] Implementar endpoint de autenticação
+  - [ ] Configurar CI no GitHub Actions
+- <span class="string">**Repositório:**</span> github.com/user/projeto
+- <span class="string">**Deadline:**</span> 2026-06-30</code></pre>
+
+    <h3>sessions.md</h3>
+    <p>Log do que foi feito em cada sessão. Substitui a necessidade de reexplicar histórico.</p>
+
+    <pre class="code-block"><code><span class="keyword">## 2026-05-15 — nome-do-projeto</span>
+<span class="string">**O que foi feito:**</span>
+- Implementei validação de schema no pipeline de ingestão
+- Corrigi bug de encoding em dados UTF-8 do legado
+
+<span class="string">**Decisões tomadas:**</span>
+- Usar Pydantic v2 em vez de marshmallow — melhor performance
+
+<span class="string">**Próximos passos:**</span>
+- [ ] Adicionar testes unitários para o validador</code></pre>
+
+    <h3>decisions.md</h3>
+    <p>
+      Decisões técnicas importantes com contexto e trade-offs. Evita revisitar o mesmo debate em sessões futuras — ou pior, tomar a decisão oposta por falta de memória.
+    </p>
+
+    <pre class="code-block"><code><span class="keyword">## 2026-05-10 — Não usar calibração isotônica em produção</span>
+<span class="string">**Contexto:**</span> modelo LightGBM com calibração melhorava precision mas reduzia recall
+<span class="string">**Decisão:**</span> manter modelo sem calibração
+<span class="string">**Motivo:**</span> objetivo é capturar máximo de no-shows — recall é prioritário
+<span class="string">**Trade-offs:**</span> precision menor, mais falsos positivos aceitáveis</code></pre>
+
+    <h2>Passo 3 — Hook de log automático</h2>
+    <p>
+      O ponto mais importante para manter o sistema vivo: automatizar o lembrete de atualizar o log. Sem automação, o sistema morre na segunda semana.
+    </p>
+    <p>
+      O Claude Code suporta <strong>hooks</strong> — comandos que executam em eventos específicos. O evento <code>Stop</code> dispara toda vez que o Claude encerra uma resposta. Usamos isso para escrever um lembrete automático no <code>sessions.md</code>.
+    </p>
+
+    <div class="callout">
+      <p><strong>Atenção ao escaping:</strong> não escreva o comando PowerShell inline no JSON do <code>settings.json</code>. O escaping duplo (JSON + PowerShell) é frágil e difícil de manter. Sempre extraia para um <code>.ps1</code> separado.</p>
+    </div>
+
+    <h3>O script</h3>
+    <p>Crie <code>~/.claude/scripts/log-session.ps1</code>:</p>
+
+    <pre class="code-block"><code><span class="keyword">$date</span> = Get-Date -Format <span class="string">'yyyy-MM-dd HH:mm'</span>
+<span class="keyword">$path</span> = <span class="string">"$env:USERPROFILE\.claude\memory\sessions.md"</span>
+<span class="keyword">$entry</span> = @<span class="string">"
+
+&lt;!-- session-auto --&gt;
+## $date — sessao encerrada
+**Lembrete:** atualize este log com o que foi feito.
+
+"</span>@
+Add-Content -Path <span class="keyword">$path</span> -Value <span class="keyword">$entry</span></code></pre>
+
+    <h3>O hook no settings.json</h3>
+    <p>Adicione o bloco <code>hooks</code> em <code>~/.claude/settings.json</code>:</p>
+
+    <pre class="code-block"><code>{
+  <span class="string">"hooks"</span>: {
+    <span class="string">"Stop"</span>: [
+      {
+        <span class="string">"matcher"</span>: <span class="string">""</span>,
+        <span class="string">"hooks"</span>: [
+          {
+            <span class="string">"type"</span>: <span class="string">"command"</span>,
+            <span class="string">"command"</span>: <span class="string">"powershell -ExecutionPolicy Bypass -File \"%USERPROFILE%\\.claude\\scripts\\log-session.ps1\""</span>
+          }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+
+    <h3>Testando</h3>
+    <p>Antes de depender do hook, teste manualmente:</p>
+
+    <pre class="code-block"><code>powershell -ExecutionPolicy Bypass -File <span class="string">"$env:USERPROFILE\.claude\scripts\log-session.ps1"</span></code></pre>
+
+    <p>Verifique se uma entrada apareceu no final de <code>sessions.md</code>. Se sim, o hook vai funcionar.</p>
+
+    <h2>Passo 4 — CLAUDE.md por projeto</h2>
+    <p>
+      Cada repositório deve ter um <code>CLAUDE.md</code> na raiz. O Claude Code detecta e lê automaticamente quando você abre o projeto no VSCode. Aqui vai o contexto que seria muito específico para ficar no arquivo global.
+    </p>
+
+    <pre class="code-block"><code><span class="comment"># Nome do Projeto</span>
+
+<span class="keyword">## Contexto</span>
+- <span class="string">**Objetivo:**</span> descrição clara e direta
+- <span class="string">**Stack:**</span> Python 3.11, FastAPI, PostgreSQL 15
+- <span class="string">**Deadline:**</span> 2026-06-30
+
+<span class="keyword">## Arquitetura</span>
+<span class="comment"># Descreva como o sistema está organizado</span>
+<span class="comment"># Não precisa ser exaustivo — só o suficiente para orientar decisões</span>
+
+<span class="keyword">## Decisões técnicas</span>
+<span class="comment"># Decisões específicas deste projeto que não devem ser revisitadas</span>
+
+<span class="keyword">## O que NÃO fazer</span>
+<span class="comment"># Armadilhas conhecidas, tentativas que não funcionaram</span></code></pre>
+
+    <p>
+      A seção "O que NÃO fazer" é subestimada. Ela evita que o Claude repita abordagens que você já tentou e descartou — especialmente em projetos mais longos onde é fácil esquecer por que certas decisões foram tomadas.
+    </p>
+
+    <h2>Uso no dia a dia</h2>
+    <p>
+      Com o sistema montado, a rotina é simples. Você abre o projeto no VSCode, o Claude já carregou o contexto global e o do projeto. Trabalha normalmente. Ao encerrar, o hook dispara o lembrete — você substitui pelo log real do que foi feito naquela sessão.
+    </p>
+    <p>
+      Para adicionar um novo projeto: copie o template para a raiz do repo como <code>CLAUDE.md</code>, preencha os campos, adicione uma entrada em <code>projects.md</code>. Leva menos de cinco minutos e economiza muito mais do que isso em cada sessão futura.
+    </p>
+
+    <div class="callout">
+      <p><strong>O que este sistema não é:</strong> não é automágico. O Claude não atualiza os arquivos sozinho — ele lembra de tudo que está escrito, mas a curadoria do que merece ser registrado ainda é sua. A disciplina de atualizar o log após sessões produtivas é o que mantém o sistema útil.</p>
+    </div>
+
+    <h2>O que vem a seguir</h2>
+    <p>
+      Com o contexto persistente funcionando, o próximo passo natural é criar <strong>comandos customizados</strong> no Claude Code — slash commands como <code>/status</code> para ver projetos ativos ou <code>/log</code> para estruturar o log da sessão atual sem sair do editor.
+    </p>
+    <p>
+      Outro caminho é automatizar ainda mais o log usando hooks mais específicos por tipo de operação — commit hooks que registram o que foi alterado, por exemplo. Mas isso já é otimização. O sistema descrito aqui resolve o problema central: nunca mais começar uma sessão do zero.
+    </p>
+
+  </article>
+
+  <div class="bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent h-[1px] w-full max-w-[800px] mx-auto"></div>
+
+  <!-- Author + Back -->
+  <section class="px-8 py-16 max-w-[800px] mx-auto flex flex-col md:flex-row gap-12 justify-between items-start">
+    <div class="flex items-center gap-4">
+      <img src="https://github.com/RodrigoPuertas.png" alt="Rodrigo Puertas" class="w-12 h-12 rounded-full border border-outline-variant/30"/>
+      <div>
+        <div class="text-sm font-bold text-on-surface">Rodrigo Puertas</div>
+        <div class="text-[0.6875rem] text-outline uppercase tracking-widest">Engenheiro de Dados · Shopee</div>
+      </div>
+    </div>
+    <a href="../artigos.html" class="inline-flex items-center gap-2 px-6 py-3 border border-outline-variant/30 rounded text-[0.6875rem] font-bold uppercase tracking-widest hover:border-primary transition-all group">
+      <span class="material-symbols-outlined text-sm group-hover:text-primary transition-colors">arrow_back</span>
+      Ver todos os artigos
+    </a>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#0b0e14] border-t border-[#22262f] py-12">
+  <div class="w-full flex flex-col md:flex-row justify-between items-center px-12 gap-6">
+    <div class="text-sm font-black text-[#ecedf6]">PUERTAS.DEV</div>
+    <div class="text-[#ecedf6]/40 font-['Inter'] text-[0.6875rem] tracking-widest uppercase">&copy; 2026 RODRIGO PUERTAS // KNOWLEDGE BASE</div>
+    <div class="flex gap-8">
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://www.linkedin.com/in/rodrigopuertas" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="font-['Inter'] text-[0.6875rem] tracking-widest uppercase text-[#ecedf6]/40 hover:text-[#a7a5ff] transition-all duration-200" href="https://github.com/RodrigoPuertas" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+<script src="../js/main.js"></script>
+</body>
+</html>
